@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        {% include 'head.html' %}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="wrapper">
+            {% block content %}{% endblock %}
+        </div>
+        <footer id="footer">
+            {% block footer %}
+            {% include 'footer.html' %}
+            {% endblock %}
+        </footer>
+    </body>
+    <!--  JS/Bootstrap   -->
+        <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</html>

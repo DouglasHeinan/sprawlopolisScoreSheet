@@ -1,0 +1,11 @@
+ul {
+    list-style-type: none;
+}
+
+.hidden {
+    display: none;
+}
+
+th, tr, td {
+    border: solid;
+}

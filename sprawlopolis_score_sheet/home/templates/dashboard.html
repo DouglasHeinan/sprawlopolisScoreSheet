@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>HELLO!</h1>
+
+<button id="newGame">New Game</button>
+
+<div id="newGameCardListDiv">
+    <ul class="hidden" id="newGameCardList"></ul>
+
+</div>
+
+<div id="tableDiv" class="hidden">
+    <table id="scoreDisplay">
+        <tr>
+            <th>Zones</th>
+            <th>Count</th>
+        </tr>
+        <tr>
+            <td>Residential</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Commercial</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Industrial</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Parks</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Score Cards</th>
+        </tr>
+        <tr>
+            <th id="scoreCardOneHeader"></th>
+            <th id="scoreCardOneFirstCat">Count</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td id="scoreCardOneData"></td>
+        </tr>
+        <tr>
+            <th id="scoreCardTwoHeader"></th>
+            <th id="scoreCardTwoFirstCat"></th>
+        </tr>
+        <tr>
+            <td></td>
+            <td id="scoreCardTwoData"></td>
+        </tr>
+        <tr>
+            <th id="scoreCardThreeHeader"></th>
+            <th id="scoreCardTwoFirstCat"></th>
+        </tr>
+        <tr>
+            <td></td>
+            <td id="scoreCardThreeData"></td>
+        </tr>
+    </table>
+</div>
+
+<!--<table>-->
+<!--    <tbody id="scoreSheet">-->
+
+<!--    </tbody>-->
+<!--</table>-->
+
+{% endblock %}
