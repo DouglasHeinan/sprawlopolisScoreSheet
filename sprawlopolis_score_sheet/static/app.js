@@ -28,15 +28,16 @@ Score.prototype.total = function() {
 Score.prototype.cardScore = function() {
     cards = Object.keys(this).slice(-3);
     for (i = 0; i < cards.length; i++) {
-        if (this[cards[i]]["groups"]) {
-            this[cards[i]]["total"] = -8 + (this[cards[i]]["groups"] * 3);
-            if (this[cards[i]]["total"] > 7) {
-                this[cards[i]]["total"] = 7;
+        card = cards[i];
+        if (this[card]["groups"]) {
+            this[card]["total"] = -8 + (this[card]["groups"] * 3);
+            if (this[card]["total"] > 7) {
+                this[card]["total"] = 7;
             }
-        } else if (this[cards[i]]["edge-blocks"]) {
-            this[cards[i]]["total"] = this[cards[i]]["edge-blocks"] + this[cards[i]]["corner-blocks"];
+        } else if (this[card]["edge-blocks"]) {
+            this[card]["total"] = this[card]["edge-blocks"] + this[card]["corner-blocks"];
         } else {
-            this[cards[i]]["total"] = (this[cards[i]]["count"] * this[cards[i]]["countMultiplier"]) - (this[cards[i]]["negative-count"] * this[cards[i]]["negMultiplier"]);
+            this[card]["total"] = (this[card]["count"] * this[card]["countMultiplier"]) - (this[card]["negative-count"] * this[card]["negMultiplier"]);
         }
     }
 }
@@ -69,6 +70,8 @@ function testFunc() {
     allCards = makeCards();
     score1 = new Score(allCards[5], allCards[6], allCards[7]);
     score2 = new Score(allCards[8], allCards[9], allCards[11]);
+    score1["scoreOne"]["count"] = 8;
+    score1["scoreOne"]["negative-count"] = 2;
     console.log(score1, score2)
     return score1, score2
 }
