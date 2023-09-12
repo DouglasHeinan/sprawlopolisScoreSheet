@@ -65,6 +65,18 @@ function makeCards() {
     return allCards;
 }
 
+function testFunc() {
+    allCards = makeCards();
+    score1 = new Score(allCards[5], allCards[6], allCards[7]);
+    score2 = new Score(allCards[8], allCards[9], allCards[11]);
+    console.log(score1, score2)
+    return score1, score2
+}
+
+const testBtn = document.querySelector("#testBtn");
+
+testBtn.addEventListener("click", testFunc)
+
 //const scoringCardOne = {"name": "The Outskirts", "img": 0, "count": 0, "countMultiplier": 1, "negative-count": 0, "negMultiplier": 1, "target": 1, "total": 0};
 //const scoringCardTwo = {"name": "Bloom Boom", "img": 0, "count": 0, "countMultiplier": 1, "negative-count": 0, "negMultiplier": 1, "target": 2, "total": 0};
 //const scoringCardThree = {"name": "Go Green", "img": 0, "count": 0, "countMultiplier": 1, "negative-count": 0, "negMultiplier": 3, "target": 3, "total": 0};
@@ -151,7 +163,6 @@ function createGameSheet(gameCards) {
 
 function createDisplay(sheet) {
     tableDiv.classList.remove("hidden");
-    console.log(sheet)
     scoreCardOneHeader.innerText = sheet.scoreOne["name"]
     scoreCardTwoHeader.innerText = sheet.scoreTwo["name"]
     scoreCardThreeHeader.innerText = sheet.scoreThree["name"]
