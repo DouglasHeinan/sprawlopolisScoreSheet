@@ -9,3 +9,7 @@ ul {
 th, tr, td {
     border: solid;
 }
+
+.noBorder {
+    border: none;
+}

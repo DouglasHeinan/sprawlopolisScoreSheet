@@ -132,6 +132,9 @@ const tableDiv = document.querySelector("#tableDiv");
 const scoreDisplay = document.querySelector("#scoreDisplay");
 const scoreCardOneHeader = document.querySelector("#scoreCardOneHeader");
 const scoreCardOneFirstCat = document.querySelector("#scoreCardOneFirstCat");
+const scoreCardOneSecondCat = document.querySelector("#scoreCardOneSecondCat");
+const scoreCardTwoSecondCat = document.querySelector("#scoreCardTwoSecondCat");
+const scoreCardThreeSecondCat = document.querySelector("#scoreCardThreeSecondCat");
 const scoreCardOneData = document.querySelector("#scoreCardOneData");
 const scoreCardTwoHeader = document.querySelector("#scoreCardTwoHeader");
 const scoreCardTwoFirstCat = document.querySelector("#scoreCardTwoFirstCat");
@@ -191,7 +194,21 @@ function createDisplay(sheet) {
     scoreCardOneFirstCat.innerText = sheet.scoreOne["colOneName"]
     scoreCardTwoFirstCat.innerText = sheet.scoreTwo["colOneName"]
     scoreCardThreeFirstCat.innerText = sheet.scoreThree["colOneName"]
+    scoreCardOneData.innerText = sheet.scoreOne["colOne"]
+    scoreCardTwoData.innerText = sheet.scoreTwo["colOne"]
+    scoreCardThreeData.innerText = sheet.scoreThree["colOne"]
+    makeSecondCol([sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree], [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat])
+}
 
+
+function makeSecondCol(scores, cells) {
+    for (let i = 0; i < scores.length; i++) {
+        if (scores[i]["colTwoName"] === null) {
+            cells[i].classList.add("hidden");
+        } else {
+            cells[i].innerText = scores[i]["colTwoName"]
+        }
+    }
 }
 
 //------------------------------TEST---------------------------------------
