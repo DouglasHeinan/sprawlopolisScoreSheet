@@ -135,13 +135,16 @@ const scoreCardOneFirstCat = document.querySelector("#scoreCardOneFirstCat");
 const scoreCardOneSecondCat = document.querySelector("#scoreCardOneSecondCat");
 const scoreCardTwoSecondCat = document.querySelector("#scoreCardTwoSecondCat");
 const scoreCardThreeSecondCat = document.querySelector("#scoreCardThreeSecondCat");
-const scoreCardOneData = document.querySelector("#scoreCardOneData");
+const scoreCardOneDataOne = document.querySelector("#scoreCardOneDataOne");
+const scoreCardOneDataTwo = document.querySelector("#scoreCardOneDataTwo");
 const scoreCardTwoHeader = document.querySelector("#scoreCardTwoHeader");
 const scoreCardTwoFirstCat = document.querySelector("#scoreCardTwoFirstCat");
-const scoreCardTwoData = document.querySelector("#scoreCardTwoData");
+const scoreCardTwoDataOne = document.querySelector("#scoreCardTwoDataOne");
+const scoreCardTwoDataTwo = document.querySelector("#scoreCardTwoDataTwo");
 const scoreCardThreeHeader = document.querySelector("#scoreCardThreeHeader");
 const scoreCardThreeFirstCat = document.querySelector("#scoreCardThreeFirstCat");
-const scoreCardThreeData = document.querySelector("#scoreCardThreeData");
+const scoreCardThreeDataOne = document.querySelector("#scoreCardThreeDataOne");
+const scoreCardThreeDataTwo = document.querySelector("#scoreCardThreeDataTwo");
 
 
 newGameBtn.addEventListener("click", function() {
@@ -194,19 +197,24 @@ function createDisplay(sheet) {
     scoreCardOneFirstCat.innerText = sheet.scoreOne["colOneName"]
     scoreCardTwoFirstCat.innerText = sheet.scoreTwo["colOneName"]
     scoreCardThreeFirstCat.innerText = sheet.scoreThree["colOneName"]
-    scoreCardOneData.innerText = sheet.scoreOne["colOne"]
-    scoreCardTwoData.innerText = sheet.scoreTwo["colOne"]
-    scoreCardThreeData.innerText = sheet.scoreThree["colOne"]
-    makeSecondCol([sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree], [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat])
+    scoreCardOneDataOne.innerText = sheet.scoreOne["colOne"]
+    scoreCardTwoDataOne.innerText = sheet.scoreTwo["colOne"]
+    scoreCardThreeDataOne.innerText = sheet.scoreThree["colOne"]
+    scores = [sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree]
+    headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
+    dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
+    makeSecondCol(scores, headerCells, dataCells)
 }
 
 
-function makeSecondCol(scores, cells) {
+function makeSecondCol(scores, headerCells, dataCells) {
     for (let i = 0; i < scores.length; i++) {
         if (scores[i]["colTwoName"] === null) {
-            cells[i].classList.add("hidden");
+            headerCells[i].classList.add("hidden");
+            dataCells[i].classList.add("hidden");
         } else {
-            cells[i].innerText = scores[i]["colTwoName"]
+            headerCells[i].innerText = scores[i]["colTwoName"];
+            dataCells[i].innerText = scores[i]["colTwo"];
         }
     }
 }
