@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>HELLO!</h1>
+<h1>Sprawlopolis Score Sheet</h1>
 
 <button id="newGame">New Game</button>
 
@@ -17,23 +17,45 @@
     <table id="scoreDisplay">
         <tr>
             <th>Zones</th>
+            <th class="noBorder"></th>
+            <th class="noBorder"></th>
             <th>Count</th>
         </tr>
         <tr>
             <td>Residential</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
             <td><div contenteditable></div></td>
         </tr>
         <tr>
             <td>Commercial</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
             <td><div contenteditable></div></td>
         </tr>
         <tr>
             <td>Industrial</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
             <td><div contenteditable></div></td>
         </tr>
         <tr>
             <td>Parks</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
             <td><div contenteditable></div></td>
+        </tr>
+        <tr>
+            <td>Roads</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
+            <td><div contenteditable></div></td>
+        </tr>
+        <tr>
+            <td>Blocks and Roads subtotal</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
+            <td id="blocksRoadsSubtotal"></td>
         </tr>
         <tr>
             <th>Score Card One</th>
@@ -42,7 +64,7 @@
             <th id="scoreCardOneHeader"></th>
             <th id="scoreCardOneFirstCat"></th>
             <th id="scoreCardOneSecondCat"></th>
-            <th id="scoreCardOneTotal"></th>
+            <th class="subTotalHeader">Scoring card subtotal</th>
         </tr>
         <tr>
             <td class="noBorder"></td>
@@ -52,6 +74,7 @@
             <td>
                 <div contenteditable id="scoreCardOneDataTwo"></div>
             </td>
+            <td id="scoreCardOneTotal"></td>
         </tr>
         <tr>
             <th>Score Card Two</th>
@@ -60,7 +83,7 @@
             <th id="scoreCardTwoHeader"></th>
             <th id="scoreCardTwoFirstCat"></th>
             <th id="scoreCardTwoSecondCat"></th>
-            <th id="scoreCardTwoTotal"></th>
+            <th class="subTotalHeader">Scoring card subtotal</th>
         </tr>
         <tr>
             <td class="noBorder"></td>
@@ -70,6 +93,7 @@
             <td>
                 <div contenteditable id="scoreCardTwoDataTwo"></div>
             </td>
+            <td id="scoreCardTwoTotal"></td>
         </tr>
         <tr>
             <th>Score Card Three</th>
@@ -78,7 +102,7 @@
             <th id="scoreCardThreeHeader"></th>
             <th id="scoreCardThreeFirstCat"></th>
             <th id="scoreCardThreeSecondCat"></th>
-            <th id="scoreCardThreeTotal"></th>
+            <th class="subTotalHeader">Scoring card subtotal</th>
         </tr>
         <tr>
             <td class="noBorder"></td>
@@ -88,14 +112,21 @@
             <td>
                 <div contenteditable id="scoreCardThreeDataTwo"></div>
             </td>
+            <td id="scoreCardThreeTotal"></td>
+        </tr>
+        <tr>
+            <td>Scoring card subtotal</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
+            <td id="scoringCardSubtotal"></td>
+        </tr>
+        <tr>
+            <td>Total score</td>
+            <td class="noBorder"></td>
+            <td class="noBorder"></td>
+            <td id="totalScore"></td>
         </tr>
     </table>
 </div>
-
-<!--<table>-->
-<!--    <tbody id="scoreSheet">-->
-
-<!--    </tbody>-->
-<!--</table>-->
 
 {% endblock %}

@@ -78,23 +78,6 @@ class Score {
         }
         return total;
     }
-//    cardScore() {
-//        const {scoreOne, scoreTwo, scoreThree} = this;
-//        const cards = [scoreOne, scoreTwo, scoreThree];
-//        for (let i = 0; i < cards.length; i++) {
-//            const card = cards[i];
-//            if (card["groups"]) {
-//                card["total"] = -8 + (card["groups"] * 3);
-//                if (card["total"] > 7) {
-//                    card["total"] = 7;
-//                }
-//            } else if (card["edge-blocks"]) {
-//                card["total"] = card["edge-blocks"] + card["corner-blocks"];
-//            } else {
-//                card["total"] = (card["count"] * card["countMultiplier"]) - (card["negative-count"] * card["negMultiplier"]);
-//            }
-//        }
-//    }
 
     cardScore() {
         const {scoreOne, scoreTwo, scoreThree} = this;
@@ -107,10 +90,10 @@ class Score {
                 card["total"] += Math.floor(card["colOne"] * card["colOneMulti"]);
             }
             if (card["total"] > card["max-score"]) {
-                card["total"] += card["max-score"];
+                card["total"] = card["max-score"];
             }
             if (card["total"] < card["min-score"]) {
-                card["total"] += card["min-score"];
+                card["total"] = card["min-score"];
             }
             console.log(card["total"])
         }
@@ -174,19 +157,23 @@ const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
 const newGameCardList = document.querySelector("#newGameCardList");
 const tableDiv = document.querySelector("#tableDiv");
 const scoreDisplay = document.querySelector("#scoreDisplay");
+const subTotalHeaders = document.querySelectorAll(".subTotalHeader");
+
 const scoreCardOneHeader = document.querySelector("#scoreCardOneHeader");
 const scoreCardOneFirstCat = document.querySelector("#scoreCardOneFirstCat");
 const scoreCardOneSecondCat = document.querySelector("#scoreCardOneSecondCat");
-const scoreCardTwoSecondCat = document.querySelector("#scoreCardTwoSecondCat");
-const scoreCardThreeSecondCat = document.querySelector("#scoreCardThreeSecondCat");
 const scoreCardOneDataOne = document.querySelector("#scoreCardOneDataOne");
 const scoreCardOneDataTwo = document.querySelector("#scoreCardOneDataTwo");
+
 const scoreCardTwoHeader = document.querySelector("#scoreCardTwoHeader");
 const scoreCardTwoFirstCat = document.querySelector("#scoreCardTwoFirstCat");
+const scoreCardTwoSecondCat = document.querySelector("#scoreCardTwoSecondCat");
 const scoreCardTwoDataOne = document.querySelector("#scoreCardTwoDataOne");
 const scoreCardTwoDataTwo = document.querySelector("#scoreCardTwoDataTwo");
+
 const scoreCardThreeHeader = document.querySelector("#scoreCardThreeHeader");
 const scoreCardThreeFirstCat = document.querySelector("#scoreCardThreeFirstCat");
+const scoreCardThreeSecondCat = document.querySelector("#scoreCardThreeSecondCat");
 const scoreCardThreeDataOne = document.querySelector("#scoreCardThreeDataOne");
 const scoreCardThreeDataTwo = document.querySelector("#scoreCardThreeDataTwo");
 
@@ -248,6 +235,7 @@ function createDisplay(sheet) {
     headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
     dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
     makeSecondCol(scores, headerCells, dataCells)
+//    makeTotalCol();
 }
 
 
@@ -263,6 +251,12 @@ function makeSecondCol(scores, headerCells, dataCells) {
     }
 }
 
+function makeTotalCol() {
+//    for (let i = 0; i < subTotalHeaders.length; i++) {
+//        subTotalHeaders[i]. inner
+//    }
+}
+
 //------------------------------TEST---------------------------------------
 testBtn.addEventListener("click", function() {
     score1 = new SprawlScore(allSprawlCards[1], allSprawlCards[2], allSprawlCards[11]);
@@ -274,7 +268,7 @@ testBtn.addEventListener("click", function() {
     score1["scoreThree"]["colOne"] = 11;
     score2["scoreOne"]["colOne"] = 8;
     score2["scoreOne"]["colTwo"] = 6;
-    score2["scoreTwo"]["colOne"] = 3;
+    score2["scoreTwo"]["colOne"] = 12;
     score2["scoreThree"]["colOne"] = 6;
     score2["scoreThree"]["colTwo"] = 3;
     console.log(score1, score2)
