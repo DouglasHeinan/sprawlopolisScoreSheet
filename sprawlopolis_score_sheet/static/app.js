@@ -150,6 +150,7 @@ const allSprawlCards = [
 let gameCards = [];
 let score1
 let score2
+let newSheet
 
 const testBtn = document.querySelector("#testBtn");
 const newGameBtn = document.querySelector("#newGame");
@@ -157,25 +158,32 @@ const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
 const newGameCardList = document.querySelector("#newGameCardList");
 const tableDiv = document.querySelector("#tableDiv");
 const scoreDisplay = document.querySelector("#scoreDisplay");
-const subTotalHeaders = document.querySelectorAll(".subTotalHeader");
+const blockScores = document.querySelectorAll(".blockScore");
+const blockScoreChanges = document.querySelectorAll(".blockScoreChange");
+const blocksRoadsSubtotal = document.querySelector("#blocksRoadsSubtotal");
+const cardScoreChanges = document.querySelectorAll(".cardScoreChange");
+const scoreCardTotals = document.querySelectorAll(".scoreCardTotal");
 
 const scoreCardOneHeader = document.querySelector("#scoreCardOneHeader");
 const scoreCardOneFirstCat = document.querySelector("#scoreCardOneFirstCat");
 const scoreCardOneSecondCat = document.querySelector("#scoreCardOneSecondCat");
 const scoreCardOneDataOne = document.querySelector("#scoreCardOneDataOne");
 const scoreCardOneDataTwo = document.querySelector("#scoreCardOneDataTwo");
+const scoreCardOneTotal = document.querySelector("#scoreCardOneTotal");
 
 const scoreCardTwoHeader = document.querySelector("#scoreCardTwoHeader");
 const scoreCardTwoFirstCat = document.querySelector("#scoreCardTwoFirstCat");
 const scoreCardTwoSecondCat = document.querySelector("#scoreCardTwoSecondCat");
 const scoreCardTwoDataOne = document.querySelector("#scoreCardTwoDataOne");
 const scoreCardTwoDataTwo = document.querySelector("#scoreCardTwoDataTwo");
+const scoreCardTwoTotal = document.querySelector("#scoreCardTwoTotal");
 
 const scoreCardThreeHeader = document.querySelector("#scoreCardThreeHeader");
 const scoreCardThreeFirstCat = document.querySelector("#scoreCardThreeFirstCat");
 const scoreCardThreeSecondCat = document.querySelector("#scoreCardThreeSecondCat");
 const scoreCardThreeDataOne = document.querySelector("#scoreCardThreeDataOne");
 const scoreCardThreeDataTwo = document.querySelector("#scoreCardThreeDataTwo");
+const scoreCardThreeTotal = document.querySelector("#scoreCardThreeTotal");
 
 
 newGameBtn.addEventListener("click", function() {
@@ -205,6 +213,19 @@ newGameCardList.addEventListener("click", function(e) {
     }
 })
 
+for (let i = 0; i < blockScoreChanges.length; i++) {
+    blockScoreChanges[i].addEventListener("input", function() {
+        calcBlocks()
+    })
+}
+
+for (let i = 0; i < cardScoreChanges.length; i++) {
+    cardScoreChanges[i].addEventListener("input", function() {
+        console.log("here")
+        calcScoreCards()
+    })
+}
+
 function createGameSheet(gameCards) {
     newCards = []
     for (let i = 0; i < gameCards.length; i++) {
@@ -215,7 +236,7 @@ function createGameSheet(gameCards) {
             }
         }
     }
-    const newSheet = new Score(newCards[0], newCards[1], newCards[2])
+    newSheet = new Score(newCards[0], newCards[1], newCards[2])
     gameCards = [];
     createDisplay(newSheet);
 }
@@ -231,11 +252,15 @@ function createDisplay(sheet) {
     scoreCardOneDataOne.innerText = sheet.scoreOne["colOne"]
     scoreCardTwoDataOne.innerText = sheet.scoreTwo["colOne"]
     scoreCardThreeDataOne.innerText = sheet.scoreThree["colOne"]
+    scoreCardOneHeader.title = sheet.scoreOne["description"];
+    scoreCardTwoHeader.title = sheet.scoreTwo["description"];
+    scoreCardThreeHeader.title = sheet.scoreThree["description"];
     scores = [sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree]
     headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
     dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
     makeSecondCol(scores, headerCells, dataCells)
-//    makeTotalCol();
+    calcBlocks();
+    calcScoreCards();
 }
 
 
@@ -251,10 +276,33 @@ function makeSecondCol(scores, headerCells, dataCells) {
     }
 }
 
-function makeTotalCol() {
-//    for (let i = 0; i < subTotalHeaders.length; i++) {
-//        subTotalHeaders[i]. inner
-//    }
+function calcBlocks() {
+    let subtotal = 0;
+    for (let i = 0; i < blockScoreChanges.length; i++) {
+        scoreDiv = blockScoreChanges[i];
+        score = parseInt(scoreDiv.innerText);
+        if (!score) {
+            score = 0;
+        }
+        subtotal += score;
+    }
+    blocksRoadsSubtotal.innerText = subtotal;
+}
+
+function calcScoreCards() {
+    newSheet.cardScore()
+    subTotals = [newSheet["scoreOne"], newSheet["scoreTwo"], newSheet["scoreThree"]]
+    totalDisplays = [scoreCardOneTotal, scoreCardTwoTotal, scoreCardThreeTotal];
+    for (let i = 0; i < subTotals.length; i++) {
+        cardScore = subTotals[i]["total"];
+        totalDisplays[i].innerText = cardScore;
+        if (subTotals[i]["colTwo"]) {
+            scoreCardTotals[i].innerText = (subTotals[i]["colOne"] * subTotals[i]["colOneMulti"]) + (subTotals[i]["colTwo"] * subTotals[i]["colTwoMulti"]);
+        } else {
+            scoreCardTotals[i].innerText = subTotals[i]["colOne"] * subTotals[i]["colOneMulti"];
+        }
+    }
+//    cardsSubTotal =
 }
 
 //------------------------------TEST---------------------------------------
