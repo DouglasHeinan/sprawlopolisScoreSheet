@@ -105,22 +105,22 @@ class Score {
 class SprawlScore extends Score {
     constructor(scoreOne, scoreTwo, scoreThree) {
         super(scoreOne, scoreTwo, scoreThree)
-        this.residential = {"count": 0, "negative count": "N/A", "total": 0};
-        this.commercial = {"count": 0, "negative count": "N/A", "total": 0};
-        this.residential = {"count": 0, "negative count": "N/A", "total": 0};
-        this.parks = {"count": 0, "negative count": "N/A", "total": 0};
-        this.roads = {"count": "N/A", "negative count": 0, "total": 0};
+        this.residential = {"count": 0, "modifier": 1, "total": 0};
+        this.commercial = {"count": 0, "modifier": 1, "total": 0};
+        this.residential = {"count": 0, "modifier": 1, "total": 0};
+        this.parks = {"count": 0, "modifier": 1, "total": 0};
+        this.roads = {"count": 0, "modifier": -1, "total": 0};
     }
 }
 
 class AgScore extends Score {
     constructor(scoreOne, scoreTwo, scoreThree) {
         super(scoreOne, scoreTwo, scoreThree)
-        this.cornfield = {"count": 0, "negative count": "N/A", "total": 0};
-        this.orchard = {"count": 0, "negative count": "N/A", "total": 0};
-        this.livestock = {"count": 0, "negative count": "N/A", "total": 0};
-        this.vineyard = {"count": 0, "negative count": "N/A", "total": 0};
-        this.roads = {"count": "N/A", "negative count": 0, "total": 0};
+        this.cornfield = {"count": 0, "modifier": 1, "total": 0};
+        this.orchard = {"count": 0, "modifier": 1, "total": 0};
+        this.livestock = {"count": 0, "modifier": 1, "total": 0};
+        this.vineyard = {"count": 0, "modifier": 1, "total": 0};
+        this.roads = {"count": 0, "modifier": 1, "total": 0};
     }
 }
 
@@ -165,6 +165,8 @@ const cardScoreChanges = document.querySelectorAll(".cardScoreChange");
 const scoreCardTotals = document.querySelectorAll(".scoreCardTotal");
 const scoreColOne = document.querySelectorAll(".scoreColOne");
 const scoreColTwo = document.querySelectorAll(".scoreColTwo");
+const scoringCardSubTotal = document.querySelector("#scoringCardSubtotal");
+const totalScore = document.querySelector("#totalScore");
 
 const scoreCardOneHeader = document.querySelector("#scoreCardOneHeader");
 const scoreCardOneFirstCat = document.querySelector("#scoreCardOneFirstCat");
@@ -218,12 +220,14 @@ newGameCardList.addEventListener("click", function(e) {
 for (let i = 0; i < blockScoreChanges.length; i++) {
     blockScoreChanges[i].addEventListener("input", function() {
         calcBlocks()
+        calcTotal()
     })
 }
 
 for (let i = 0; i < cardScoreChanges.length; i++) {
     cardScoreChanges[i].addEventListener("input", function() {
         calcScoreCards()
+        calcTotal()
     })
 }
 
@@ -262,6 +266,7 @@ function createDisplay(sheet) {
     makeSecondCol(scores, headerCells, dataCells)
     calcBlocks();
     calcScoreCards();
+    calcTotal()
 }
 
 
@@ -291,34 +296,27 @@ function calcBlocks() {
 }
 
 function calcScoreCards() {
-//    newSheet.cardScore();
-//    subTotals = [newSheet["scoreOne"], newSheet["scoreTwo"], newSheet["scoreThree"]]
-//    totalDisplays = [scoreCardOneTotal, scoreCardTwoTotal, scoreCardThreeTotal];
-//    for (let i = 0; i < subTotals.length; i++) {
-//        cardScore = subTotals[i]["total"];
-//        totalDisplays[i].innerText = cardScore;
-//        if (subTotals[i]["colTwo"]) {
-//            scoreCardTotals[i].innerText = (subTotals[i]["colOne"] * subTotals[i]["colOneMulti"]) + (subTotals[i]["colTwo"] * subTotals[i]["colTwoMulti"]);
-//        } else {
-//            scoreCardTotals[i].innerText = subTotals[i]["colOne"] * subTotals[i]["colOneMulti"];
-//        }
-//    }
+    scoringCardSub = 0
     cards = [newSheet["scoreOne"], newSheet["scoreTwo"], newSheet["scoreThree"]]
     totalDisplays = [scoreCardOneTotal, scoreCardTwoTotal, scoreCardThreeTotal];
     for (let i = 0; i < cards.length; i++) {
         card = cards[i];
         card["colOne"] = scoreColOne[i].innerText;
-//        console.log(card["colOne"])
-//        console.log(card["colTwo"])
         if (card["colTwo"] != null) {
             card["colTwo"] = scoreColTwo[i].innerText;
-//            console.log(card["colTwo"])
         }
     }
     newSheet.cardScore()
     for (let i = 0; i < totalDisplays.length; i++) {
         totalDisplays[i].innerText = cards[i]["total"];
+        scoringCardSub += cards[i]["total"];
     }
+    scoringCardSubtotal.innerText = scoringCardSub
+}
+
+function calcTotal() {
+    total = parseInt(scoringCardSubtotal.innerText) + parseInt(blocksRoadsSubtotal.innerText)
+    totalScore.innerText = total;
 }
 
 //------------------------------TEST---------------------------------------
