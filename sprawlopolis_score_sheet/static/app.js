@@ -1,66 +1,5 @@
-//function Score(scoreOne, scoreTwo, scoreThree) {
-//    this.residential = {"count": 0, "negative count": "N/A", "total": 0};
-//    this.commercial = {"count": 0, "negative count": "N/A", "total": 0};
-//    this.residential = {"count": 0, "negative count": "N/A", "total": 0};
-//    this.parks = {"count": 0, "negative count": "N/A", "total": 0};
-//    this.roads = {"count": "N/A", "negative count": 0, "total": 0};
-//    this.scoreOne = scoreOne;
-//    this.scoreTwo = scoreTwo;
-//    this.scoreThree = scoreThree;
-//}
-
-//Score.prototype.target = function() {
-//    const { scoreOne, scoreTwo, scoreThree } = this;
-//    const target = (scoreOne["target"]) + (scoreTwo["target"]) + (scoreThree["target"])
-//    return target
-//}
-
-//Score.prototype.total = function() {
-//    const { scoreOne, scoreTwo, scoreThree } = this;
-//    properties = Object.keys(this)
-//    total = 0;
-//    for (i = 0; i < 7; i++) {
-//        total += this[properties[i]]["total"];
-//    }
-//    return total;
-//}
-
-//Score.prototype.cardScore = function() {
-//    cards = Object.keys(this).slice(-3);
-//    for (i = 0; i < cards.length; i++) {
-//        card = cards[i];
-//        if (this[card]["groups"]) {
-//            this[card]["total"] = -8 + (this[card]["groups"] * 3);
-//            if (this[card]["total"] > 7) {
-//                this[card]["total"] = 7;
-//            }
-//        } else if (this[card]["edge-blocks"]) {
-//            this[card]["total"] = this[card]["edge-blocks"] + this[card]["corner-blocks"];
-//        } else {
-//            this[card]["total"] = (this[card]["count"] * this[card]["countMultiplier"]) - (this[card]["negative-count"] * this[card]["negMultiplier"]);
-//        }
-//    }
-//}
-
-//class Color {
-//    constructor(r, g, b) {
-//        this.r = r;
-//        this.g = g;
-//        this.b= b;
-//    }
-//    rgb() {
-//        const { r, g, b} = this;
-//        return `rgb(${r}, ${g}, ${b})`;
-//    }
-//}
-
 class Score {
     constructor(scoreOne, scoreTwo, scoreThree) {
-//        this.residential = {"count": 0, "negative count": "N/A", "total": 0};
-//        this.commercial = {"count": 0, "negative count": "N/A", "total": 0};
-//        this.residential = {"count": 0, "negative count": "N/A", "total": 0};
-//        this.parks = {"count": 0, "negative count": "N/A", "total": 0};
-//        this.roads = {"count": "N/A", "negative count": 0, "total": 0};
         this.scoreOne = scoreOne;
         this.scoreTwo = scoreTwo;
         this.scoreThree = scoreThree;
@@ -72,8 +11,9 @@ class Score {
     }
     total() {
         const properties = Object.keys(this);
+        console.log(properties)
         let total = 0;
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < properties.length; i++) {
             total += this[properties[i]]["total"];
         }
         return total;
@@ -95,7 +35,6 @@ class Score {
             if (card["total"] < card["min-score"]) {
                 card["total"] = card["min-score"];
             }
-            console.log(card["total"])
         }
     }
 
@@ -105,22 +44,22 @@ class Score {
 class SprawlScore extends Score {
     constructor(scoreOne, scoreTwo, scoreThree) {
         super(scoreOne, scoreTwo, scoreThree)
-        this.residential = {"count": 0, "modifier": 1, "total": 0};
-        this.commercial = {"count": 0, "modifier": 1, "total": 0};
-        this.residential = {"count": 0, "modifier": 1, "total": 0};
-        this.parks = {"count": 0, "modifier": 1, "total": 0};
-        this.roads = {"count": 0, "modifier": -1, "total": 0};
+        this.residential = {"name": "Residential", "count": 0, "modifier": 1, "total": 0};
+        this.commercial = {"name": "Commercial", "count": 0, "modifier": 1, "total": 0};
+        this.industrial = {"name": "Industrial", "count": 0, "modifier": 1, "total": 0};
+        this.parks = {"name": "Parks", "count": 0, "modifier": 1, "total": 0};
+        this.roads = {"name": "Roads", "count": 0, "modifier": -1, "total": 0};
     }
 }
 
 class AgScore extends Score {
     constructor(scoreOne, scoreTwo, scoreThree) {
         super(scoreOne, scoreTwo, scoreThree)
-        this.cornfield = {"count": 0, "modifier": 1, "total": 0};
-        this.orchard = {"count": 0, "modifier": 1, "total": 0};
-        this.livestock = {"count": 0, "modifier": 1, "total": 0};
-        this.vineyard = {"count": 0, "modifier": 1, "total": 0};
-        this.roads = {"count": 0, "modifier": 1, "total": 0};
+        this.cornfield = {"name": "Cornfields", "count": 0, "modifier": 1, "total": 0};
+        this.orchard = {"name": "Orchards", "count": 0, "modifier": 1, "total": 0};
+        this.livestock = {"name": "Livestock", "count": 0, "modifier": 1, "total": 0};
+        this.vineyard = {"name": "Vineyards", "count": 0, "modifier": 1, "total": 0};
+        this.roads = {"name": "Roads", "count": 0, "modifier": 1, "total": 0};
     }
 }
 
@@ -151,6 +90,7 @@ let gameCards = [];
 let score1
 let score2
 let newSheet
+let blocks
 
 const testBtn = document.querySelector("#testBtn");
 const newGameBtn = document.querySelector("#newGame");
@@ -158,6 +98,7 @@ const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
 const newGameCardList = document.querySelector("#newGameCardList");
 const tableDiv = document.querySelector("#tableDiv");
 const scoreDisplay = document.querySelector("#scoreDisplay");
+const cardTargets = document.querySelectorAll(".cardTarget");
 const blockScores = document.querySelectorAll(".blockScore");
 const blockScoreChanges = document.querySelectorAll(".blockScoreChange");
 const blocksRoadsSubtotal = document.querySelector("#blocksRoadsSubtotal");
@@ -241,8 +182,9 @@ function createGameSheet(gameCards) {
             }
         }
     }
-    newSheet = new Score(newCards[0], newCards[1], newCards[2])
+    newSheet = new SprawlScore(newCards[0], newCards[1], newCards[2])
     gameCards = [];
+    makeBlocks()
     createDisplay(newSheet);
 }
 
@@ -264,9 +206,19 @@ function createDisplay(sheet) {
     headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
     dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
     makeSecondCol(scores, headerCells, dataCells)
+    makeBlocks()
+    makeTargets()
     calcBlocks();
     calcScoreCards();
     calcTotal()
+}
+
+function makeBlocks() {
+    allKeys = Object.keys(newSheet);
+    blocks = allKeys.slice(3)
+    for (let i = 0; i < blockScores.length; i++) {
+        blockScores[i].innerText = newSheet[blocks[i]]["name"]
+    }
 }
 
 
@@ -279,6 +231,13 @@ function makeSecondCol(scores, headerCells, dataCells) {
             headerCells[i].innerText = scores[i]["colTwoName"];
             dataCells[i].innerText = scores[i]["colTwo"];
         }
+    }
+}
+
+function makeTargets() {
+    cards = [newSheet["scoreOne"], newSheet["scoreTwo"], newSheet["scoreThree"]]
+    for (let i = 0; i < cardTargets.length; i++) {
+        cardTargets[i].innerText = "Target: " + cards[i]["target"]
     }
 }
 
