@@ -1,26 +1,19 @@
 class ScoreSheet {
-    constructor(scoreCards, deck, cardElements) {
-        this.scoreOne = scoreCards[0];
-        this.scoreTwo = scoreCards[1];
-        this.scoreThree = scoreCards[2];
-        this.blockOne = deck['blocks'][0];
-        this.blockTwo = deck['blocks'][1];
-        this.blockThree = deck['blocks'][2];
-        this.blockFour = deck['blocks'][3];
-        this.blockFive = deck['blocks'][4];
+    constructor(scoreCards, blocks, cardElements) {
+        this.scoreCards = scoreCards;
+        this.blocks = blocks
         this.cardElements = cardElements;
     }
 
     createSheet() {
-        const {scoreCards, deck, cardElements} = this;
+        const {scoreCards, cardElements} = this;
         length = scoreCards.length;
         for (let i = 0; i < length; i++) {
             card = scoreCards[i];
             this.createScoreCardRow(i);
         }
-        this.createScoreBlockRows(deck)
+        this.createScoreBlockRows()
         cardElements['totalTarget'].innerText = scoreCards[3]['target'];
-        this.calcScore()
     }
 
     createScoreCardRow(i) {
@@ -38,59 +31,50 @@ class ScoreSheet {
         }
     }
 
+    createScoreBlockRows() {
+        const {blocks, cardElements} = this
+        blockNames = cardElements['blockNames'];
+        length = blockNames.length;
+        for (let i = 0; i < length; i++) {
+            blockNames[i].innerText = blocks[i]["name"];
+        }
+    }
+
+    calcBlockScores() {
+        const {blocks, cardElements} = this;
+        scores = cardElements["blockScores"];
+        length = blockScores.length;
+        total = 0;
+        for (let i = 0; i < length; i++) {
+            toAdd = scores[i].innerText;
+            total += parseInt(toAdd);
+        }
+        cardElements['blockTotal'].innerText = total;
+    }
+
+    calcScoreCards() {
+        let total
+        const {scoreCards, cardElements} = this;
+        const length = scoreCards.length;
+        for (let i = 0; i < length; i++) {
+            let cardTotal
+            const colOne = cardElements["colOneData"][i].innerText;
+            const colOneScore = parseInt(colOne) + scoreCards[i]["colOneMulti"];
+            cardTotal += colOneScore;
+            if (cardElements['colTwo'] != null) {
+                colTwo = cardElements["colTwoData"][i].innerText;
+                colTwoScore = parseInt(colTwo) + scoreCards[i]['colTwoMulti'];
+                cardTotal += colTwoScore;
+            }
+            cardElements["scoreCardTotals"][i].innerText = cardTotal;
+            total += cardTotal;
+        }
+        cardElements["gameTotal"].innerText = total;
+    }
+
 }
 
 
-//function makeTargets() {
-//    cards = [newSheet["scoreOne"], newSheet["scoreTwo"], newSheet["scoreThree"]]
-//    for (let i = 0; i < cardTargets.length; i++) {
-//        cardTargets[i].innerText = "Target: " + cards[i]["target"]
-//    }
-//    totalTarget.innerText = newSheet.target()
-//}
-
-
-//    scores = [sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree]
-//    headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
-//    dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
-//    makeSecondCol(scores, headerCells, dataCells)
-//}
-
-//    target() {
-//        const {scoreOne, scoreTwo, scoreThree} = this;
-//        const target = (scoreOne["target"]) + (scoreTwo["target"]) + (scoreThree["target"])
-//        return target
-//    }
-//    total() {
-//        const properties = Object.keys(this);
-//        console.log(properties)
-//        let total = 0;
-//        for (let i = 0; i < properties.length; i++) {
-//            total += this[properties[i]]["total"];
-//        }
-//        return total;
-//    }
-//
-//    cardScore() {
-//        const {scoreOne, scoreTwo, scoreThree} = this;
-//        const cards = [scoreOne, scoreTwo, scoreThree];
-//        for (let i = 0; i < cards.length; i++) {
-//            const card = cards[i];
-//            if (card["colTwo"]) {
-//                card["total"] = Math.floor((card["colOne"] * card["colOneMulti"]) + (card["colTwo"] * card["colTwoMulti"]) + card["totalMod"]);
-//            } else {
-//                card["total"] = Math.floor((card["colOne"] * card["colOneMulti"]) + card["totalMod"]);
-//            }
-//            if (card["total"] > card["max-score"]) {
-//                card["total"] = card["max-score"];
-//            }
-//            if (card["total"] < card["min-score"]) {
-//                card["total"] = card["min-score"];
-//            }
-//        }
-//    }
-//
-//}
 //
 //
 
@@ -108,39 +92,48 @@ class Deck {
 
 function startGame() {
 //    EventListener for button press
-    deck = function selectDeck() {
+    newDeck = function selectDeck() {
 //        things to select appropriate deck
     }
+//    do some deck things
     scoreCards = function selectScoreCards(deck) {
 //        things to create an array of three scoring cards AND target score
     }
+    blocks = newDeck['blocks'];
     cardElements = getCardElements();
-    const newSheet = new ScoreSheet(scoreCards, deck, cardElements)
+    const newSheet = new ScoreSheet(scoreCards, blocks, cardElements)
     newSheet.createSheet()
 }
 
 getCardElements() {
     const allCardElements = {};
+    const blockNames = document.querySelectorAll(".blockNames");
+    const blockScores = document.querySelecotrAll(".blockScores");
+    const blockTotal = document.querySelector("#blockTotal");
     const scoreCardHeader = document.querySelectorAll(".scoreCardHeaders");
     const scoreCardColOneNames = document.querySelectorAll(".scoreCardColOneNames");
     const scoreCardColTwoNames = document.querySelectorAll(".scoreCardColTwoNames");
-    const scoreCardDataOne = document.querySelectorAll(".scoreCardDataOne");
-    const scoreCardDataTwo = document.querySelectorAll(".scoreCardDataTwo");
+    const scoreCardColOneData = document.querySelectorAll(".scoreCardColOneData");
+    const scoreCardColTwoData = document.querySelectorAll(".scoreCardColTwoData");
     const scoreCardTotals = document.querySelectorAll(".scoreCardTotals");
     const cardTargets = document.querySelectorAll(".cardTargets");
     const totalTarget = document.querySelector("#totalTarget");
+    const gameTotal = document.querySelector("gameTotal")
+    allCardElements['blockNames'] = blockNames;
+    allCardElements['blockScores'] = blockScores;
+    allCardElements['blockTotal'] = blockTotal;
     allCardElements['headers'] = scoreCardHeader;
     allCardElements['colOneNames'] = scoreCardColOneNames;
     allCardElements['colTwoNames'] = scoreCardColTwoNames;
-    allCardElements['colOneData'] = scoreCardDataOne;
-    allCardElements['colTwoData'] = scoreCardDataTwo;
+    allCardElements['colOneData'] = scoreCardColOneData;
+    allCardElements['colTwoData'] = scoreCardColOneData;
+    allCardElements['scoreCardTotals'] = scoreCardTotals;
     allCardElements['cardTargets'] = cardTargets;
     allCardElements['totalTarget'] = totalTarget;
-    allCardElements['totals'] = scoreCardTotals;
+    allCardElements['gameTotal'] = gameTotal;
     return allCardElements
 }
 
-//const d = new Deck(sprawlopolis)
 
 //function createGameSheet(gameCards) {
 //    newCards = []
@@ -223,26 +216,7 @@ const sprawlopolis = {
 //const totalScore = document.querySelector("#totalScore");
 //const totalTarget = document.querySelector("#totalTarget");
 //
-//const scoreCardOneHeader = document.querySelector("#scoreCardOneHeader");
-//const scoreCardOneFirstCat = document.querySelector("#scoreCardOneFirstCat");
-//const scoreCardOneSecondCat = document.querySelector("#scoreCardOneSecondCat");
-//const scoreCardOneDataOne = document.querySelector("#scoreCardOneDataOne");
-//const scoreCardOneDataTwo = document.querySelector("#scoreCardOneDataTwo");
-//const scoreCardOneTotal = document.querySelector("#scoreCardOneTotal");
-//
-//const scoreCardTwoHeader = document.querySelector("#scoreCardTwoHeader");
-//const scoreCardTwoFirstCat = document.querySelector("#scoreCardTwoFirstCat");
-//const scoreCardTwoSecondCat = document.querySelector("#scoreCardTwoSecondCat");
-//const scoreCardTwoDataOne = document.querySelector("#scoreCardTwoDataOne");
-//const scoreCardTwoDataTwo = document.querySelector("#scoreCardTwoDataTwo");
-//const scoreCardTwoTotal = document.querySelector("#scoreCardTwoTotal");
-//
-//const scoreCardThreeHeader = document.querySelector("#scoreCardThreeHeader");
-//const scoreCardThreeFirstCat = document.querySelector("#scoreCardThreeFirstCat");
-//const scoreCardThreeSecondCat = document.querySelector("#scoreCardThreeSecondCat");
-//const scoreCardThreeDataOne = document.querySelector("#scoreCardThreeDataOne");
-//const scoreCardThreeDataTwo = document.querySelector("#scoreCardThreeDataTwo");
-//const scoreCardThreeTotal = document.querySelector("#scoreCardThreeTotal");
+
 //
 //
 //newGameBtn.addEventListener("click", function() {
@@ -296,44 +270,10 @@ const sprawlopolis = {
 //            }
 //        }
 //    }
-//    newSheet = new SprawlScore(newCards[0], newCards[1], newCards[2])
-//    gameCards = [];
-//    makeBlocks()
-//    createDisplay(newSheet);
+
 //}
 //
-//function createDisplay(sheet) {
-//    tableDiv.classList.remove("hidden");
-//    scoreCardOneHeader.innerText = sheet.scoreOne["name"]
-//    scoreCardTwoHeader.innerText = sheet.scoreTwo["name"]
-//    scoreCardThreeHeader.innerText = sheet.scoreThree["name"]
-//    scoreCardOneFirstCat.innerText = sheet.scoreOne["colOneName"]
-//    scoreCardTwoFirstCat.innerText = sheet.scoreTwo["colOneName"]
-//    scoreCardThreeFirstCat.innerText = sheet.scoreThree["colOneName"]
-//    scoreCardOneDataOne.innerText = sheet.scoreOne["colOne"]
-//    scoreCardTwoDataOne.innerText = sheet.scoreTwo["colOne"]
-//    scoreCardThreeDataOne.innerText = sheet.scoreThree["colOne"]
-//    scoreCardOneHeader.title = sheet.scoreOne["description"];
-//    scoreCardTwoHeader.title = sheet.scoreTwo["description"];
-//    scoreCardThreeHeader.title = sheet.scoreThree["description"];
-//    scores = [sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree]
-//    headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
-//    dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
-//    makeSecondCol(scores, headerCells, dataCells)
-//    makeBlocks()
-//    makeTargets()
-//    calcBlocks();
-//    calcScoreCards();
-//    calcTotal()
-//}
-//
-//function makeBlocks() {
-//    allKeys = Object.keys(newSheet);
-//    blocks = allKeys.slice(3)
-//    for (let i = 0; i < blockScores.length; i++) {
-//        blockScores[i].innerText = newSheet[blocks[i]]["name"]
-//    }
-//}
+
 //
 //
 //function makeSecondCol(scores, headerCells, dataCells) {
