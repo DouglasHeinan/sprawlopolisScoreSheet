@@ -1,39 +1,39 @@
 class ScoreSheet {
-    constructor(scoreCards, blocks, cardElements) {
+    constructor(scoreCards, blocks, sheetElements) {
         this.scoreCards = scoreCards;
         this.blocks = blocks
-        this.cardElements = cardElements;
+        this.sheetElements = sheetElements;
     }
 
     createSheet() {
-        const {scoreCards, cardElements} = this;
+        const {scoreCards, sheetElements} = this;
         length = scoreCards.length;
         for (let i = 0; i < length; i++) {
             card = scoreCards[i];
             this.createScoreCardRow(i);
         }
         this.createScoreBlockRows()
-        cardElements['totalTarget'].innerText = scoreCards[3]['target'];
+        sheetElements['totalTarget'].innerText = scoreCards[3]['target'];
     }
 
     createScoreCardRow(i) {
-        const {scoreCards, cardElements} = this;
+        const {scoreCards, sheetElements} = this;
         card = scoreCards[i];
-        cardElements['headers'][i].innerText = card["name"];
-        cardElements['headers'][i].title = card["description"];
-        cardElements['colOneNames'][i].innerText = card["colOneName"];
-        cardElements['colOneData'][i].innerText = card["colOne"];
-        cardElements['totals'][i].innerText = card["total"];
-        cardElements['cardtargets'][i].innerText = card["target"];
+        sheetElements['headers'][i].innerText = card["name"];
+        sheetElements['headers'][i].title = card["description"];
+        sheetElements['colOneNames'][i].innerText = card["colOneName"];
+        sheetElements['colOneData'][i].innerText = card["colOne"];
+        sheetElements['totals'][i].innerText = card["total"];
+        sheetElements['cardtargets'][i].innerText = card["target"];
         if (card['colTwo']) {
-            cardElements['colTwoNames'][i].innerText = card["colTwoName"];
-            cardElements['colTwoData'][i].innerText = card["colTwo"];
+            sheetElements['colTwoNames'][i].innerText = card["colTwoName"];
+            sheetElements['colTwoData'][i].innerText = card["colTwo"];
         }
     }
 
     createScoreBlockRows() {
-        const {blocks, cardElements} = this
-        blockNames = cardElements['blockNames'];
+        const {blocks, sheetElements} = this
+        blockNames = sheetElements['blockNames'];
         length = blockNames.length;
         for (let i = 0; i < length; i++) {
             blockNames[i].innerText = blocks[i]["name"];
@@ -41,56 +41,63 @@ class ScoreSheet {
     }
 
     calcBlockScores() {
-        const {blocks, cardElements} = this;
-        scores = cardElements["blockScores"];
+        const {blocks, sheetElements} = this;
+        scores = sheetElements["blockScores"];
         length = blockScores.length;
         total = 0;
         for (let i = 0; i < length; i++) {
             toAdd = scores[i].innerText;
             total += parseInt(toAdd);
         }
-        cardElements['blockTotal'].innerText = total;
+        sheetElements['blockTotal'].innerText = total;
     }
 
     calcScoreCards() {
+        const {scoreCards, sheetElements} = this;
         let total
-        const {scoreCards, cardElements} = this;
         const length = scoreCards.length;
         for (let i = 0; i < length; i++) {
             let cardTotal
-            const colOne = cardElements["colOneData"][i].innerText;
+            const colOne = sheetElements["colOneData"][i].innerText;
             const colOneScore = parseInt(colOne) + scoreCards[i]["colOneMulti"];
             cardTotal += colOneScore;
-            if (cardElements['colTwo'] != null) {
-                colTwo = cardElements["colTwoData"][i].innerText;
+            if (sheetElements['colTwo'] != null) {
+                colTwo = sheetElements["colTwoData"][i].innerText;
                 colTwoScore = parseInt(colTwo) + scoreCards[i]['colTwoMulti'];
                 cardTotal += colTwoScore;
             }
-            cardElements["scoreCardTotals"][i].innerText = cardTotal;
+            sheetElements["scoreCardTotals"][i].innerText = cardTotal;
             total += cardTotal;
         }
-        cardElements["gameTotal"].innerText = total;
+        sheetElements["scoreCardSubtotal"].innerText = total;
     }
 
+    calcTotalScore() {
+        const {sheetElements} = this;
+        blocksSubtotal = sheetElements["blockTotal"].innerText;
+        scoreCardSubTotal = sheetElements["scoreCardSubtotal"].innerText;
+        total = parseInt(blocksSubtotal) + parseInt(scoreCardSubtotal);
+        sheetElements["gameTotal"].innerText = total;
+    }
 }
 
-
-//
-//
 
 class Deck {
     constructor(game) {
         this.name = game['name'];
-        this.blocks = game['blocks']
-        this.scoringCards = game['scoringCards']
+        this.blocks = game['blocks'];
+        this.scoringCards = game['scoringCards'];
     }
+
     selectScoreCards() {
         const {scoringCards} = this;
 
     }
+
 }
 
 function startGame() {
+    deckElements = getDeckElements()
 //    EventListener for button press
     newDeck = function selectDeck() {
 //        things to select appropriate deck
@@ -100,13 +107,18 @@ function startGame() {
 //        things to create an array of three scoring cards AND target score
     }
     blocks = newDeck['blocks'];
-    cardElements = getCardElements();
-    const newSheet = new ScoreSheet(scoreCards, blocks, cardElements)
+    sheetElements = getSheetElements();
+    const newSheet = new ScoreSheet(scoreCards, blocks, sheetElements)
     newSheet.createSheet()
 }
 
-getCardElements() {
-    const allCardElements = {};
+function getDeckElements() {
+    const allDeckElements = {};
+    return allDeckElements;
+}
+
+function getSheetElements() {
+    const allSheetElements = {};
     const blockNames = document.querySelectorAll(".blockNames");
     const blockScores = document.querySelecotrAll(".blockScores");
     const blockTotal = document.querySelector("#blockTotal");
@@ -116,40 +128,28 @@ getCardElements() {
     const scoreCardColOneData = document.querySelectorAll(".scoreCardColOneData");
     const scoreCardColTwoData = document.querySelectorAll(".scoreCardColTwoData");
     const scoreCardTotals = document.querySelectorAll(".scoreCardTotals");
+    const scoreCardSubtotal = document.querySelector("#scoreCardSubTotal");
     const cardTargets = document.querySelectorAll(".cardTargets");
     const totalTarget = document.querySelector("#totalTarget");
     const gameTotal = document.querySelector("gameTotal")
-    allCardElements['blockNames'] = blockNames;
-    allCardElements['blockScores'] = blockScores;
-    allCardElements['blockTotal'] = blockTotal;
-    allCardElements['headers'] = scoreCardHeader;
-    allCardElements['colOneNames'] = scoreCardColOneNames;
-    allCardElements['colTwoNames'] = scoreCardColTwoNames;
-    allCardElements['colOneData'] = scoreCardColOneData;
-    allCardElements['colTwoData'] = scoreCardColOneData;
-    allCardElements['scoreCardTotals'] = scoreCardTotals;
-    allCardElements['cardTargets'] = cardTargets;
-    allCardElements['totalTarget'] = totalTarget;
-    allCardElements['gameTotal'] = gameTotal;
-    return allCardElements
+    allSheetElements['blockNames'] = blockNames;
+    allSheetElements['blockScores'] = blockScores;
+    allSheetElements['blockTotal'] = blockTotal;
+    allSheetElements['headers'] = scoreCardHeader;
+    allSheetElements['colOneNames'] = scoreCardColOneNames;
+    allSheetElements['colTwoNames'] = scoreCardColTwoNames;
+    allSheetElements['colOneData'] = scoreCardColOneData;
+    allSheetElements['colTwoData'] = scoreCardColOneData;
+    allSheetElements['scoreCardTotals'] = scoreCardTotals;
+    allSheetElements['scoreCardSubtotal'] = scoreCardSubtotal;
+    allSheetElements['cardTargets'] = cardTargets;
+    allSheetElements['totalTarget'] = totalTarget;
+    allSheetElements['gameTotal'] = gameTotal;
+    return allSheetElements
 }
 
 
-//function createGameSheet(gameCards) {
-//    newCards = []
-//    for (let i = 0; i < gameCards.length; i++) {
-//        for (let j = 0; j < allSprawlCards.length; j++) {
-//            if (gameCards[i] === allSprawlCards[j]["name"]) {
-//                newCard = allSprawlCards[j];
-//                newCards.push(newCard);
-//            }
-//        }
-//    }
-//    newSheet = new SprawlScore(newCards[0], newCards[1], newCards[2])
-//    gameCards = [];
-//    makeBlocks()
-//    createDisplay(newSheet);
-//}
+
 
 //newGameCardList.addEventListener("click", function(e) {
 //    if (e.target.className == "addToGame") {
@@ -162,6 +162,33 @@ getCardElements() {
 //        }
 //    }
 //})
+//newGameBtn.addEventListener("click", function() {
+//    newGameBtn.classList.add("hidden");
+//    newGameCardList.classList.remove("hidden");
+//    for (i = 0; i < allSprawlCards.length; i++) {
+//        const newListTag = document.createElement("li");
+//        const newAnchorTag = document.createElement("a");
+//        newAnchorTag.innerText = allSprawlCards[i]["name"];
+//        newAnchorTag.href = "#";
+//        newAnchorTag.classList.add("addToGame");
+//        const availableCards = document.querySelector(".addToGame");
+//        newGameCardList.insertAdjacentElement("beforeend", newListTag);
+//        newListTag.insertAdjacentElement("beforeend", newAnchorTag);
+//    }
+
+//    for (let i = 0; i < gameCards.length; i++) {
+//        for (let j = 0; j < allSprawlCards.length; j++) {
+//            if (gameCards[i] === allSprawlCards[j]["name"]) {
+//                newCard = allSprawlCards[j];
+//                newCards.push(newCard);
+
+//const testBtn = document.querySelector("#testBtn");
+//const newGameBtn = document.querySelector("#newGame");
+//const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
+//const newGameCardList = document.querySelector("#newGameCardList");
+//const tableDiv = document.querySelector("#tableDiv");
+//const scoreDisplay = document.querySelector("#scoreDisplay");
+//const cardTargets = document.querySelectorAll(".cardTarget");
 
 
 const sprawlopolis = {
@@ -195,138 +222,7 @@ const sprawlopolis = {
     ]
 }
 
-//-----------------------------------------------------------------
 
-
-//const testBtn = document.querySelector("#testBtn");
-//const newGameBtn = document.querySelector("#newGame");
-//const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
-//const newGameCardList = document.querySelector("#newGameCardList");
-//const tableDiv = document.querySelector("#tableDiv");
-//const scoreDisplay = document.querySelector("#scoreDisplay");
-//const cardTargets = document.querySelectorAll(".cardTarget");
-//const blockScores = document.querySelectorAll(".blockScore");
-//const blockScoreChanges = document.querySelectorAll(".blockScoreChange");
-//const blocksRoadsSubtotal = document.querySelector("#blocksRoadsSubtotal");
-//const cardScoreChanges = document.querySelectorAll(".cardScoreChange");
-//const scoreCardTotals = document.querySelectorAll(".scoreCardTotal");
-//const scoreColOne = document.querySelectorAll(".scoreColOne");
-//const scoreColTwo = document.querySelectorAll(".scoreColTwo");
-//const scoringCardSubTotal = document.querySelector("#scoringCardSubtotal");
-//const totalScore = document.querySelector("#totalScore");
-//const totalTarget = document.querySelector("#totalTarget");
-//
-
-//
-//
-//newGameBtn.addEventListener("click", function() {
-//    newGameBtn.classList.add("hidden");
-//    newGameCardList.classList.remove("hidden");
-//    for (i = 0; i < allSprawlCards.length; i++) {
-//        const newListTag = document.createElement("li");
-//        const newAnchorTag = document.createElement("a");
-//        newAnchorTag.innerText = allSprawlCards[i]["name"];
-//        newAnchorTag.href = "#";
-//        newAnchorTag.classList.add("addToGame");
-//        const availableCards = document.querySelector(".addToGame");
-//        newGameCardList.insertAdjacentElement("beforeend", newListTag);
-//        newListTag.insertAdjacentElement("beforeend", newAnchorTag);
-//    }
-//})
-//
-//newGameCardList.addEventListener("click", function(e) {
-//    if (e.target.className == "addToGame") {
-//        newCard = e.target.innerText;
-//        gameCards.push(newCard);
-//        e.target.remove();
-//        if (gameCards.length === 3) {
-//            newGameCardList.classList.add("hidden");
-//            createGameSheet(gameCards);
-//        }
-//    }
-//})
-//
-//for (let i = 0; i < blockScoreChanges.length; i++) {
-//    blockScoreChanges[i].addEventListener("input", function() {
-//        calcBlocks()
-//        calcTotal()
-//    })
-//}
-//
-//for (let i = 0; i < cardScoreChanges.length; i++) {
-//    cardScoreChanges[i].addEventListener("input", function() {
-//        calcScoreCards()
-//        calcTotal()
-//    })
-//}
-//
-//function createGameSheet(gameCards) {
-//    newCards = []
-//    for (let i = 0; i < gameCards.length; i++) {
-//        for (let j = 0; j < allSprawlCards.length; j++) {
-//            if (gameCards[i] === allSprawlCards[j]["name"]) {
-//                newCard = allSprawlCards[j];
-//                newCards.push(newCard);
-//            }
-//        }
-//    }
-
-//}
-//
-
-//
-//
-//function makeSecondCol(scores, headerCells, dataCells) {
-//    for (let i = 0; i < scores.length; i++) {
-//        if (scores[i]["colTwoName"] === null) {
-//            headerCells[i].classList.add("noBorder");
-//            dataCells[i].parentNode.classList.add("noBorder");
-//        } else {
-//            headerCells[i].innerText = scores[i]["colTwoName"];
-//            dataCells[i].innerText = scores[i]["colTwo"];
-//        }
-//    }
-//}
-//
-
-//
-//function calcBlocks() {
-//    let subtotal = 0;
-//    for (let i = 0; i < blockScoreChanges.length; i++) {
-//        scoreDiv = blockScoreChanges[i];
-//        score = parseInt(scoreDiv.innerText);
-//        if (!score) {
-//            score = 0;
-//        }
-//        subtotal += score;
-//    }
-//    blocksRoadsSubtotal.innerText = subtotal;
-//}
-//
-//function calcScoreCards() {
-//    scoringCardSub = 0
-//    cards = [newSheet["scoreOne"], newSheet["scoreTwo"], newSheet["scoreThree"]]
-//    totalDisplays = [scoreCardOneTotal, scoreCardTwoTotal, scoreCardThreeTotal];
-//    for (let i = 0; i < cards.length; i++) {
-//        card = cards[i];
-//        card["colOne"] = scoreColOne[i].innerText;
-//        if (card["colTwo"] != null) {
-//            card["colTwo"] = scoreColTwo[i].innerText;
-//        }
-//    }
-//    newSheet.cardScore()
-//    for (let i = 0; i < totalDisplays.length; i++) {
-//        totalDisplays[i].innerText = cards[i]["total"];
-//        scoringCardSub += cards[i]["total"];
-//    }
-//    scoringCardSubtotal.innerText = scoringCardSub
-//}
-//
-//function calcTotal() {
-//    total = parseInt(scoringCardSubtotal.innerText) + parseInt(blocksRoadsSubtotal.innerText)
-//    totalScore.innerText = total;
-//}
-//
 ////------------------------------TEST---------------------------------------
 //testBtn.addEventListener("click", function() {
 //    score1 = new SprawlScore(allSprawlCards[1], allSprawlCards[2], allSprawlCards[11]);
