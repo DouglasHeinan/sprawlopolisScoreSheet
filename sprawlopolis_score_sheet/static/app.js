@@ -83,25 +83,66 @@ class ScoreSheet {
 
 
 class Deck {
-    constructor(game) {
+    constructor(game, deckElements) {
         this.name = game['name'];
         this.blocks = game['blocks'];
         this.scoringCards = game['scoringCards'];
+        this.deckElements = deckElements;
     }
 
-    selectScoreCards() {
-        const {scoringCards} = this;
+    createScoreCardList() {
+        const {scoringCards, deckElements} = this;
+        deckElements["newGameCardList"].classList.remove("hidden");
+        length = scoringCards.length;
+        for (i = 0; i < length; i++) {
+            const newListTag = document.createElement("li");
+            const newAnchorTag = document.createElement("a");
+            newAnchorTag.innerText = scoringCards[i]["name"];
+            newAnchorTag.href = "#";
+            newAnchorTag.classList.add("addToGame");
+            deckElements["newGameCardList"].insertAdjacentElement("beforeend", newListTag);
+            newListTag.insertAdjacentElement("beforeend", newAnchorTag);
+        }
 
     }
 
 }
 
+
+//newGameCardList.addEventListener("click", function(e) {
+//    if (e.target.className == "addToGame") {
+//        newCard = e.target.innerText;
+//        gameCards.push(newCard);
+//        e.target.remove();
+//        if (gameCards.length === 3) {
+//            newGameCardList.classList.add("hidden");
+//            createGameSheet(gameCards);
+//        }
+//    }
+//})
+
+
+//    for (let i = 0; i < gameCards.length; i++) {
+//        for (let j = 0; j < allSprawlCards.length; j++) {
+//            if (gameCards[i] === allSprawlCards[j]["name"]) {
+//                newCard = allSprawlCards[j];
+//                newCards.push(newCard);
+
+//const testBtn = document.querySelector("#testBtn");
+//const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
+//const newGameCardList = document.querySelector("#newGameCardList");
+//const tableDiv = document.querySelector("#tableDiv");
+//const scoreDisplay = document.querySelector("#scoreDisplay");
+//const cardTargets = document.querySelectorAll(".cardTarget");
+
+
+
 function startGame() {
     deckElements = getDeckElements()
-//    EventListener for button press
-    newDeck = function selectDeck() {
-//        things to select appropriate deck
-    }
+    game = gameSelect() //Probably an event listener, three buttons on page to start game
+    const newDeck = new Deck(game, deckElements);
+    newDeck.createScoreCardList()
+//        things to select appropriate deck/game
 //    do some deck things
     scoreCards = function selectScoreCards(deck) {
 //        things to create an array of three scoring cards AND target score
@@ -114,6 +155,8 @@ function startGame() {
 
 function getDeckElements() {
     const allDeckElements = {};
+    allDeckElements["newGameButtons"] = document.querySelector("#newGameButtons");
+    allDeckElements["newGameCardList"] = document.querySelector("#newGameCardList");
     return allDeckElements;
 }
 
@@ -147,49 +190,6 @@ function getSheetElements() {
     allSheetElements['gameTotal'] = gameTotal;
     return allSheetElements
 }
-
-
-
-
-//newGameCardList.addEventListener("click", function(e) {
-//    if (e.target.className == "addToGame") {
-//        newCard = e.target.innerText;
-//        gameCards.push(newCard);
-//        e.target.remove();
-//        if (gameCards.length === 3) {
-//            newGameCardList.classList.add("hidden");
-//            createGameSheet(gameCards);
-//        }
-//    }
-//})
-//newGameBtn.addEventListener("click", function() {
-//    newGameBtn.classList.add("hidden");
-//    newGameCardList.classList.remove("hidden");
-//    for (i = 0; i < allSprawlCards.length; i++) {
-//        const newListTag = document.createElement("li");
-//        const newAnchorTag = document.createElement("a");
-//        newAnchorTag.innerText = allSprawlCards[i]["name"];
-//        newAnchorTag.href = "#";
-//        newAnchorTag.classList.add("addToGame");
-//        const availableCards = document.querySelector(".addToGame");
-//        newGameCardList.insertAdjacentElement("beforeend", newListTag);
-//        newListTag.insertAdjacentElement("beforeend", newAnchorTag);
-//    }
-
-//    for (let i = 0; i < gameCards.length; i++) {
-//        for (let j = 0; j < allSprawlCards.length; j++) {
-//            if (gameCards[i] === allSprawlCards[j]["name"]) {
-//                newCard = allSprawlCards[j];
-//                newCards.push(newCard);
-
-//const testBtn = document.querySelector("#testBtn");
-//const newGameBtn = document.querySelector("#newGame");
-//const newGameCardListDiv = document.querySelector("#newGameCardListDiv");
-//const newGameCardList = document.querySelector("#newGameCardList");
-//const tableDiv = document.querySelector("#tableDiv");
-//const scoreDisplay = document.querySelector("#scoreDisplay");
-//const cardTargets = document.querySelectorAll(".cardTarget");
-
 
 const sprawlopolis = {
     'name': "Sprawlopolis",
