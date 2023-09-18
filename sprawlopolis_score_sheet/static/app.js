@@ -1,13 +1,71 @@
-//class Score {
-//    constructor(scoreOne, scoreTwo, scoreThree, game) {
-//        this.scoreOne = scoreOne;
-//        this.scoreTwo = scoreTwo;
-//        this.scoreThree = scoreThree;
-//        this.blockOne = game[0];
-//        this.blockTwo = game[1];
-//        this.blockThree = game[2];
-//        this.blockFour = game[3];
-//    }
+class ScoreSheet {
+    constructor(scoreCards, deck) {
+        this.scoreOne = scoreCards[0];
+        this.scoreTwo = scoreCards[1];
+        this.scoreThree = scoreCards[2];
+        this.blockOne = deck['blocks'][0];
+        this.blockTwo = deck['blocks'][1];
+        this.blockThree = deck['blocks'][2];
+        this.blockFour = deck['blocks'][3];
+        this.blockFive = deck['blocks'][4];
+    }
+
+    create() {
+        const {scoreCards, deck} = this;
+        length = scoreCards.length
+        for (let i = 0; i < length; i++) {
+            card = scoreCards[i];
+            cardElements = this.getCardElements(i)
+            this.createScoreCardRow(cardElements, card);
+            this.createTargets(cardElements);
+        }
+        this.createScoreBlockRows()
+        this.calcScore()
+    }
+
+    getCardElements(elementIndex) {
+        allCardElements = [];
+        scoreCardHeader = document.querySelectorAll(".scoreCardHeaders");
+        scoreCardFirstCat = document.querySelectorAll(".scoreCardFirstCats");
+        scoreCardSecondCat = document.querySelectorAll(".scoreCardSecondCats");
+        scoreCardDataOne = document.querySelectorAll(".scoreCardDataOne");
+        scoreCardDataTwo = document.querySelectorAll(".scoreCardDataTwo");
+        scoreCardTotal = document.querySelectorAll(".scoreCardTotal")
+        allCardElements.push (
+        scoreCardHeader[elementIndex],
+        scoreCardFirstCat[elementIndex],
+        scoreCardSecondCat[elementIndex],
+        scoreCardDataOne[elementIndex],
+        scoreCardDataTwo[elementIndex],
+        scoreCardTotal[elementIndex]
+        )
+        return allCardElements
+    }
+    createScoreCardRow(cardElements) {
+
+    }
+}
+
+
+//    tableDiv.classList.remove("hidden");
+//    scoreCardOneHeader.innerText = sheet.scoreOne["name"]
+//    scoreCardTwoHeader.innerText = sheet.scoreTwo["name"]
+//    scoreCardThreeHeader.innerText = sheet.scoreThree["name"]
+//    scoreCardOneFirstCat.innerText = sheet.scoreOne["colOneName"]
+//    scoreCardTwoFirstCat.innerText = sheet.scoreTwo["colOneName"]
+//    scoreCardThreeFirstCat.innerText = sheet.scoreThree["colOneName"]
+//    scoreCardOneDataOne.innerText = sheet.scoreOne["colOne"]
+//    scoreCardTwoDataOne.innerText = sheet.scoreTwo["colOne"]
+//    scoreCardThreeDataOne.innerText = sheet.scoreThree["colOne"]
+//    scoreCardOneHeader.title = sheet.scoreOne["description"];
+//    scoreCardTwoHeader.title = sheet.scoreTwo["description"];
+//    scoreCardThreeHeader.title = sheet.scoreThree["description"];
+//    scores = [sheet.scoreOne, sheet.scoreTwo, sheet.scoreThree]
+//    headerCells = [scoreCardOneSecondCat, scoreCardTwoSecondCat, scoreCardThreeSecondCat]
+//    dataCells = [scoreCardOneDataTwo, scoreCardTwoDataTwo, scoreCardThreeDataTwo]
+//    makeSecondCol(scores, headerCells, dataCells)
+//}
+
 //    target() {
 //        const {scoreOne, scoreTwo, scoreThree} = this;
 //        const target = (scoreOne["target"]) + (scoreTwo["target"]) + (scoreThree["target"])
@@ -45,37 +103,16 @@
 //}
 //
 //
-//class SprawlScore extends Score {
-//    constructor(scoreOne, scoreTwo, scoreThree) {
-//        super(scoreOne, scoreTwo, scoreThree)
-//        this.residential = {"name": "Residential", "count": 0, "modifier": 1, "total": 0};
-//        this.commercial = {"name": "Commercial", "count": 0, "modifier": 1, "total": 0};
-//        this.industrial = {"name": "Industrial", "count": 0, "modifier": 1, "total": 0};
-//        this.parks = {"name": "Parks", "count": 0, "modifier": 1, "total": 0};
-//        this.roads = {"name": "Roads", "count": 0, "modifier": -1, "total": 0};
-//    }
-//}
-//
-//class AgScore extends Score {
-//    constructor(scoreOne, scoreTwo, scoreThree) {
-//        super(scoreOne, scoreTwo, scoreThree)
-//        this.cornfield = {"name": "Cornfields", "count": 0, "modifier": 1, "total": 0};
-//        this.orchard = {"name": "Orchards", "count": 0, "modifier": 1, "total": 0};
-//        this.livestock = {"name": "Livestock", "count": 0, "modifier": 1, "total": 0};
-//        this.vineyard = {"name": "Vineyards", "count": 0, "modifier": 1, "total": 0};
-//        this.roads = {"name": "Roads", "count": 0, "modifier": -1, "total": 0};
-//    }
-//}
+
 class Deck {
     constructor(game) {
-        console.log(game)
-        this.name = game[name];
-        this.blocks = game[blocks]
-        this.scoringCards = game[scoringCards]
+        this.name = game['name'];
+        this.blocks = game['blocks']
+        this.scoringCards = game['scoringCards']
     }
     selectScoreCards() {
-        const scoringCards = this;
-        console.log(scoringCards)
+        const {scoringCards} = this;
+
     }
 }
 
@@ -97,6 +134,18 @@ class Deck {
 //    createDisplay(newSheet);
 //}
 
+//newGameCardList.addEventListener("click", function(e) {
+//    if (e.target.className == "addToGame") {
+//        newCard = e.target.innerText;
+//        gameCards.push(newCard);
+//        e.target.remove();
+//        if (gameCards.length === 3) {
+//            newGameCardList.classList.add("hidden");
+//            createGameSheet(gameCards);
+//        }
+//    }
+//})
+
 
 const sprawlopolis = {
     'name': "Sprawlopolis",
@@ -107,7 +156,7 @@ const sprawlopolis = {
         {"name": "parks", "modifier": 1},
         {"name": "roads", "modifier": -1}
     ],
-    'scoringCards' = [
+    'scoringCards': [
         {"name": "The Outskirts", "description": "1 point per road that DOES NOT end at the edge of the city; -1 point per road that ends at the edge of the city.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Roads ending not at edge", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Roads ending at city's edge", "target": 1, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
         {"name": "Bloom Boom", "description": "1 point/each row and column with exactly three Park blocks in it; -1 point for each row and column with exactly 0 Park blocks in it.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Rows/Columns w/ 3 Parks", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Rows with 0 Parks", "target": 2, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
         {"name": "Go Green", "description": "1 point per Park block in your city; -3 points per Industrail block in your city.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Parks", "colTwo": 0, "colTwoMulti": -3, "colTwoName": "Inudstrial Blocks", "target": 3, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
