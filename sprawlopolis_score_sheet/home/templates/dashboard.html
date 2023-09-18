@@ -4,7 +4,7 @@
 
 <h1>Sprawlopolis Score Sheet</h1>
 
-<button id="newGame">New Game</button>
+<button id="newGameButton">New Game</button>
 
 <button id="testBtn">TEST</button>
 
@@ -22,97 +22,97 @@
             <th>Count</th>
         </tr>
         <tr>
-            <td class="blockScore"></td>
+            <td class="blockName"></td>
             <td class="noBorder"></td>
             <td class="noBorder"></td>
-            <td><div contenteditable class="blockScoreChange">0</div></td>
+            <td><div contenteditable class="blockScores">0</div></td>
         </tr>
         <tr>
-            <td class="blockScore"></td>
+            <td class="blockName"></td>
             <td class="noBorder"></td>
             <td class="noBorder"></td>
-            <td><div contenteditable class="blockScoreChange">0</div></td>
+            <td><div contenteditable class="blockScores">0</div></td>
         </tr>
         <tr>
-            <td class="blockScore"></td>
+            <td class="blockName"></td>
             <td class="noBorder"></td>
             <td class="noBorder"></td>
-            <td><div contenteditable class="blockScoreChange">0</div></td>
+            <td><div contenteditable class="blockScores">0</div></td>
         </tr>
         <tr>
-            <td class="blockScore"></td>
+            <td class="blockName"></td>
             <td class="noBorder"></td>
             <td class="noBorder"></td>
-            <td><div contenteditable class="blockScoreChange">0</div></td>
+            <td><div contenteditable class="blockScores">0</div></td>
         </tr>
         <tr>
-            <td class="blockScore"></td>
+            <td class="blockName"></td>
             <td class="noBorder"></td>
             <td class="noBorder"></td>
-            <td><div contenteditable class="blockScoreChange">0</div></td>
+            <td><div contenteditable class="blockScores">0</div></td>
         </tr>
         <tr>
             <td>Blocks and Roads subtotal</td>
             <td class="noBorder"></td>
             <td class="noBorder"></td>
-            <td id="blocksRoadsSubtotal"></td>
+            <td id="blockTotal"></td>
         </tr>
         <tr>
             <th>Score Card One</th>
         </tr>
         <tr>
-            <th id="scoreCardOneHeader"></th>
-            <th id="scoreCardOneFirstCat"></th>
-            <th id="scoreCardOneSecondCat"></th>
-            <th class="subTotalHeader">Scoring card subtotal</th>
+            <th class="scoreCardHeaders"></th>
+            <th class="scoreCardColOneNames"></th>
+            <th class="scoreCardColTwoNames"></th>
+            <th>Scoring card subtotal</th>
         </tr>
         <tr>
             <td class="cardTarget"></td>
             <td>
-                <div contenteditable class="cardScoreChange scoreColOne" id="scoreCardOneDataOne"></div>
+                <div contenteditable class="scoreCardColOneData"></div>
             </td>
             <td>
-                <div contenteditable class="cardScoreChange scoreColTwo" id="scoreCardOneDataTwo"></div>
+                <div contenteditable class="scoreCardColTwoData"></div>
             </td>
-            <td class="scoreCardTotal" id="scoreCardOneTotal"></td>
+            <td class="scoreCardTotal"></td>
         </tr>
         <tr>
             <th>Score Card Two</th>
         </tr>
         <tr>
-            <th id="scoreCardTwoHeader"></th>
-            <th id="scoreCardTwoFirstCat"></th>
-            <th id="scoreCardTwoSecondCat"></th>
-            <th class="subTotalHeader">Scoring card subtotal</th>
+            <th class="scoreCardHeaders"></th>
+            <th class="scoreCardColOneNames"></th>
+            <th class="scoreCardColTwoNames"></th>
+            <th class="scoreCardTotals">Scoring card subtotal</th>
         </tr>
         <tr>
             <td class="cardTarget"></td>
             <td>
-                <div contenteditable class="cardScoreChange scoreColOne" id="scoreCardTwoDataOne"></div>
+                <div contenteditable class="scoreCardColOneData"></div>
             </td>
             <td>
-                <div contenteditable class="cardScoreChange scoreColTwo" id="scoreCardTwoDataTwo"></div>
+                <div contenteditable class="scoreCardColTwoData"></div>
             </td>
-            <td class="scoreCardTotal" id="scoreCardTwoTotal"></td>
+            <td class="scoreCardTotal"></td>
         </tr>
         <tr>
             <th>Score Card Three</th>
         </tr>
         <tr>
-            <th id="scoreCardThreeHeader"></th>
-            <th id="scoreCardThreeFirstCat"></th>
-            <th id="scoreCardThreeSecondCat"></th>
-            <th class="subTotalHeader">Scoring card subtotal</th>
+            <th class="scoreCardHeaders"></th>
+            <th class="scoreCardColOneNames"></th>
+            <th class="scoreCardColTwoNames"></th>
+            <th class="scoreCardTotals">Scoring card subtotal</th>
         </tr>
         <tr>
             <td class="cardTarget"></td>
             <td>
-                <div contenteditable class="cardScoreChange scoreColOne" id="scoreCardThreeDataOne"></div>
+                <div contenteditable class="scoreCardColOneData"></div>
             </td>
             <td>
-                <div contenteditable class="cardScoreChange scoreColTwo" id="scoreCardThreeDataTwo"></div>
+                <div contenteditable class="scoreCardColTwoData"></div>
             </td>
-            <td class="scoreCardTotal" id="scoreCardThreeTotal"></td>
+            <td class="scoreCardTotal"></td>
         </tr>
         <tr>
             <td>Scoring card subtotal</td>
@@ -124,7 +124,7 @@
             <td>Total score</td>
             <td class="noBorder"></td>
             <td id="totalTarget"></td>
-            <td id="totalScore"></td>
+            <td id="gameTotal"></td>
         </tr>
     </table>
 </div>
