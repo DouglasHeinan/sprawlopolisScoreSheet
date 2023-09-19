@@ -25,9 +25,12 @@ class ScoreSheet {
         sheetElements['colOneData'][i].innerText = card["colOne"];
         sheetElements['scoreCardTotals'].innerText = card["total"];
         sheetElements['cardTargets'][i].innerText = card["target"];
-        if (card['colTwo']) {
+        if (card['colTwo'] != null) {
             sheetElements['colTwoNames'][i].innerText = card["colTwoName"];
             sheetElements['colTwoData'][i].innerText = card["colTwo"];
+        } else {
+            sheetElements['colTwoNames'][i].classList.add("noBorder");
+            sheetElements['colTwoData'][i].parentNode.classList.add("noBorder");
         }
     }
 
@@ -132,12 +135,7 @@ class Deck {
 
 };
 
-
-
-
-
-
-
+//-------------------------------------------------------------------
 
 window.onload = function wrapper() {
 
@@ -176,13 +174,14 @@ window.onload = function wrapper() {
     chooseGame(games);
 
     function chooseGame(games) {
-        let game
+        let game;
         newGameButton = document.querySelector("#newGameButton");
         newGameButton.addEventListener("click", function() {
-            game = games[0]
+            game = games[0];
+            newGameButton.classList.add("hidden");
             makeDeck(game);
-        })
-    }
+        });
+    };
 
     function makeDeck(game) {
         deckElements = getDeckElements()
@@ -206,8 +205,6 @@ window.onload = function wrapper() {
         newSheet.createSheet()
         sheetElements['tableDiv'].classList.remove("hidden");
     }
-
-
 
     function getDeckElements() {
         const allDeckElements = {};
@@ -236,31 +233,3 @@ window.onload = function wrapper() {
     }
 
 }
-
-
-
-
-
-
-
-
-
-////------------------------------TEST---------------------------------------
-//testBtn.addEventListener("click", function() {
-//    score1 = new SprawlScore(allSprawlCards[1], allSprawlCards[2], allSprawlCards[11]);
-//    score2 = new SprawlScore(allSprawlCards[16], allSprawlCards[3], allSprawlCards[7]);
-//    score1["scoreOne"]["colOne"] = 8;
-//    score1["scoreOne"]["colTwo"] = 2;
-//    score1["scoreTwo"]["colOne"] = 7;
-//    score1["scoreTwo"]["colTwo"] = 1;
-//    score1["scoreThree"]["colOne"] = 11;
-//    score2["scoreOne"]["colOne"] = 8;
-//    score2["scoreOne"]["colTwo"] = 6;
-//    score2["scoreTwo"]["colOne"] = 12;
-//    score2["scoreThree"]["colOne"] = 6;
-//    score2["scoreThree"]["colTwo"] = 3;
-//    console.log(score1, score2)
-//    return score1, score2
-//})
-
-//
