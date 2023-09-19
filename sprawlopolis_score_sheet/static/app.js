@@ -29,13 +29,24 @@ class ScoreSheet {
     }
 
     createColTwo(card, i) {
-            if (card["colTwo"] != null) {
+        if (card["colTwo"] != null) {
             sheetElements["colTwoNames"][i].innerText = card["colTwoName"];
-            sheetElements["colTwoData"][i].innerText = card["colTwo"];
+            if (card["name"] === "Them Apples") {
+                this.makeThemApplesCol(card, i)
+            } else {
+                sheetElements["colTwoData"][i].innerText = card["colTwo"];
+            }
         } else {
             sheetElements["colTwoNames"][i].classList.add("noBorder");
             sheetElements["colTwoData"][i].parentNode.classList.add("noBorder");
         }
+    }
+
+    makeThemApplesCol(card, i) {
+        const {sheetElements} = this;
+        sheetElements["colTwoData"][i].contentEditable = "false";
+        sheetElements["colTwoData"][i].insertAdjacentElement("beforeend", card["colTwo"][0]);
+        sheetElements["colTwoData"][i].insertAdjacentElement("beforeend", card["colTwo"][1]);
     }
 
     createScoreBlockRows() {
@@ -86,11 +97,25 @@ class ScoreSheet {
         let cardTotal = scoreCards[i]["startingTotal"];
         cardTotal += this.calcColTotal(i, "colOneData", "colOneMulti");
         if (sheetElements["colTwoNames"] != null) {
-            cardTotal += this.calcColTotal(i, "colTwoData", "colTwoMulti");
+            if (scoreCards[i]["name"] === "Them Apples") {
+                cardTotal += this.scoreThemApples();
+            } else {
+                cardTotal += this.calcColTotal(i, "colTwoData", "colTwoMulti");
+            }
         }
         const adjustedCardTotal = this.adjustScoreCardMinMax(cardTotal, i);
         sheetElements["scoreCardTotals"][i].innerText = adjustedCardTotal;
         return adjustedCardTotal;
+    }
+
+    scoreThemApples() {
+        let points = 0;
+        if (document.querySelector("#themApplesBonus").checked) {
+            points = 5;
+        } else {
+            points = 0;
+        }
+        return points;
     }
 
     calcColTotal(i, colData, colMulti) {
@@ -185,12 +210,16 @@ window.onload = function wrapper() {
     function chooseGame() {
         const games = [sprawlopolis, agropolis, naturopolis]
         let game;
-        newGameButton = document.querySelector("#newGameButton");
-        newGameButton.addEventListener("click", function() {
-            game = games[0];
-            newGameButton.classList.add("hidden");
-            makeDeck(game);
-        });
+        const newGameButtons = document.querySelectorAll(".newGameButton");
+        const gameStartButtons = document.querySelector("#gameStartButtons");
+        const length = newGameButtons.length;
+        for (let i = 0; i < length; i++) {
+            newGameButtons[i].addEventListener("click", function() {
+                game = games[i];
+                gameStartButtons.classList.add("hidden");
+                makeDeck(game);
+            });
+        }
     };
 
     function makeDeck(game) {
@@ -332,7 +361,8 @@ window.onload = function wrapper() {
             {"name": "Polyominorchards", "description": "Score points for each Orchard group of a given size, regardless of shape.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Orchard group comrpised of exactly 2 blocks?", "colTwo": 0, "colTwoMulti": 3, "colTwoName": "Orchard group of exactly 3 blocks?", "colThree": 0, "colThreeMulti": 5, "colTwoName": "Orchard group of exactly 4 blocks?", "target": 13, "min-score": 0, "max-score": 9, "startingTotal": 0},
             {"name": "Bacon and Eggs", "description": "1 point per Pig Pen adjacent to 1 or more Chicken Blocks but not to another Pig Block; 1 point per Chicken Pen adjacent to 1 or more Pig Blocks but not to another Chicken Block.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Pig Pens adjacent to Chicken Blocks bot not Pig Blocks.", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "Chicken Pens adjacent to Pig Blocks but not Chicken Blocks.", "target": 14, "min-score": 0, "max-score": 99, "startingTotal": 0},
             {"name": "Cornercopia", "description": "2 points per Cornfield Block on a corner; -2 points per Cornfield Block not on a corner.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Cornfield blocks on a corner.", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Cornfield blocks not on a corner.", "target": 15, "min-score": -98, "max-score": 98, "startingTotal": 0},
-            {"name": "Them Apples", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": 0, "colTwoMulti": 5, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
+//            {"name": "Them Apples", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": 0, "colTwoMulti": 5, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
+            {"name": "Them Apples", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": themApplesCheckBox(), "colTwoMulti": 1, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
             {"name": "Noah's Farm", "description": "3 points per Livestock group that contains an even number of pens and at least 2 different Livestock types.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Livestock group containing an even number of pens and 2+ different Livestock types.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 17, "min-score": 0, "max-score": 99, "startingTotal": 0},
             {"name": "Agropolis", "description": "Count all of the Livestock Pens in your longest row and in your longest column. Score that many points.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "All Livestock Pens in longest row.", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "All Livestock Pens in longest column.", "target": 18, "min-score": 0, "max-score": 99, "startingTotal": 0},
         ]
@@ -341,9 +371,21 @@ window.onload = function wrapper() {
         const naturopolis = {
         "name": "Naturopolis",
         "blocks": [
-
+//            later...
         ],
         "scoringCards": [
-
+//            later...
         ]
     };
+
+    function themApplesCheckBox() {
+        const bonusCheck = document.createElement("input");
+        const bonusLabel = document.createElement("label");
+        bonusCheck.type = "checkbox";
+        bonusCheck.id = "themApplesBonus";
+        bonusCheck.value = "5";
+        bonusLabel.for = "themApplesBonus";
+        bonusLabel.innerText = "5 point bonus!";
+        return [bonusCheck, bonusLabel];
+    }
+
