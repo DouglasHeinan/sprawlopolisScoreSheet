@@ -22,9 +22,13 @@ class ScoreSheet {
         sheetElements["headers"][i].innerText = card["name"];
         sheetElements["headers"][i].title = card["description"];
         sheetElements["colOneNames"][i].innerText = card["colOneName"];
-        sheetElements["colOneData"][i].innerText = card["colOne"];
         sheetElements["scoreCardTotals"].innerText = card["startingTotal"];
         sheetElements["cardTargets"][i].innerText = card["target"];
+        if (card["name"] === "Polyominorchards" || card["name"] === "Big Country") {
+            this.multiCheckScoreCol(card, i);
+        } else {
+            sheetElements["colOneData"][i].innerText = card["colOne"];
+        }
         this.createColTwo(card, i)
     }
 
@@ -39,6 +43,20 @@ class ScoreSheet {
         } else {
             sheetElements["colTwoNames"][i].classList.add("noBorder");
             sheetElements["colTwoData"][i].parentNode.classList.add("noBorder");
+        }
+    }
+
+    multiCheckScoreCol(card, i) {
+        const {sheetElements} = this;
+        const checkDivs = [];
+        const checksLength = card["colOne"][0].length;
+        sheetElements["colOneData"][i].contentEditable = "false";
+        for (let j = 0; j < checksLength; j++) {
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("multiCheckDiv");
+            sheetElements["colOneData"][i].insertAdjacentElement("beforeEnd", newDiv)
+            newDiv.insertAdjacentElement("beforeEnd", card["colOne"][0][j]);
+            newDiv.insertAdjacentElement("beforeEnd", card["colOne"][1][j]);
         }
     }
 
@@ -110,8 +128,9 @@ class ScoreSheet {
 
     scoreThemApples() {
         let points = 0;
-        if (document.querySelector("#themApplesBonus").checked) {
-            points = 5;
+        const appleBonus = document.querySelector("#themApplesBonus");
+        if (appleBonus.checked) {
+            points = parseInt(appleBonus.value);
         } else {
             points = 0;
         }
@@ -358,10 +377,9 @@ window.onload = function wrapper() {
             {"name": "Swine Country", "description": "2 points per Pig Pen adjacent to your largest Vineyard group; -2 points per Pig Pen not adjacent to your largest Vineyard group.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Pig Pens adjacent to largest Vineyard group.", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Pig Pens not adjacent to largest Vineyard group.", "target": 10, "min-score": -98, "max-score": 98, "startingTotal": 0},
             {"name": "Tractor Tours", "description": "Count the number of left and right turns on your longest Road and score that many points.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Number of turns on longest Road.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 11, "min-score": 0, "max-score": 99, "startingTotal": 0},
             {"name": "Country Roads", "description": "2 points per Road that passes more Cornfield blocks that any other block type.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Roads that pass through more Cornfield blocks than any other kind.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 12, "min-score": 0, "max-score": 98, "startingTotal": 0},
-            {"name": "Polyominorchards", "description": "Score points for each Orchard group of a given size, regardless of shape.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Orchard group comrpised of exactly 2 blocks?", "colTwo": 0, "colTwoMulti": 3, "colTwoName": "Orchard group of exactly 3 blocks?", "colThree": 0, "colThreeMulti": 5, "colTwoName": "Orchard group of exactly 4 blocks?", "target": 13, "min-score": 0, "max-score": 9, "startingTotal": 0},
+            {"name": "Polyominorchards", "description": "Score points for each Orchard group of a given size, regardless of shape.", "img": 0, "colOne": createMultiCheck("ag13"), "colOneMulti": 1, "colOneName": "Select each size of Orchard group present on your map.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 13, "min-score": 0, "max-score": 9, "startingTotal": 0},
             {"name": "Bacon and Eggs", "description": "1 point per Pig Pen adjacent to 1 or more Chicken Blocks but not to another Pig Block; 1 point per Chicken Pen adjacent to 1 or more Pig Blocks but not to another Chicken Block.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Pig Pens adjacent to Chicken Blocks bot not Pig Blocks.", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "Chicken Pens adjacent to Pig Blocks but not Chicken Blocks.", "target": 14, "min-score": 0, "max-score": 99, "startingTotal": 0},
             {"name": "Cornercopia", "description": "2 points per Cornfield Block on a corner; -2 points per Cornfield Block not on a corner.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Cornfield blocks on a corner.", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Cornfield blocks not on a corner.", "target": 15, "min-score": -98, "max-score": 98, "startingTotal": 0},
-//            {"name": "Them Apples", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": 0, "colTwoMulti": 5, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
             {"name": "Them Apples", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": themApplesCheckBox(), "colTwoMulti": 1, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
             {"name": "Noah's Farm", "description": "3 points per Livestock group that contains an even number of pens and at least 2 different Livestock types.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Livestock group containing an even number of pens and 2+ different Livestock types.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 17, "min-score": 0, "max-score": 99, "startingTotal": 0},
             {"name": "Agropolis", "description": "Count all of the Livestock Pens in your longest row and in your longest column. Score that many points.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "All Livestock Pens in longest row.", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "All Livestock Pens in longest column.", "target": 18, "min-score": 0, "max-score": 99, "startingTotal": 0},
@@ -387,5 +405,37 @@ window.onload = function wrapper() {
         bonusLabel.for = "themApplesBonus";
         bonusLabel.innerText = "5 point bonus!";
         return [bonusCheck, bonusLabel];
+    }
+
+    function createMultiCheck(card) {
+        const checkOne = document.createElement("input");
+        const checkTwo = document.createElement("input");
+        const checkThree = document.createElement("input");
+        const labelOne = document.createElement("label");
+        const labelTwo = document.createElement("label");
+        const labelThree = document.createElement("label");
+        const checks = [checkOne, checkTwo, checkThree];
+        const labels = [labelOne, labelTwo, labelThree]
+        if (card === "ag13") {
+            const checkElements = checkPolyominorchards(checks, labels);
+            return checkElements;
+        } else if (card === "ag2") {
+            const checkElements = checkBigCountry(radios);
+            return checkElements;
+        }
+    }
+
+    function checkPolyominorchards(checks, labels) {
+        const length = checks.length;
+        const values = [1, 3, 5];
+        const blocks = ["2", "3", "4"];
+        for (let i = 0; i < length; i++) {
+            checks[i].type = "checkbox";
+            checks[i].id = `polyCheck${String(values[i])}`;
+            checks[i].value = values[i];
+            labels[i].for = `polyCheck${String(values[i])}`;
+            labels[i].innerText = `Exactly ${blocks[i]} blocks (${String(values[i])} points)`;
+        }
+        return [checks, labels]
     }
 
