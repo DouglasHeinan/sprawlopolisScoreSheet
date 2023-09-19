@@ -25,7 +25,11 @@ class ScoreSheet {
         sheetElements['colOneData'][i].innerText = card["colOne"];
         sheetElements['scoreCardTotals'].innerText = card["total"];
         sheetElements['cardTargets'][i].innerText = card["target"];
-        if (card['colTwo'] != null) {
+        this.createColTwo(card, i)
+    }
+
+    createColTwo(card, i) {
+            if (card['colTwo'] != null) {
             sheetElements['colTwoNames'][i].innerText = card["colTwoName"];
             sheetElements['colTwoData'][i].innerText = card["colTwo"];
         } else {
@@ -72,31 +76,42 @@ class ScoreSheet {
         let total = 0;
         const length = scoreCards.length;
         for (let i = 0; i < length; i++) {
-            let cardTotal = scoreCards[i]['total'];
-            const colOne = sheetElements["colOneData"][i].innerText;
-            let colOneScore = parseInt(colOne) * scoreCards[i]["colOneMulti"];
-            if (!colOneScore) {
-                colOneScore = 0;
-            }
-            cardTotal += Math.floor(colOneScore);
-            if (sheetElements['colTwoNames'] != null) {
-                const colTwo = sheetElements["colTwoData"][i].innerText;
-                let colTwoScore = parseInt(colTwo) * scoreCards[i]['colTwoMulti'];
-                if (!colTwoScore) {
-                    colTwoScore = 0;
-                }
-                cardTotal += Math.floor(colTwoScore);
-            }
-            if (cardTotal < scoreCards[i]['min-score']) {
-                cardTotal = scoreCards[i]['min-score'];
-            }
-            if (cardTotal > scoreCards[i]['max-score']) {
-                cardTotal = scoreCards[i]['max-score'];
-            }
-            sheetElements["scoreCardTotals"][i].innerText = cardTotal;
-            total += cardTotal;
+            total += this.getScoreCardTotal(i)
         }
         sheetElements["scoreCardsSubtotal"].innerText = total;
+    }
+
+    getScoreCardTotal(i) {
+        const {scoreCards, sheetElements} = this;
+        let cardTotal = scoreCards[i]['total'];
+        cardTotal += this.calcColTotal(i, "colOneData", "colOneMulti");
+        if (sheetElements['colTwoNames'] != null) {
+            cardTotal += this.calcColTotal(i, "colTwoData", "colTwoMulti");
+        }
+        const adjustedCardTotal = this.adjustScoreCardMinMax(cardTotal, i);
+        sheetElements["scoreCardTotals"][i].innerText = adjustedCardTotal;
+        return adjustedCardTotal;
+    }
+
+    calcColTotal(i, colData, colMulti) {
+        const {scoreCards, sheetElements} = this;
+        const col = sheetElements[colData][i].innerText;
+        let colScore = parseInt(col) * scoreCards[i][colMulti];
+        if (!colScore) {
+            colScore = 0;
+        }
+        return Math.floor(colScore);
+    }
+
+    adjustScoreCardMinMax(cardTotal, i) {
+        const {scoreCards} = this;
+        if (cardTotal < scoreCards[i]['min-score']) {
+            cardTotal = scoreCards[i]['min-score'];
+        }
+        if (cardTotal > scoreCards[i]['max-score']) {
+            cardTotal = scoreCards[i]['max-score'];
+        }
+        return cardTotal;
     }
 
     calcTotalScore() {
