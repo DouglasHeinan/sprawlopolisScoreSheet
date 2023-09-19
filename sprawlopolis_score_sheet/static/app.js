@@ -54,12 +54,15 @@ class ScoreSheet {
 
     calcBlockScores() {
         const {blocks, sheetElements} = this;
-        scores = sheetElements["blockScores"];
-        length = blockScores.length;
-        total = 0;
+        const scores = sheetElements["blockScores"];
+        const length = scores.length;
+        let total = 0;
         for (let i = 0; i < length; i++) {
-            toAdd = scores[i].innerText;
-            total += parseInt(toAdd);
+            let toAdd = scores[i].innerText;
+            if (!toAdd) {
+                toAdd = 0;
+            }
+            total += (parseInt(toAdd) * blocks[i]['modifier']);
         }
         sheetElements['blockTotal'].innerText = total;
     }
@@ -69,9 +72,9 @@ class ScoreSheet {
         let total
         const length = scoreCards.length;
         for (let i = 0; i < length; i++) {
-            let cardTotal
+            let cardTotal = 0;
             const colOne = sheetElements["colOneData"][i].innerText;
-            const colOneScore = parseInt(colOne) + scoreCards[i]["colOneMulti"];
+            const colOneScore = parseInt(colOne) * scoreCards[i]["colOneMulti"];
             cardTotal += colOneScore;
             if (sheetElements['colTwo'] != null) {
                 colTwo = sheetElements["colTwoData"][i].innerText;
@@ -81,14 +84,20 @@ class ScoreSheet {
             sheetElements["scoreCardTotals"][i].innerText = cardTotal;
             total += cardTotal;
         }
-        sheetElements["scoreCardSubtotal"].innerText = total;
+        sheetElements["scoreCardsSubtotal"].innerText = total;
     }
 
     calcTotalScore() {
         const {sheetElements} = this;
-        blocksSubtotal = sheetElements["blockTotal"].innerText;
-        scoreCardSubTotal = sheetElements["scoreCardSubtotal"].innerText;
-        total = parseInt(blocksSubtotal) + parseInt(scoreCardSubtotal);
+        let blocksSubtotal = sheetElements["blockTotal"].innerText;
+        if (!blocksSubtotal) {
+            blocksSubtotal = 0;
+        }
+        let scoreCardSubtotal = sheetElements["scoreCardsSubtotal"].innerText;
+        if (!scoreCardSubtotal) {
+            scoreCardSubtotal = 0;
+        }
+        const total = parseInt(blocksSubtotal) + parseInt(scoreCardSubtotal);
         sheetElements["gameTotal"].innerText = total;
     }
 }
@@ -151,7 +160,7 @@ window.onload = function wrapper() {
         'scoringCards': [
             {"name": "The Outskirts", "description": "1 point per road that DOES NOT end at the edge of the city; -1 point per road that ends at the edge of the city.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Roads ending not at edge", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Roads ending at city's edge", "target": 1, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
             {"name": "Bloom Boom", "description": "1 point/each row and column with exactly three Park blocks in it; -1 point for each row and column with exactly 0 Park blocks in it.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Rows/Columns w/ 3 Parks", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Rows with 0 Parks", "target": 2, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
-            {"name": "Go Green", "description": "1 point per Park block in your city; -3 points per Industrail block in your city.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Parks", "colTwo": 0, "colTwoMulti": -3, "colTwoName": "Inudstrial Blocks", "target": 3, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
+            {"name": "Go Green", "description": "1 point per Park block in your city; -3 points per Industrial block in your city.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Parks", "colTwo": 0, "colTwoMulti": -3, "colTwoName": "Industrial Blocks", "target": 3, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
             {"name": "Block Party", "description": "Score points per group of 4 'corner-tocorner' blocks of the same type. You may score multiple groups of the same type and a block may apply to more than one group.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Corner 2 corner blocks", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 4, "min-score": -8, "max-score": 7, "totalMod": -8, "total": -8},
             {"name": "Stacks and Scrapers", "description": "2 points per Industrial block adjacent to only Commercial or Industrial blocks", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Industrial blocks only adjacent to Industrial/Commercial", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 5, "min-score": 0, "max-score": 98, "totalMod": 0, "total": 0},
             {"name": "Master Planned", "description": "Subtract the number of blocks in your largest Industrial group from the number of blocks in your largest Residential group. Score that many points.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Blocks in largest Residential group", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Blocks in largest Industrial Group", "target": 6, "min-score": -99, "max-score": 99, "totalMod": 0, "total": 0},
@@ -204,6 +213,38 @@ window.onload = function wrapper() {
         const newSheet = new ScoreSheet(scoreCards, blocks, sheetElements)
         newSheet.createSheet()
         sheetElements['tableDiv'].classList.remove("hidden");
+        keepScore(sheetElements, newSheet);
+    }
+
+    function keepScore(sheetElements, sheet) {
+        const blockScores = sheetElements['blockScores'];
+        const cardScoresOne = sheetElements['colOneData'];
+        const cardScoresTwo = sheetElements['colTwoData'];
+        const blockLength = blockScores.length;
+        const cardOneLength = cardScoresOne.length;
+        const cardTwoLength = cardScoresTwo.length
+        sheet.calcBlockScores()
+        sheet.calcScoreCards()
+        sheet.calcTotalScore()
+        for (let i = 0; i < blockLength; i++) {
+            blockScores[i].addEventListener("input", function() {
+                sheet.calcBlockScores();
+                sheet.calcScoreCards();
+                sheet.calcTotalScore();
+            })
+        }
+        for (let i = 0; i < cardOneLength; i++) {
+            cardScoresOne[i].addEventListener("input", function() {
+                sheet.calcScoreCards();
+                sheet.calcTotalScore();
+            })
+        }
+        for (let i = 0; i < cardTwoLength; i++) {
+            cardScoresTwo[i].addEventListener("input", function() {
+                sheet.calcScoreCards();
+                sheet.calcTotalScore();
+            })
+        }
     }
 
     function getDeckElements() {
@@ -228,7 +269,7 @@ window.onload = function wrapper() {
         allSheetElements['scoreCardsSubtotal'] = document.querySelector("#scoringCardSubtotal");
         allSheetElements['cardTargets'] = document.querySelectorAll(".cardTarget");
         allSheetElements['totalTarget'] = document.querySelector("#totalTarget");
-        allSheetElements['gameTotal'] = document.querySelector("gameTotal");
+        allSheetElements['gameTotal'] = document.querySelector("#gameTotal");
         return allSheetElements
     }
 
