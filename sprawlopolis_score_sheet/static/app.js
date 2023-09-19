@@ -9,22 +9,23 @@ class ScoreSheet {
         const {scoreCards, sheetElements} = this;
         length = scoreCards.length;
         for (let i = 0; i < length; i++) {
-            card = scoreCards[i];
+            const card = scoreCards[i];
             this.createScoreCardRow(i);
         }
         this.createScoreBlockRows()
-        sheetElements['totalTarget'].innerText = scoreCards[3]['target'];
+        console.log(scoreCards)
+        this.createTargetScore()
     }
 
     createScoreCardRow(i) {
         const {scoreCards, sheetElements} = this;
-        card = scoreCards[i];
+        const card = scoreCards[i];
         sheetElements['headers'][i].innerText = card["name"];
         sheetElements['headers'][i].title = card["description"];
         sheetElements['colOneNames'][i].innerText = card["colOneName"];
         sheetElements['colOneData'][i].innerText = card["colOne"];
-        sheetElements['totals'][i].innerText = card["total"];
-        sheetElements['cardtargets'][i].innerText = card["target"];
+        sheetElements['scoreCardTotals'].innerText = card["total"];
+        sheetElements['cardTargets'][i].innerText = card["target"];
         if (card['colTwo']) {
             sheetElements['colTwoNames'][i].innerText = card["colTwoName"];
             sheetElements['colTwoData'][i].innerText = card["colTwo"];
@@ -33,11 +34,20 @@ class ScoreSheet {
 
     createScoreBlockRows() {
         const {blocks, sheetElements} = this
-        blockNames = sheetElements['blockNames'];
-        length = blockNames.length;
+        const blockNames = sheetElements['blockNames'];
+        const length = blockNames.length;
         for (let i = 0; i < length; i++) {
             blockNames[i].innerText = blocks[i]["name"];
         }
+    }
+
+    createTargetScore() {
+        const {scoreCards, sheetElements} = this;
+        const targetOne = parseInt(scoreCards[0]['target']);
+        const targetTwo = parseInt(scoreCards[1]['target']);
+        const targetThree = parseInt(scoreCards[2]['target']);
+        const target = targetOne + targetTwo + targetThree
+        sheetElements['totalTarget'].innerText = target;
     }
 
     calcBlockScores() {
@@ -134,6 +144,7 @@ class Deck {
 
     selectScoreCard(e) {
         const {scoringCards} = this;
+        let newCard
         length = scoringCards.length
 //        deckElements['newGameCardList'].addEventListener("click", function(e) {
         if (e.target.className == "addToGame") {
@@ -141,7 +152,7 @@ class Deck {
             e.target.remove();
             for (let i = 0; i < length; i++) {
                 if (cardName === scoringCards[i]["name"]) {
-                    const newCard = scoringCards[i];
+                    newCard = scoringCards[i];
                 }
             }
             return newCard;
@@ -205,35 +216,28 @@ window.onload = function wrapper() {
 
     function makeDeck(game) {
         deckElements = getDeckElements()
-        sheetElements = getSheetElements();
         const newDeck = new Deck(game, deckElements);
         newDeck.createScoreCardList()
         const blocks = newDeck['blocks'];
         const scoringCards = [];
-
-
         deckElements['newGameCardList'].addEventListener("click", function(e) {
-
-            scoringCards.push()
-        }
-
-//        while (scoringCards.length < 3) {
-//            newCard = newDeck.selectScoreCards()
-//            scoringCards.push(newCard)
-//        }
-
-
-
-
-//        const scoreCards = newDeck.selectScoreCards()
-//        const newSheet = new ScoreSheet(scoreCards, blocks, sheetElements)
-//        newSheet.createSheet()
+            const newCard = newDeck.selectScoreCard(e);
+            scoringCards.push(newCard)
+            if (scoringCards.length === 3) {
+                deckElements["newGameCardList"].classList.add('hidden');
+                makeSheet(scoringCards, blocks);
+            };
+        });
     };
 
-//    async function waitForVariable(func) {
-//        variable = await func();
-//        return variable;
-//    }
+    function makeSheet(scoreCards, blocks) {
+        sheetElements = getSheetElements();
+        const newSheet = new ScoreSheet(scoreCards, blocks, sheetElements)
+        newSheet.createSheet()
+        sheetElements['tableDiv'].classList.remove("hidden");
+    }
+
+
 
     function getDeckElements() {
         const allDeckElements = {};
@@ -244,6 +248,7 @@ window.onload = function wrapper() {
 
     function getSheetElements() {
         const allSheetElements = {};
+        const tableDiv = document.querySelector("#tableDiv");
         const blockNames = document.querySelectorAll(".blockNames");
         const blockScores = document.querySelectorAll(".blockScores");
         const blockTotal = document.querySelector("#blockTotal");
@@ -253,10 +258,11 @@ window.onload = function wrapper() {
         const scoreCardColOneData = document.querySelectorAll(".scoreCardColOneData");
         const scoreCardColTwoData = document.querySelectorAll(".scoreCardColTwoData");
         const scoreCardTotals = document.querySelectorAll(".scoreCardTotal");
-        const scoreCardSubtotal = document.querySelector("#scoreCardSubTotal");
+        const scoreCardsSubtotal = document.querySelector("#scoringCardSubtotal");
         const cardTargets = document.querySelectorAll(".cardTarget");
         const totalTarget = document.querySelector("#totalTarget");
         const gameTotal = document.querySelector("gameTotal");
+        allSheetElements['tableDiv'] = tableDiv;
         allSheetElements['blockNames'] = blockNames;
         allSheetElements['blockScores'] = blockScores;
         allSheetElements['blockTotal'] = blockTotal;
@@ -266,7 +272,7 @@ window.onload = function wrapper() {
         allSheetElements['colOneData'] = scoreCardColOneData;
         allSheetElements['colTwoData'] = scoreCardColOneData;
         allSheetElements['scoreCardTotals'] = scoreCardTotals;
-        allSheetElements['scoreCardSubtotal'] = scoreCardSubtotal;
+        allSheetElements['scoreCardsSubtotal'] = scoreCardsSubtotal;
         allSheetElements['cardTargets'] = cardTargets;
         allSheetElements['totalTarget'] = totalTarget;
         allSheetElements['gameTotal'] = gameTotal;
