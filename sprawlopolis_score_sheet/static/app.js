@@ -69,16 +69,22 @@ class ScoreSheet {
 
     calcScoreCards() {
         const {scoreCards, sheetElements} = this;
-        let total
+        let total = 0;
         const length = scoreCards.length;
         for (let i = 0; i < length; i++) {
             let cardTotal = 0;
             const colOne = sheetElements["colOneData"][i].innerText;
-            const colOneScore = parseInt(colOne) * scoreCards[i]["colOneMulti"];
+            let colOneScore = parseInt(colOne) * scoreCards[i]["colOneMulti"];
+            if (!colOneScore) {
+                colOneScore = 0;
+            }
             cardTotal += colOneScore;
-            if (sheetElements['colTwo'] != null) {
-                colTwo = sheetElements["colTwoData"][i].innerText;
-                colTwoScore = parseInt(colTwo) + scoreCards[i]['colTwoMulti'];
+            if (sheetElements['colTwoNames'] != null) {
+                const colTwo = sheetElements["colTwoData"][i].innerText;
+                let colTwoScore = parseInt(colTwo) * scoreCards[i]['colTwoMulti'];
+                if (!colTwoScore) {
+                    colTwoScore = 0;
+                }
                 cardTotal += colTwoScore;
             }
             sheetElements["scoreCardTotals"][i].innerText = cardTotal;
