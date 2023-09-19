@@ -13,7 +13,6 @@ class ScoreSheet {
             this.createScoreCardRow(i);
         }
         this.createScoreBlockRows()
-        console.log(scoreCards)
         this.createTargetScore()
     }
 
@@ -115,38 +114,10 @@ class Deck {
         };
     };
 
-
-//    selectScoreCards() {
-//        const {scoringCards} = this;
-//        const cardNames = [];
-//        const gameCards = [];
-//        length = scoringCards.length
-//        deckElements['newGameCardList'].addEventListener("click", function(e) {
-//            if (e.target.className == "addToGame") {
-//                const newCard = e.target.innerText;
-//                cardNames.push(newCard);
-//                e.target.remove();
-//                if (cardNames.length === 3) {
-//                    newGameCardList.classList.add("hidden");
-//                    for (let i = 0; i < gameCards.length; i++) {
-//                        for (let j = 0; j < length; j++) {
-//                            if (gameCards[i] === scoringCards[j]["name"]) {
-//                                const card = scoringCards[j];
-//                                gameCards.push(newCard);
-//                            }
-//                        }
-//                    }
-//                    return gameCards
-//                };
-//            };
-//        });
-//    };
-
     selectScoreCard(e) {
         const {scoringCards} = this;
         let newCard
         length = scoringCards.length
-//        deckElements['newGameCardList'].addEventListener("click", function(e) {
         if (e.target.className == "addToGame") {
             const cardName = e.target.innerText;
             e.target.remove();
@@ -157,7 +128,6 @@ class Deck {
             }
             return newCard;
         };
-//        });
     };
 
 };
@@ -248,34 +218,20 @@ window.onload = function wrapper() {
 
     function getSheetElements() {
         const allSheetElements = {};
-        const tableDiv = document.querySelector("#tableDiv");
-        const blockNames = document.querySelectorAll(".blockNames");
-        const blockScores = document.querySelectorAll(".blockScores");
-        const blockTotal = document.querySelector("#blockTotal");
-        const scoreCardHeaders = document.querySelectorAll(".scoreCardHeaders");
-        const scoreCardColOneNames = document.querySelectorAll(".scoreCardColOneNames");
-        const scoreCardColTwoNames = document.querySelectorAll(".scoreCardColTwoNames");
-        const scoreCardColOneData = document.querySelectorAll(".scoreCardColOneData");
-        const scoreCardColTwoData = document.querySelectorAll(".scoreCardColTwoData");
-        const scoreCardTotals = document.querySelectorAll(".scoreCardTotal");
-        const scoreCardsSubtotal = document.querySelector("#scoringCardSubtotal");
-        const cardTargets = document.querySelectorAll(".cardTarget");
-        const totalTarget = document.querySelector("#totalTarget");
-        const gameTotal = document.querySelector("gameTotal");
-        allSheetElements['tableDiv'] = tableDiv;
-        allSheetElements['blockNames'] = blockNames;
-        allSheetElements['blockScores'] = blockScores;
-        allSheetElements['blockTotal'] = blockTotal;
-        allSheetElements['headers'] = scoreCardHeaders;
-        allSheetElements['colOneNames'] = scoreCardColOneNames;
-        allSheetElements['colTwoNames'] = scoreCardColTwoNames;
-        allSheetElements['colOneData'] = scoreCardColOneData;
-        allSheetElements['colTwoData'] = scoreCardColOneData;
-        allSheetElements['scoreCardTotals'] = scoreCardTotals;
-        allSheetElements['scoreCardsSubtotal'] = scoreCardsSubtotal;
-        allSheetElements['cardTargets'] = cardTargets;
-        allSheetElements['totalTarget'] = totalTarget;
-        allSheetElements['gameTotal'] = gameTotal;
+        allSheetElements['tableDiv'] = document.querySelector("#tableDiv");
+        allSheetElements['blockNames'] = document.querySelectorAll(".blockName");
+        allSheetElements['blockScores'] = document.querySelectorAll(".blockScores");
+        allSheetElements['blockTotal'] = document.querySelector("#blockTotal");
+        allSheetElements['headers'] = document.querySelectorAll(".scoreCardHeaders");
+        allSheetElements['colOneNames'] = document.querySelectorAll(".scoreCardColOneNames");
+        allSheetElements['colTwoNames'] = document.querySelectorAll(".scoreCardColTwoNames");
+        allSheetElements['colOneData'] = document.querySelectorAll(".scoreCardColOneData");
+        allSheetElements['colTwoData'] = document.querySelectorAll(".scoreCardColTwoData");
+        allSheetElements['scoreCardTotals'] = document.querySelectorAll(".scoreCardTotal");
+        allSheetElements['scoreCardsSubtotal'] = document.querySelector("#scoringCardSubtotal");
+        allSheetElements['cardTargets'] = document.querySelectorAll(".cardTarget");
+        allSheetElements['totalTarget'] = document.querySelector("#totalTarget");
+        allSheetElements['gameTotal'] = document.querySelector("gameTotal");
         return allSheetElements
     }
 
