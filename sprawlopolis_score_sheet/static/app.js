@@ -72,20 +72,26 @@ class ScoreSheet {
         let total = 0;
         const length = scoreCards.length;
         for (let i = 0; i < length; i++) {
-            let cardTotal = 0;
+            let cardTotal = scoreCards[i]['total'];
             const colOne = sheetElements["colOneData"][i].innerText;
             let colOneScore = parseInt(colOne) * scoreCards[i]["colOneMulti"];
             if (!colOneScore) {
                 colOneScore = 0;
             }
-            cardTotal += colOneScore;
+            cardTotal += Math.floor(colOneScore);
             if (sheetElements['colTwoNames'] != null) {
                 const colTwo = sheetElements["colTwoData"][i].innerText;
                 let colTwoScore = parseInt(colTwo) * scoreCards[i]['colTwoMulti'];
                 if (!colTwoScore) {
                     colTwoScore = 0;
                 }
-                cardTotal += colTwoScore;
+                cardTotal += Math.floor(colTwoScore);
+            }
+            if (cardTotal < scoreCards[i]['min-score']) {
+                cardTotal = scoreCards[i]['min-score'];
+            }
+            if (cardTotal > scoreCards[i]['max-score']) {
+                cardTotal = scoreCards[i]['max-score'];
             }
             sheetElements["scoreCardTotals"][i].innerText = cardTotal;
             total += cardTotal;
