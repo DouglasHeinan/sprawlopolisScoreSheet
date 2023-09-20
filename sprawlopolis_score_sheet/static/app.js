@@ -113,7 +113,11 @@ class ScoreSheet {
     getScoreCardTotal(i) {
         const {scoreCards, sheetElements} = this;
         let cardTotal = scoreCards[i]["startingTotal"];
-        cardTotal += this.calcColTotal(i, "colOneData", "colOneMulti");
+        if (scoreCards[i]["name"] === "Polyominorchards" || scoreCards[i]["name"] === "Big Country") {
+            cardTotal += this.scoreMultiCheck()
+        } else {
+            cardTotal += this.calcColTotal(i, "colOneData", "colOneMulti");
+        }
         if (sheetElements["colTwoNames"] != null) {
             if (scoreCards[i]["name"] === "Them Apples") {
                 cardTotal += this.scoreThemApples();
@@ -126,13 +130,23 @@ class ScoreSheet {
         return adjustedCardTotal;
     }
 
+    scoreMultiCheck() {
+        let points = 0;
+        const multiCheckDivs = document.querySelectorAll(".multiCheckDiv");
+        length = multiCheckDivs.length;
+        for (let i = 0; i < length; i++) {
+            if (multiCheckDivs[i].firstElementChild.checked) {
+                points += parseInt(multiCheckDivs[i].firstElementChild.value);
+            }
+        }
+        return points;
+    }
+
     scoreThemApples() {
         let points = 0;
         const appleBonus = document.querySelector("#themApplesBonus");
         if (appleBonus.checked) {
             points = parseInt(appleBonus.value);
-        } else {
-            points = 0;
         }
         return points;
     }
