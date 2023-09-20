@@ -196,6 +196,11 @@ class ScoreSheet {
         if (!colScore) {
             colScore = 0;
         }
+        if (scoreCards[i]["name"] === "Count Your Chickens") {
+            if (colScore != 0) {
+                colScore += 4;
+            }
+        }
         return Math.floor(colScore);
     }
 
