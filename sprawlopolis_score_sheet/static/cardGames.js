@@ -158,8 +158,8 @@ function radioBigCountry(radios, labels) {
 
 function radioNaturalSelection(radios, labels) {
     const length = radios.length;
-    const values = [-2, 1, 4, 7];
-    const blocks = ["0-4", "5-8", "9-11"; "12+"];
+    const values = [-2, 3, 6, 9];
+    const blocks = ["0-4", "5-8", "9-11", "12+"];
     for (let i = 0; i < length; i++) {
         radios[i].type = "radio";
         radios[i].id = `NatSel${String(values[i])}`;

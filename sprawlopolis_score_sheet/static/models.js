@@ -53,6 +53,8 @@ export class ScoreSheet {
             this.multiRadioScoreCol(card, i)
         } else if (card["name"] === "Polyominorchards") {
             this.multiCheckScoreCol(card, i);
+        } else if (card["name"] === "Natural Selection") {
+            this.multiRadioScoreCol(card, i);
         }
     }
 
@@ -138,6 +140,8 @@ export class ScoreSheet {
         if (scoreCards[i]["name"] === "Polyominorchards") {
             cardTotal += this.scoreMultiCheck(scoreCards[i]["id"])
         } else if (scoreCards[i]["name"] === "Big Country") {
+            cardTotal += this.scoreMultiRadio(scoreCards[i]["id"])
+        } else if (scoreCards[i]["name"] === "Natural Selection") {
             cardTotal += this.scoreMultiRadio(scoreCards[i]["id"])
         } else {
             cardTotal += this.calcColTotal(i, "colOneData", "colOneMulti");
