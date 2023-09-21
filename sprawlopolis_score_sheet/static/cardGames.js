@@ -38,11 +38,11 @@ export const agropolis = {
         {"name": "orchards", "modifier": 1},
         {"name": "vineyards", "modifier": 1},
         {"name": "livestock", "modifier": 1},
-        {"name": "roads", "modifier": -1},
+        {"name": "roads", "modifier": -1}
     ],
     "scoringCards": [
         {"name": "Wine Seller", "id": "ag1", "description": "1 point per Road taht passes through 2 or more Vineyard blocks; -1 point per road that passes through 0 or 1 Vineyards.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Roads passing through multiple Vineyards.", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Roads that pass through 1 or fewer Vineyards.", "target": 1, "min-score": -99, "max-score": 99, "startingTotal": 0},
-        {"name": "Big Country", "id": "ag2", "description": "Score points based on the largest completed square group of blocks.", "img": 0, "colOne": createMultiInput("ag2"), "colOneMulti": 1, "colOneName": "What size is your largest completed square group of blocks?", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 2, "min-score": -5, "max-score": 5, "startingTotal": -5},
+        {"name": "Big Country", "id": "ag2", "description": "Score points based on the largest completed square group of blocks.", "img": 0, "colOne": createMultiInput("ag2", 3), "colOneMulti": 1, "colOneName": "What size is your largest completed square group of blocks?", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 2, "min-score": -5, "max-score": 5, "startingTotal": -5},
         {"name": "Udderly Impossible", "id": "ag3", "description": "1 point per Cow Pen not in the same row or column as any other Livestock block; -2 points per Cow Pen in the same row or column as any other Livestock block.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Cow Pens not in same row/column as other Livestock.", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Cow Pens in same row/column as other Livestock.", "target": 3, "min-score": -99, "max-score": 99, "startingTotal": 0},
         {"name": "Count Your Chickens", "id": "ag4", "description": "1 point per Chicken Pen directly across a straight road segment from at least 1 other Chicken Pen; -4 points if none of your Chicken Pens score as described above.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Chicken Pens across a straight road segment form 1 or more Chicken Pens.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 4, "min-score": -4, "max-score": 99, "startingTotal": -4},
         {"name": "All the Way Home", "id": "ag5", "description": "1 point per Pig Pen adjacent to your longest road; -1 point per Pig Pen not adjacent to your longest Road.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Pig Pens adjacent to longest Road.", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Pig Pens not adjacent to longest Road.", "target": 5, "min-score": -99, "max-score": 99, "startingTotal": 0},
@@ -53,7 +53,7 @@ export const agropolis = {
         {"name": "Swine Country", "id": "ag10", "description": "2 points per Pig Pen adjacent to your largest Vineyard group; -2 points per Pig Pen not adjacent to your largest Vineyard group.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Pig Pens adjacent to largest Vineyard group.", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Pig Pens not adjacent to largest Vineyard group.", "target": 10, "min-score": -98, "max-score": 98, "startingTotal": 0},
         {"name": "Tractor Tours", "id": "ag11", "description": "Count the number of left and right turns on your longest Road and score that many points.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Number of turns on longest Road.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 11, "min-score": 0, "max-score": 99, "startingTotal": 0},
         {"name": "Country Roads", "id": "ag12", "description": "2 points per Road that passes more Cornfield blocks that any other block type.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Roads that pass through more Cornfield blocks than any other kind.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 12, "min-score": 0, "max-score": 98, "startingTotal": 0},
-        {"name": "Polyominorchards", "id": "ag13", "description": "Score points for each Orchard group of a given size, regardless of shape.", "img": 0, "colOne": createMultiInput("ag13"), "colOneMulti": 1, "colOneName": "Select each size of Orchard group present on your map.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 13, "min-score": 0, "max-score": 9, "startingTotal": 0},
+        {"name": "Polyominorchards", "id": "ag13", "description": "Score points for each Orchard group of a given size, regardless of shape.", "img": 0, "colOne": createMultiInput("ag13", 3), "colOneMulti": 1, "colOneName": "Select each size of Orchard group present on your map.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 13, "min-score": 0, "max-score": 9, "startingTotal": 0},
         {"name": "Bacon and Eggs", "id": "ag14", "description": "1 point per Pig Pen adjacent to 1 or more Chicken Blocks but not to another Pig Block; 1 point per Chicken Pen adjacent to 1 or more Pig Blocks but not to another Chicken Block.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Pig Pens adjacent to Chicken Blocks bot not Pig Blocks.", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "Chicken Pens adjacent to Pig Blocks but not Chicken Blocks.", "target": 14, "min-score": 0, "max-score": 99, "startingTotal": 0},
         {"name": "Cornercopia", "id": "ag15", "description": "2 points per Cornfield Block on a corner; -2 points per Cornfield Block not on a corner.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Cornfield blocks on a corner.", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Cornfield blocks not on a corner.", "target": 15, "min-score": -98, "max-score": 98, "startingTotal": 0},
         {"name": "Them Apples", "id": "ag16", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": themApplesCheckBox(), "colTwoMulti": 1, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
@@ -65,10 +65,31 @@ export const agropolis = {
 export const naturopolis = {
     "name": "Naturopolis",
     "blocks": [
-//            later...
+        {"name": "forests", "modifier": 1},
+        {"name": "lakes", "modifier": 1},
+        {"name": "meadows", "modifier": 1},
+        {"name": "mountains", "modifier": 1},
+        {"name": "roads", "modifier": -2}
     ],
     "scoringCards": [
-//            later...
+        {"name": "Trees in Threes", "id": "nat1", "description": "1 point per Forest group with exactly 3 blocks; -1 point per Forest block that is not in a group of 3", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Forest groups with 3 blocks", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Forest blocks NOT in a group of 3", "target": 1, "min-score": -99, "max-score": 99, "startingTotal": 0},
+        {"name": "Lake Mistakes", "id": "nat2", "description": "1 point per Lake connected to at least 1 Road or River; -2 points per Lake group with no connections to Roads or Rivers", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Lake groups connected to Roads or Rivers", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Lake groups with no Road or River connections", "target": 2, "min-score": -98, "max-score": 99, "startingTotal": 0},
+        {"name": "A River Runs Through It", "id": "nat3", "description": "1 point per River that connects only to map edges; -1 point per River that connects to a block.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Rivers that only connect to map edges", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "River that connects to a block", "target": 3, "min-score": -99, "max-score": 99, "startingTotal": 0},
+        {"name": "Natural Selection", "id": "nat4", "description": "Score points based on the number of blocks in the longest row or column with 0 Roads.", "img": 0, "colOne": createMultiInput("nat4", 4), "colOneMulti": 1, "colOneName": "Number of blocks in longest row or column with no Roads", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 4, "min-score": -2, "max-score": 7, "startingTotal": -2},
+        {"name": "Straight and Narrow", "id": "nat5", "description": "1 point per Road section in one straightaway (a continuous stretch of roadway with no turns).", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Road sections in longest straightaway", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 5, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Drivin' Daisies", "id": "nat6", "description": "2 points per Meadow block on your longest Road; -1 point per Meadow block not on that Road.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Meadow blocks on longest Road", "colTwo": 0, "colTwoMulti": -1, "colTwoName": "Meadow blocks not on longest Road", "target": 6, "min-score": -99, "max-score": 98, "startingTotal": 0},
+        {"name": "Second Nature", "id": "nat7", "description": "1 point per Meadow block in your second largest Meadow group (which must be smaller than your largest Meadow group); Additional 1 point per Campsite in that group.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Meadow blocks in second largest Meadow group", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "Campsites in second largest Meadow group", "target": 7, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Waterways and Means", "id": "nat8", "description": "2 points per River with a different number of sections than any other River.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Rivers with different number of sections than any other River", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 8, "min-score": 0, "max-score": 98, "startingTotal": 0},
+        {"name": "Patchwork Park", "id": "nat9", "description": "1 point per Campsite adjacent to another Campsite on a different block type.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "Campsites adjacent to other Campsites on different blocks types.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 9, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Twin Peaks", "id": "nat10", "description": "2 points per Mountain group with exactly 2 blocks, where either or both blocks have Campsites or both do not.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Mountain groups with 2 blocks, both with Campsites", "colTwo": 0, "colTwoMulti": 2, "colTwoName": "Mountain groups with 2 blocks, neither with Campsites", "target": 10, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Run Forest Run", "id": "nat11", "description": "1 point per River section in 1 River that begins and ends within Forest blocks (it may pass through other Forest blocks).", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "River sections of 1 River beginning and ending in Forest blocks", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 11, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Happy Campers", "id": "nat12", "description": "2 points per Campsite along 1 River or Road of your choice.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Campsites along 1 River or Road, your choice", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 12, "min-score": 0, "max-score": 98, "startingTotal": 0},
+        {"name": "Bigfoot Country", "id": "nat13", "description": "2 points per Forest block that does not have a Campsite and is not on a map edge.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Forest blocks without Campsites and not on map's edge", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 13, "min-score": 0, "max-score": 98, "startingTotal": 0},
+        {"name": "Sniff or Swim", "id": "nat14", "description": "Choose one: [2 points per block in your largest Meadow group; -2 points per Lake block adjacent to that group.] OR [2 points per block in your largest Lake group; -2 points per Meadow block adjacent to that group.]", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Blocks in your largest Meadow/Lake group", "colTwo": 0, "colTwoMulti": -2, "colTwoName": "Lake/Meadow blocks adjacent to that group", "target": 14, "min-score": -98, "max-score": 98, "startingTotal": 0},
+        {"name": "Impressive Range", "id": "nat15", "description": "2 points per Mountain block along any 1 diagonal of your choice; Additional 1 point per Mountain Campsite on that diagonal.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Mountain blocks along 1 diagonal", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "Mountain Campsites along that diagonal", "target": 15, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Dream Streams", "id": "nat16", "description": "3 points per straight River section directly between 2 adjacent Lake blocks but connected to neither of them.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Straight River sections between 2 adjacent Lake blocks, not connected to either.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 16, "min-score": 0, "max-score": 99, "startingTotal": 0},
+        {"name": "Summit Up", "id": "nat17", "description": "2 points per Mountain group with 2 or more blocks; Additional 2 points if that group is in a different shape or orientation than any other Mountain group.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Mountain groups of 2+ blocks", "colTwo": 0, "colTwoMulti": 2, "colTwoName": "Mountain groups of 2+ blocks in a different shape or orientation than any other Mountain group", "target": 17, "min-score": 0, "max-score": 98, "startingTotal": 0},
+        {"name": "Naturopolis", "id": "nqt18", "description": "Count all of the Campsites in the longest row and in the longest column. Score twice that many points.", "img": 0, "colOne": 0, "colOneMulti": 2, "colOneName": "Campsites in longest row", "colTwo": 0, "colTwoMulti": 2, "colTwoName": "Campsites in longest column", "target": 18, "min-score": 0, "max-score": 98, "startingTotal": 0},
     ]
 };
 
@@ -85,20 +106,23 @@ function themApplesCheckBox() {
     return [bonusCheck, bonusLabel];
 }
 
-function createMultiInput(card) {
-    const inputOne = document.createElement("input");
-    const inputTwo = document.createElement("input");
-    const inputThree = document.createElement("input");
-    const labelOne = document.createElement("label");
-    const labelTwo = document.createElement("label");
-    const labelThree = document.createElement("label");
-    const inputs = [inputOne, inputTwo, inputThree];
-    const labels = [labelOne, labelTwo, labelThree]
+function createMultiInput(card, numInputs) {
+    const inputs = [];
+    const labels = [];
+    for (let i = 0; i < numInputs; i++) {
+        const newInput = document.createElement("input");
+        const newLabel = document.createElement("label");
+        inputs.push(newInput);
+        labels.push(newLabel);
+    }
     if (card === "ag13") {
         const checkElements = checkPolyominorchards(inputs, labels);
         return checkElements;
-    } else {
+    } else if (card === "ag2") {
         const radioElements = radioBigCountry(inputs, labels);
+        return radioElements;
+    } else if (card === "nat4") {
+        const radioElements = radioNaturalSelection(inputs, labels);
         return radioElements;
     }
 }
@@ -127,6 +151,21 @@ function radioBigCountry(radios, labels) {
         radios[i].value = values[i];
         radios[i].name = "bigCountryRadio"
         labels[i].for = `BCCheck${String(values[i])}`;
+        labels[i].innerText = `${blocks[i]}`;
+    }
+    return [radios, labels]
+}
+
+function radioNaturalSelection(radios, labels) {
+    const length = radios.length;
+    const values = [-2, 1, 4, 7];
+    const blocks = ["0-4", "5-8", "9-11"; "12+"];
+    for (let i = 0; i < length; i++) {
+        radios[i].type = "radio";
+        radios[i].id = `NatSel${String(values[i])}`;
+        radios[i].value = values[i];
+        radios[i].name = "NaturalSelectionRadio"
+        labels[i].for = `NatSel${String(values[i])}`;
         labels[i].innerText = `${blocks[i]}`;
     }
     return [radios, labels]
