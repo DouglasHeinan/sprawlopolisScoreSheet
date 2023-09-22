@@ -59,7 +59,7 @@ export const agropolis = {
         {"name": "Them Apples", "id": "ag16", "description": "3 points per Orchard group with a different number of blocks than any other Orchard group; BONUS: 5 points if every Orchard group has a different number of blocks.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Orchard groups with different numbers of blocks.", "colTwo": themApplesCheckBox(), "colTwoMulti": 1, "colTwoName": "Does every Orchard group have a different number of blocks?", "target": 16, "min-score": 0, "max-score": 20, "startingTotal": 0},
         {"name": "Noah's Farm", "id": "ag17", "description": "3 points per Livestock group that contains an even number of pens and at least 2 different Livestock types.", "img": 0, "colOne": 0, "colOneMulti": 3, "colOneName": "Livestock group containing an even number of pens and 2+ different Livestock types.", "colTwo": null, "colTwoMulti": null, "colTwoName": null, "target": 17, "min-score": 0, "max-score": 99, "startingTotal": 0},
         {"name": "Agropolis", "id": "ag18", "description": "Count all of the Livestock Pens in your longest row and in your longest column. Score that many points.", "img": 0, "colOne": 0, "colOneMulti": 1, "colOneName": "All Livestock Pens in longest row.", "colTwo": 0, "colTwoMulti": 1, "colTwoName": "All Livestock Pens in longest column.", "target": 18, "min-score": 0, "max-score": 99, "startingTotal": 0},
-    ],
+    ]
 };
 
 export const naturopolis = {
@@ -104,7 +104,7 @@ function themApplesCheckBox() {
     bonusLabel.for = "themApplesBonus";
     bonusLabel.innerText = "5 point bonus!";
     return [bonusCheck, bonusLabel];
-}
+};
 
 function createMultiInput(card, numInputs) {
     const inputs = [];
@@ -114,7 +114,7 @@ function createMultiInput(card, numInputs) {
         const newLabel = document.createElement("label");
         inputs.push(newInput);
         labels.push(newLabel);
-    }
+    };
     if (card === "ag13") {
         const checkElements = checkPolyominorchards(inputs, labels);
         return checkElements;
@@ -124,8 +124,8 @@ function createMultiInput(card, numInputs) {
     } else if (card === "nat4") {
         const radioElements = radioNaturalSelection(inputs, labels);
         return radioElements;
-    }
-}
+    };
+};
 
 function checkPolyominorchards(checks, labels) {
     const length = checks.length;
@@ -137,9 +137,9 @@ function checkPolyominorchards(checks, labels) {
         checks[i].value = values[i];
         labels[i].for = `polyCheck${String(values[i])}`;
         labels[i].innerText = `Exactly ${blocks[i]} blocks (${String(values[i])} points)`;
-    }
-    return [checks, labels]
-}
+    };
+    return [checks, labels];
+};
 
 function radioBigCountry(radios, labels) {
     const length = radios.length;
@@ -152,9 +152,9 @@ function radioBigCountry(radios, labels) {
         radios[i].name = "bigCountryRadio"
         labels[i].for = `BCCheck${String(values[i])}`;
         labels[i].innerText = `${blocks[i]}`;
-    }
-    return [radios, labels]
-}
+    };
+    return [radios, labels];
+};
 
 function radioNaturalSelection(radios, labels) {
     const length = radios.length;
@@ -164,9 +164,9 @@ function radioNaturalSelection(radios, labels) {
         radios[i].type = "radio";
         radios[i].id = `NatSel${String(values[i])}`;
         radios[i].value = values[i];
-        radios[i].name = "NaturalSelectionRadio"
+        radios[i].name = "NaturalSelectionRadio";
         labels[i].for = `NatSel${String(values[i])}`;
         labels[i].innerText = `${blocks[i]}`;
-    }
-    return [radios, labels]
-}
+    };
+    return [radios, labels];
+};

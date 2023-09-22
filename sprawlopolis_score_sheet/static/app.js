@@ -14,10 +14,10 @@ import {
 
 //-------------------------------------------------------------------
 
-window.onload = chooseGame()
+window.onload = chooseGame();
 
 function chooseGame() {
-    const games = [sprawlopolis, agropolis, naturopolis]
+    const games = [sprawlopolis, agropolis, naturopolis];
     let game;
     const newGameButtons = document.querySelectorAll(".newGameButton");
     const gameStartButtons = document.querySelector("#gameStartButtons");
@@ -33,12 +33,12 @@ function chooseGame() {
 
 function makeDeck(game) {
     const newDeck = new Deck(game, deckElements);
-    newDeck.createScoreCardList()
+    newDeck.createScoreCardList();
     const blocks = newDeck["blocks"];
     const scoringCards = [];
     deckElements["newGameCardList"].addEventListener("click", function(e) {
         const newCard = newDeck.selectScoreCard(e);
-        scoringCards.push(newCard)
+        scoringCards.push(newCard);
         if (scoringCards.length === 3) {
             deckElements["newGameCardList"].classList.add("hidden");
             makeSheet(scoringCards, blocks);
@@ -47,8 +47,8 @@ function makeDeck(game) {
 };
 
 function makeSheet(scoreCards, blocks) {
-    const newSheet = new ScoreSheet(scoreCards, blocks, sheetElements)
-    newSheet.createSheet()
+    const newSheet = new ScoreSheet(scoreCards, blocks, sheetElements);
+    newSheet.createSheet();
     sheetElements["tableDiv"].classList.remove("hidden");
     createScoreKeepingVariables(sheetElements, newSheet);
 }
@@ -57,12 +57,12 @@ function createScoreKeepingVariables(sheetElements, sheet) {
     const blockScores = sheetElements["blockScores"];
     const cardScoresOne = sheetElements["colOneData"];
     const cardScoresTwo = sheetElements["colTwoData"];
-    const scoringGroups = [blockScores, cardScoresOne, cardScoresTwo]
+    const scoringGroups = [blockScores, cardScoresOne, cardScoresTwo];
     const blockLength = blockScores.length;
     const cardOneLength = cardScoresOne.length;
     const cardTwoLength = cardScoresTwo.length;
     const scoringGroupLengths = [blockLength, cardOneLength, cardTwoLength];
-    keepScore(scoringGroupLengths, sheet, scoringGroups)
+    keepScore(scoringGroupLengths, sheet, scoringGroups);
 }
 
 function keepScore(scoringGroupLengths, sheet, scoringGroups) {
@@ -74,7 +74,7 @@ function keepScore(scoringGroupLengths, sheet, scoringGroups) {
             });
         };
     };
-}
+};
 
 function updateScores(sheet) {
     sheet.calcBlockScores();
