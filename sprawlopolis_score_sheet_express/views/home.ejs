@@ -1,0 +1,132 @@
+<%- include("partials/head") %>
+        <h1>Sprawlopolis Score Sheet</h1>
+
+        <div id="gameStartButtons">
+            <h3>Which game would you like to play?</h3>
+            <button class="newGameButton" id="newSprawlButton">Sprawlopolis</button>
+            <button class="newGameButton" id="newAgButton">Agropolis</button>
+            <button class="newGameButton" id="newNatButton">Naturopolis</button>
+        </div>
+
+
+        <div id="newGameCardListDiv">
+            <ul class="hidden" id="newGameCardList"></ul>
+
+        </div>
+
+        <div id="tableDiv" class="hidden">
+            <table id="scoreDisplay">
+                <tr>
+                    <th>Zones</th>
+                    <th class="noBorder"></th>
+                    <th class="noBorder"></th>
+                    <th>Count</th>
+                </tr>
+                <tr>
+                    <td class="blockName"></td>
+                    <td class="noBorder"></td>
+                    <td class="noBorder"></td>
+                    <td><div contenteditable class="blockScores">0</div></td>
+                </tr>
+                <tr>
+                    <td class="blockName"></td>
+                    <td class="noBorder"></td>
+                    <td class="noBorder"></td>
+                    <td><div contenteditable class="blockScores">0</div></td>
+                </tr>
+                <tr>
+                    <td class="blockName"></td>
+                    <td class="noBorder"></td>
+                    <td class="noBorder"></td>
+                    <td><div contenteditable class="blockScores">0</div></td>
+                </tr>
+                <tr>
+                    <td class="blockName"></td>
+                    <td class="noBorder"></td>
+                    <td class="noBorder"></td>
+                    <td><div contenteditable class="blockScores">0</div></td>
+                </tr>
+                <tr>
+                    <td class="blockName"></td>
+                    <td class="noBorder"></td>
+                    <td class="noBorder"></td>
+                    <td><div contenteditable class="blockScores">0</div></td>
+                </tr>
+                <tr>
+                    <td>Blocks and Roads subtotal</td>
+                    <td class="noBorder"></td>
+                    <td class="noBorder"></td>
+                    <td id="blockTotal"></td>
+                </tr>
+                <tr>
+                    <th>Score Card One</th>
+                </tr>
+                <tr>
+                    <th class="scoreCardHeaders"></th>
+                    <th class="scoreCardColOneNames"></th>
+                    <th class="scoreCardColTwoNames"></th>
+                    <th>Scoring card subtotal</th>
+                </tr>
+                <tr>
+                    <td class="cardTarget"></td>
+                    <td>
+                        <div contenteditable class="scoreCardColOneData"></div>
+                    </td>
+                    <td>
+                        <div contenteditable class="scoreCardColTwoData"></div>
+                    </td>
+                    <td class="scoreCardTotal"></td>
+                </tr>
+                <tr>
+                    <th>Score Card Two</th>
+                </tr>
+                <tr>
+                    <th class="scoreCardHeaders"></th>
+                    <th class="scoreCardColOneNames"></th>
+                    <th class="scoreCardColTwoNames"></th>
+                    <th class="scoreCardTotals">Scoring card subtotal</th>
+                </tr>
+                <tr>
+                    <td class="cardTarget"></td>
+                    <td>
+                        <div contenteditable class="scoreCardColOneData"></div>
+                    </td>
+                    <td>
+                        <div contenteditable class="scoreCardColTwoData"></div>
+                    </td>
+                    <td class="scoreCardTotal"></td>
+                </tr>
+                <tr>
+                    <th>Score Card Three</th>
+                </tr>
+                <tr>
+                    <th class="scoreCardHeaders"></th>
+                    <th class="scoreCardColOneNames"></th>
+                    <th class="scoreCardColTwoNames"></th>
+                    <th class="scoreCardTotals">Scoring card subtotal</th>
+                </tr>
+                <tr>
+                    <td class="cardTarget"></td>
+                    <td>
+                        <div contenteditable class="scoreCardColOneData"></div>
+                    </td>
+                    <td>
+                        <div contenteditable class="scoreCardColTwoData"></div>
+                    </td>
+                    <td class="scoreCardTotal"></td>
+                </tr>
+                <tr>
+                    <td>Target Score</td>
+                    <td class="noBorder"></td>
+                    <td>Scoring card subtotal</td>
+                    <td id="scoringCardSubtotal"></td>
+                </tr>
+                <tr>
+                    <td id="totalTarget"></td>
+                    <td class="noBorder"></td>
+                    <td>Total score</td>
+                    <td id="gameTotal"></td>
+                </tr>
+            </table>
+        </div>
+<%- include("partials/footer") %>

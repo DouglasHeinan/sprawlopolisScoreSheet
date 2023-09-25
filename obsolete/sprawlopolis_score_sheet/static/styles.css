@@ -1,0 +1,21 @@
+
+
+ul {
+    list-style-type: none;
+}
+
+.hidden {
+    display: none;
+}
+
+th, td {
+    border: solid;
+}
+
+td {
+    text-align: center;
+}
+
+.noBorder {
+    border: none;
+}

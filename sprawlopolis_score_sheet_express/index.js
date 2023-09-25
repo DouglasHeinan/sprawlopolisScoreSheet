@@ -9,3 +9,9 @@ app.set("views", path.join(__dirname, "/views"));
 app.get("/", (req, res) => {
     res.render("home");
 })
+
+
+
+app.listen(3000, () => {
+    console.log("list3000");
+})
