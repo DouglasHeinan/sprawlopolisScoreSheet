@@ -1,0 +1,11 @@
+<%- include("../partials/head") %>
+<h1>All Cards</h1>
+<% if (cards) { %>
+    <ul>
+        <% for (card of cards) { %>
+        <li><a href="/cards/<%= card.id %>"><%= card.name %></a></li>
+        <% } %>
+    </ul>
+<% } %>
+
+<%- include("../partials/footer") %>

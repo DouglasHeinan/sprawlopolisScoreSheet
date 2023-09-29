@@ -1,0 +1,21 @@
+<%- include("../partials/head") %>
+
+<h1>Edit Card</h1>
+
+<form action="/cards/<%= card.id %>?_method=PUT" method="POST">
+    <section>
+        <label for="name">Change Card Name</label>
+        <input type="text" name="name" id="name" value="<%= card.name %>">
+    </section>
+    <section>
+        <label for="number">Change Card Number</label>
+        <input type="number" name="number" id="number" value="<%= card.number %>">
+    </section>
+    <section>
+        <label for="timesPlayed">Change Times Played</label>
+        <input type="number" name="timesPlayed" id="timesPlayed" value="<%= card.timesPlayed %>">   
+    </section>
+    <button>Submit</button>
+</form>
+
+<%- include("../partials/footer") %>

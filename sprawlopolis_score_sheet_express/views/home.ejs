@@ -1,6 +1,16 @@
 <%- include("partials/head") %>
-        <h1>Sprawlopolis Score Sheet</h1>
+<h1>Sprawlopolis Score Sheet</h1>
 
+<form action="/cards", method="GET">
+    <button type="submit">Sprawlopolis</button>
+</form>
+
+<form action="/games/new" method="GET">
+    <button>Add New Game</button>
+</form>
+
+
+<!-- 
         <div id="gameStartButtons">
             <h3>Which game would you like to play?</h3>
             <button class="newGameButton" id="newSprawlButton">Sprawlopolis</button>
@@ -128,5 +138,5 @@
                     <td id="gameTotal"></td>
                 </tr>
             </table>
-        </div>
+        </div> -->
 <%- include("partials/footer") %>

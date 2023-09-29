@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const ScoreCard = require("../models/scoreRecords");
+const ScoreCard = require("../models/scoringCards");
+const Score = require("../models/tempModels/tempScores");
 const cards = require("./seedSprawl")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
@@ -18,12 +19,27 @@ const updateDB = async () => {
     for (let i = 0; i < 18; i++) {
         const newCard = new ScoreCard({
             name: cards["scoringCards"][i]["name"],
-            number: cards["scoringCards"][i]["target"]
+            number: cards["scoringCards"][i]["target"],
+            timesPlayed: 0
         });
         await newCard.save();
     };
 };
 
-updateDB().then(() => {
+const updateTempDB = async () => {
+    await Score.deleteMany({});
+    for (let i = 0; i < 100; i++) {
+        const newScore = new Score({
+            score: Math.floor((Math.random() * 30) + 1)
+        });
+        await newScore.save();
+    };
+}
+
+updateTempDB()
+.then(
+    updateTempDB()
+)
+.then(() => {
     mongoose.connection.close();
 });

@@ -9,15 +9,12 @@ const ScoreCardSchema = new Schema({
     number: {
         type: Number,
         required: true
+    },
+    timesPlayed: {
+        type: Number,
+        required: true
     }
 });
 
-// const CombinationRecordsSchema = new Schema({
-//     combo: [ScoreCardSchema],
-//     score: Number,
-//     wins: Number,
-//     losses: Number,
-//     highScore: Number
-// })
 
 module.exports = mongoose.model("ScoreCard", ScoreCardSchema);
