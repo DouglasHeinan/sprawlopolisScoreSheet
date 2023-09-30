@@ -1,4 +1,4 @@
-<%- include("../partials/head") %>
+<%- layout("./layouts/boilerplate") %>
 <h1>Card Name: <%= card.name %></h1>
 <h4>Card Number: <%= card.number %></h4>
 <h4> Times Played: <%= card.timesPlayed %></h4>
@@ -11,5 +11,4 @@
     <button>Delete card</button>
 </form>
 
-<%- include("../partials/footer") %>
 
