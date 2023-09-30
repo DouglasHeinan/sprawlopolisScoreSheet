@@ -4,7 +4,6 @@ const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const ScoreCard = require("./models/scoringCards");
 const Score = require("./models/tempModels/tempScores")
-// const cards = require("./spralOnly/seedSprawl")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -43,26 +42,28 @@ app.get("/cards/:id", async (req, res) => {
     res.render("tempViews/tempSingleCard", {card})
 });
 
-app.get("games/new", (req, res) => {
-    res.render("tempAddNewGame");
-})
+app.get("/games/new", (req, res) => {
+    res.render("tempViews/tempAddNewGame");
+});
 
-app.post("/games/new", (req, res) => {
-
-})
+app.post("/games/new", async (req, res) => {
+    const score = new Score(req.body);
+    await score.save();
+    res.redirect("/")
+});
 
 app.get("/cards/:id/edit", async (req, res) => {
     const {id} = req.params;
     const card = await ScoreCard.findById(id);
     res.render("tempViews/tempEditCard", {card})
-})
+});
 
 app.put("/cards/:id", async (req, res) => {
     console.log(req.body)
     const {id} = req.params;
     const card = await ScoreCard.findByIdAndUpdate(id, req.body, {runValidators: true});
     res.redirect(`/cards/${card.id}`);
-})
+});
 
 
 
