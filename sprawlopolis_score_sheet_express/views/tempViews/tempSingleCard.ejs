@@ -7,5 +7,9 @@
     <button>Edit Card</button>
 </form>
 
+<form action="/cards/<%= card.id %>?_method=DELETE" method="POST">
+    <button>Delete card</button>
+</form>
+
 <%- include("../partials/footer") %>
 

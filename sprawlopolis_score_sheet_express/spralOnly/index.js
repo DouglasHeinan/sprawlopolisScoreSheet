@@ -36,10 +36,11 @@ const updateTempDB = async () => {
     };
 }
 
-updateTempDB()
+
+updateDB()
 .then(
     updateTempDB()
-)
-.then(() => {
-    mongoose.connection.close();
-});
+);
+// .then(() => {
+//     mongoose.connection.close();
+// });

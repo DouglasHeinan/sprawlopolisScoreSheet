@@ -14,11 +14,11 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
     console.log("db connected");
-})
+});
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 
@@ -64,6 +64,12 @@ app.put("/cards/:id", async (req, res) => {
     const card = await ScoreCard.findByIdAndUpdate(id, req.body, {runValidators: true});
     res.redirect(`/cards/${card.id}`);
 });
+
+app.delete("/cards/:id", async (req, res) => {
+    const {id} = req.params;
+    await ScoreCard.findByIdAndDelete(id);
+    res.redirect("/")
+})
 
 
 
