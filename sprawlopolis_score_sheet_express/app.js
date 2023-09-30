@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
 const ScoreCard = require("./models/scoringCards");
 const Score = require("./models/tempModels/tempScores")
 
@@ -21,6 +22,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+app.use(morgan("tiny"));
 
 
 app.set("view engine", "ejs");
