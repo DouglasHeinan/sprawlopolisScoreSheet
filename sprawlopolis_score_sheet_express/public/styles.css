@@ -19,3 +19,8 @@ td {
 .noBorder {
     border: none;
 }
+
+.inputError {
+    font-size: 10px;
+    color: red;
+}
