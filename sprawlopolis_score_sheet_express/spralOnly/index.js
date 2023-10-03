@@ -28,9 +28,14 @@ const updateDB = async () => {
 
 const updateTempDB = async () => {
     await Score.deleteMany({});
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 15; i++) {
+        let winGame = "false";
+        if (i % 2 === 0) {
+            winGame = "true";
+        }
         const newScore = new Score({
-            score: Math.floor((Math.random() * 30) + 1)
+            score: Math.floor((Math.random() * 30) + 1),
+            win: winGame
         });
         await newScore.save();
     };

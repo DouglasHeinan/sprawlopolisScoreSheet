@@ -4,6 +4,7 @@ const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
+const Joi = require("joi");
 const catchAsync = require("./utils/catchAsync")
 const AppError = require("./utils/AppError")
 const ScoreCard = require("./models/scoringCards");
@@ -57,8 +58,19 @@ app.get("/games/new", (req, res) => {
 });
 
 app.post("/games/new", catchAsync(async (req, res) => {
-    const score = new Score(req.body);
-    await score.save();
+    // const resultsSchema = Joi.object({
+    //     result: Joi.object({
+    //         score: Joi.number().min(0).required(),
+    //         win: Joi.string().required()
+    //     }).required()
+    // });
+    // const { error } = resultsSchema.validate(req.body)
+    // if (error) {
+    //     const msg = error.details.map(el => el.message).join(",")
+    //     throw new AppError(msg, 400);
+    // };
+    const newResult = new Score(req.body.result);
+    await newResult.save();
     res.redirect("/")
 }));
 
@@ -88,7 +100,7 @@ app.all("*", (req, res, next) => {
 app.use((err, req, res, next) => {
     const { status = 500 } = err;
     const { message = "Bad things Happened" } = err;
-    res.status(status).send(message);
+    res.status(status).render("error", {message});
 });
 
 

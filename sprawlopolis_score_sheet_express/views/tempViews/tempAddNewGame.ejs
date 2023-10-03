@@ -5,8 +5,9 @@
 <form action="/games/new", method="POST">
     <div>
         <label for="score">Enter final score</label>
-        <input name="score" id="score" type="number">
-        <div></div>
+        <input name="result[score]" id="score" type="number">
+        <label for="win">Did you win?</label>
+        <input name="result[win]" id="win" type="string">
     </div>
     <button>Enter New Score</button>
 </form>
