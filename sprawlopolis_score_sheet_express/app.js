@@ -4,7 +4,7 @@ const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
-const Joi = require("joi");
+const { cardSchema, resultsSchema } = require("./schemas.js")
 const catchAsync = require("./utils/catchAsync")
 const AppError = require("./utils/AppError")
 const ScoreCard = require("./models/scoringCards");
@@ -32,7 +32,26 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
+const validateResult = (req, res, next) => {
 
+    const { error } = resultsSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(",");
+        throw new AppError(msg, 400);
+    } else {
+        next();
+    };
+};
+
+const validateCard = (req, res, next) => {
+    const { error } = cardSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(",");
+        throw new AppError(msg, 400);
+    } else {
+        next();
+    }
+};
 
 
 
@@ -57,18 +76,7 @@ app.get("/games/new", (req, res) => {
     res.render("tempViews/tempAddNewGame");
 });
 
-app.post("/games/new", catchAsync(async (req, res) => {
-    // const resultsSchema = Joi.object({
-    //     result: Joi.object({
-    //         score: Joi.number().min(0).required(),
-    //         win: Joi.string().required()
-    //     }).required()
-    // });
-    // const { error } = resultsSchema.validate(req.body)
-    // if (error) {
-    //     const msg = error.details.map(el => el.message).join(",")
-    //     throw new AppError(msg, 400);
-    // };
+app.post("/games/new", validateResult, catchAsync(async (req, res, next) => {
     const newResult = new Score(req.body.result);
     await newResult.save();
     res.redirect("/")
@@ -80,9 +88,9 @@ app.get("/cards/:id/edit", catchAsync(async (req, res) => {
     res.render("tempViews/tempEditCard", {card})
 }));
 
-app.put("/cards/:id", catchAsync(async (req, res) => {
+app.put("/cards/:id", validateCard, catchAsync(async (req, res) => {
     const {id} = req.params;
-    const card = await ScoreCard.findByIdAndUpdate(id, req.body, {runValidators: true});
+    const card = await ScoreCard.findByIdAndUpdate(id, req.body.card, {runValidators: true});
     res.redirect(`/cards/${card.id}`);
 }));
 
