@@ -6,15 +6,43 @@ const ScoreCardSchema = new Schema({
         type: String,
         required: true
     },
-    number: {
+    description: {
+        type: String,
+        required: true
+    },
+    img: {
+        type: String
+    },
+    colOneMulti: {
+        type: Number,
+        requied: true
+    },
+    colOneName: {
+        type: String,
+        required: true
+    },
+    colTwoMulti: {
+        type: Number,
+    },
+    colTwoName: {
+        type: String,
+    },
+    cardTargetScore: {
         type: Number,
         required: true
     },
-    timesPlayed: {
+    minScore: {
+        type: Number,
+        required: true
+    },
+    maxScore: {
+        type: Number,
+        required: true
+    },
+    startingTotal: {
         type: Number,
         required: true
     }
 });
-
 
 module.exports = mongoose.model("ScoreCard", ScoreCardSchema);
