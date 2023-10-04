@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const ScoreCard = require("../models/scoringCards");
-// const Score = require("../models/tempModels/tempScores");
 const CardCombo = require("../models/cardCombos")
-// const GameResult = require("../models/gameResults")
+const GameResult = require("../models/gameResults")
 const cards = require("./seedSprawl")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
@@ -16,27 +15,12 @@ db.once("open", () => {
     console.log("db connected");
 })
 
-// const updateTempDB = async () => {
-//     await Score.deleteMany({});
-//     for (let i = 0; i < 15; i++) {
-//         let winGame = "false";
-//         if (i % 2 === 0) {
-//             winGame = "true";
-//         }
-//         const newScore = new Score({
-//             score: Math.floor((Math.random() * 30) + 1),
-//             win: winGame
-//         });
-//         await newScore.save();
-//     };
-// }
-
 const updateCardDb = async () => {
     await ScoreCard.deleteMany({});
     length = cards["scoringCards"].length
     allCards =[];
     for (let i = 0; i < length; i++) {
-        card = cards["scoringCards"][i];
+        const card = cards["scoringCards"][i];
         const newCard = new ScoreCard({
             name: card["name"],
             description: card["description"],
@@ -75,25 +59,27 @@ const createCombos = async () => {
 
 const saveCombos = async () => {
     await CardCombo.deleteMany({});
-    allCombos = await createCombos();
+    const allCombos = await createCombos();
     for (let combo of allCombos) {
-        seeds = createResults();
+        seeds = createStats();
+        const comboTargetScore = combo[0].cardTargetScore + combo[1].cardTargetScore + combo[2].cardTargetScore
         const newCombo = new CardCombo({
             cardOne: combo[0].id,
             cardTwo: combo[1].id,
             cardThree: combo[2].id,
             wins: seeds["wins"],
             losses: seeds["losses"],
+            targetScore: comboTargetScore,
             avgScore: seeds["avgScore"],
             highScore: seeds["highScore"],
             lowScore: seeds["lowScore"]
         });
-        await newCombo.save()
+        await newCombo.save();
     };
 };
 
 
-const createResults = () => {
+const createStats = () => {
     const seeds = {};
     seeds["wins"] = Math.floor((Math.random() * 10) + 1);
     seeds["losses"] = Math.floor((Math.random() * 10) + 1);
@@ -103,15 +89,54 @@ const createResults = () => {
     return seeds;
 };
 
+const createResults = async () => {
+    await GameResult.deleteMany({});
+    for (let i = 0; i < 50; i++) {
+        const record = await createRecord();
+        const newResult = new GameResult({
+            cardCombo: record["combo"],
+            win: record["win"],
+            score: record["score"],
+            target: record["target"]
+        });
+        await newResult.save();
+    };
+};
+
+const createRecord = async () => {
+    const allCombos = await CardCombo.find({});
+    const record = {};
+    let win = false;
+    const comboIndex = Math.floor(Math.random() * 816 );
+    combo = allCombos[comboIndex]
+    let score;
+    if (comboIndex % 2 === 0) {
+        win = true;
+    };
+    if (win) {
+        score = Math.floor(Math.random() * (35 - 25) + 25);
+    } else {
+        score = Math.floor(Math.random() * (23 - 10) + 10);
+    }
+    record["combo"] = combo;
+    record["win"] = win;
+    record["target"] = 25;
+    record["score"] = score;
+    return record;
+};
 
 
 
-// updateCardDb()
-// .then(
-//     updateTempDB())
-// .then(
-    saveCombos()
-// );
-.then(() => {
-    mongoose.connection.close();
-});
+
+
+makeThings = async () => {
+    await saveCombos()
+    .then(
+        await createResults()
+    )
+    .then(() => {
+        mongoose.connection.close();
+    })
+};
+
+makeThings();

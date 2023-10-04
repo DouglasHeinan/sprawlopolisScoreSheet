@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 const ScoreCard = require("./scoringCards");
 
 const CardComboSchema = new Schema({
-    cardOne: { type: Schema.Types.ObjectId, ScoreCard },
-    cardTwo: { type: Schema.Types.ObjectId, ScoreCard },
-    cardThree: { type: Schema.Types.ObjectId, ScoreCard },
+    cardOne: { type: Schema.Types.ObjectId, ref: "ScoreCard" },
+    cardTwo: { type: Schema.Types.ObjectId, ref: "ScoreCard" },
+    cardThree: { type: Schema.Types.ObjectId, ref:  "ScoreCard" },
     wins: {
         type: Number,
         required: true,
@@ -15,6 +15,11 @@ const CardComboSchema = new Schema({
         type: Number,
         required: true,
         min: 0,
+    },
+    targetScore: {
+        type: Number,
+        required: true,
+        min: 6
     },
     avgScore: {
         type: Number,

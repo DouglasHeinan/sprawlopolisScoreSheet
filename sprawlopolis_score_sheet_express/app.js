@@ -8,7 +8,8 @@ const { cardSchema, resultsSchema } = require("./schemas.js")
 const catchAsync = require("./utils/catchAsync")
 const AppError = require("./utils/AppError")
 const ScoreCard = require("./models/scoringCards");
-const Score = require("./models/tempModels/tempScores");
+const CardCombo = require("./models/cardCombos")
+// const Score = require("./models/tempModels/tempScores");
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -50,14 +51,16 @@ const validateCard = (req, res, next) => {
         throw new AppError(msg, 400);
     } else {
         next();
-    }
+    };
 };
 
 
 
 
-app.get("/", (req, res) => {
-    let cards = null
+app.get("/", async (req, res) => {
+    const cards = null;
+    const t = await CardCombo.findOne({}).populate("cardThree").populate("cardTwo").populate("cardOne");
+    console.log(t)
     res.render("home", {cards});
 });
 

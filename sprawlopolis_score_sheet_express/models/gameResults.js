@@ -2,33 +2,22 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const CardCombo = require("./cardCombos")
 
-const GameResultSchema = new Schema ({
-    cardCombo: { type: Schema.Types.ObjectId, CardCombo },
-    wins: {
-        type: Number,
+const GameResultSchema = new Schema({
+    cardCombo: { type: Schema.Types.ObjectId, ref: "CardCombo" },
+    win: {
+        type: Boolean,
         required: true,
-        min: 0,
     },
-    losses: {
-        type: Number,
-        required: true,
-        min: 0,
-    },
-    avgScore: {
+    score: {
         type: Number,
         required: true,
         min: 0
     },
-    highScore: {
+    target: {
         type: Number,
         required: true,
-        min: 0
-    },
-    lowScore: {
-        type: Number,
-        required: true,
-        min: 0
+        min: 6
     }
 });
 
-module.exports = ("GameResults", GameResultSchema)
+module.exports = mongoose.model("GameResult", GameResultSchema)
