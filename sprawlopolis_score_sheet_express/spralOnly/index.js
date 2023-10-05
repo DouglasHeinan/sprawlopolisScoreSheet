@@ -21,6 +21,7 @@ const updateCardDb = async () => {
     allCards =[];
     for (let i = 0; i < length; i++) {
         const card = cards["scoringCards"][i];
+        const cardStats = await populateCardStats(card);
         const newCard = new ScoreCard({
             name: card["name"],
             description: card["description"],
@@ -31,13 +32,28 @@ const updateCardDb = async () => {
             cardTargetScore: card["target"],
             minScore: card["min-score"],
             maxScore: card["max-score"],
-            startingTotal: card["startingTotal"]
+            startingTotal: card["startingTotal"],
+            mostPoints: cardStats["mostPoints"],
+            fewestPoints: cardStats["fewestPoints"],
+            gamesPlayed: cardStats["gamesPlayed"],
+            wins: cardStats["wins"],
+            losses: cardStats["losses"]
         });
         allCards.push(newCard);
         await newCard.save();
     };
     return allCards;
 };
+
+const populateCardStats = async (card) => {
+    const cardStats = {};
+    cardStats["fewestPoints"] = Math.floor(Math.random() * ((card["target"] - 3) - (card["target"] - 6)) + (card["target"] - 6));
+    cardStats["mostPoints"] = Math.floor(Math.random() * ((card["target"] + 8) - (card["target"] + 2)) + (card["target"] + 2));
+    cardStats["gamesPlayed"] = Math.floor(Math.random() * (20 - 3) + 3);
+    cardStats["wins"] = cardStats["gamesPlayed"] - (Math.floor(Math.random() * cardStats["gamesPlayed"]));
+    cardStats["losses"] = cardStats["gamesPlayed"] - cardStats["wins"];
+    return cardStats;
+}
 
 
 const createCombos = async () => {

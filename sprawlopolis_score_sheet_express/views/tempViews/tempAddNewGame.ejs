@@ -2,12 +2,10 @@
 
 <h1>New Game</h1>
 
-<form action="/games/new", method="POST">
+<form action="combos/<%= id %>/games", method="POST">
     <div>
         <label for="score">Enter final score</label>
         <input name="result[score]" id="score" type="number">
-        <label for="win">Did you win?</label>
-        <input name="result[win]" id="win" type="string">
     </div>
     <button>Enter New Score</button>
 </form>

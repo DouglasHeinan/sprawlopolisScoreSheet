@@ -42,7 +42,22 @@ const ScoreCardSchema = new Schema({
     startingTotal: {
         type: Number,
         required: true
-    }
+    },
+    mostPoints: {
+        type: Number
+    },
+    fewestPoints: {
+        type: Number
+    },
+    gamesPlayed: {
+        type: Number
+    },
+    wins: {
+        type: Number
+    },
+    losses: {
+        type: Number
+    },
 });
 
 module.exports = mongoose.model("ScoreCard", ScoreCardSchema);

@@ -2,6 +2,11 @@
 <h1>Card Name: <%= card.name %></h1>
 <h4>Card Number: <%= card.cardTargetScore %></h4>
 <h4><%= card.description %></h4>
+<div>
+    <h5>Most points from this card: <%= card.mostPoints %></h5>
+    <h5>Fewest points from this card: <%= card.fewestPoints %></h5>
+    <h5>Record with this scoring card: <%= card.wins %> - <%= card.losses %></h5>
+</div>
 
 <a href="../"><button>Return to card list</button></a>
 
