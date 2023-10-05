@@ -1,2 +1,8 @@
 <%- layout("./layouts/boilerplate") %>
 
+<h1>All Combos</h1>
+<ul>
+    <% for (combo of someCombos) { %>
+        <li><a href="combos/<%= combo.id %>/games/new"><%= combo.cardOne %></a></li>
+    <% } %>
+</ul>

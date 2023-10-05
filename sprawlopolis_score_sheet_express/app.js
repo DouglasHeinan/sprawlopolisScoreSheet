@@ -69,52 +69,45 @@ app.get("/cards/:id", catchAsync(async (req, res) => {
     res.render("tempViews/tempSingleCard", {card})
 }));
 
-app.get("/combos", (req, res) => {
-    const allCombos = CardCombos.find({});
-    const someCombos = allCombos.slice(50, 76);
-    res.render("", {someCombo})
-});
+app.get("/combos", catchAsync(async(req, res) => {
+    const allCombos = await CardCombo.find({});
+    const someCombos = allCombos.slice(50);
+    res.render("tempViews/tempViewCombos", {someCombos});
+}));
 
-app.get("/combos/:id/games/new", (req, res) => {
+app.get("/combos/:id/games/new", catchAsync(async (req, res) => {
     const {id} = req.params;
-    // const combo = CardCombo.findById(id);
-    res.render("tempViews/tempAddNewGame", {id});
-});
+    const combo = await CardCombo.findById(id);
+    res.render("tempViews/tempAddNewGame", {combo});
+}));
 
-// app.get("/games/new", (req, res) => {
-//     const allCombos = CardCombo.find({});
-//     const index = Math.floor(Math.random() * 816);
-//     const combo = allCombos[index];
-//     res.render("tempViews/tempAddNewGame", {combo});
-// });
-
-app.post("combos/:id/games", validateResult, catchAsync(async (req, res, next) => {
+app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
     const {id} = req.params;
-    const combo = CardCombo.findById(id);
-    const gameScore = req.body.score;
+    const combo = await CardCombo.findById(id);
+    const gameScore = req.body.result.score;
     let gameWin = false;
-    if (score >= combo.targetScore) {
+    if (gameScore >= combo.targetScore) {
         gameWin = true;
     }; 
     const newResult = new GameResult({
         cardCombo: combo.id,
-        win : win,
+        win : gameWin,
         score: gameScore,
-        target: combo.target
+        target: combo.targetScore
     });
     await newResult.save();
-    if (wins) {
+    if (gameWin) {
         combo.wins += 1;
     } else {
         combo.losses += 1;
     };
     if (gameScore > combo.highScore) {
         combo.highScore = gameScore;
-    } elif (gameScore < combo.lowScore) {
+    } else if (gameScore < combo.lowScore) {
         combo.lowScore = gameScore;
     }
     await combo.save();
-    res.redirect("/")
+    res.redirect(`/combos/${id}/games/new`)
 }));
 
 app.get("/cards/:id/edit", catchAsync(async (req, res) => {

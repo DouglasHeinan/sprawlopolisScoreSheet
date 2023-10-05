@@ -1,8 +1,18 @@
 <%- layout("./layouts/boilerplate") %>
 
 <h1>New Game</h1>
+<h2>Combo Target <%= combo.targetScore %></h2>
 
-<form action="combos/<%= id %>/games", method="POST">
+<ul>
+    <li>Wins: <%= combo.wins %></li>
+    <li>Losses: <%= combo.losses %></li>
+    <li>Avg: <%= combo.avgScore %></li>
+    <li>High Score: <%= combo.highScore %></li>
+    <li>Low Score: <%= combo.lowScore %></li>
+</ul>
+
+
+<form action="/combos/<%= combo.id %>/games", method="POST">
     <div>
         <label for="score">Enter final score</label>
         <input name="result[score]" id="score" type="number">
