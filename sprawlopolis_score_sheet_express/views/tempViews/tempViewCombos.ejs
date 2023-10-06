@@ -3,6 +3,6 @@
 <h1>All Combos</h1>
 <ul>
     <% for (combo of someCombos) { %>
-        <li><a href="combos/<%= combo.id %>/games/new"><%= combo.cardOne %></a></li>
+        <li><a href="combos/<%= combo.id %>/games/new"><%= combo.cards[0] %></a></li>
     <% } %>
 </ul>

@@ -1,6 +1,11 @@
 <%- layout("./layouts/boilerplate") %>
 
 <h1>New Game</h1>
+<h2>
+<% for (card of cards) { %>
+    <%= card.name %>
+<% } %>
+</h2>
 <h2>Combo Target <%= combo.targetScore %></h2>
 
 <ul>

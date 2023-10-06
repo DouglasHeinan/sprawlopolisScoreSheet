@@ -43,16 +43,6 @@ const validateResult = (req, res, next) => {
     };
 };
 
-// const validateCard = (req, res, next) => {
-//     const { error } = cardSchema.validate(req.body);
-//     if (error) {
-//         const msg = error.details.map(el => el.message).join(",");
-//         throw new AppError(msg, 400);
-//     } else {
-//         next();
-//     };
-// };
-
 
 app.get("/", async (req, res) => {
     res.render("home");
@@ -71,14 +61,15 @@ app.get("/cards/:id", catchAsync(async (req, res) => {
 
 app.get("/combos", catchAsync(async(req, res) => {
     const allCombos = await CardCombo.find({});
-    const someCombos = allCombos.slice(50);
+    const someCombos = allCombos.slice(700);
     res.render("tempViews/tempViewCombos", {someCombos});
 }));
 
 app.get("/combos/:id/games/new", catchAsync(async (req, res) => {
     const {id} = req.params;
     const combo = await CardCombo.findById(id);
-    res.render("tempViews/tempAddNewGame", {combo});
+    const cards = await CardCombo.findById(id).populate(cards);
+    res.render("tempViews/tempAddNewGame", {combo, cards});
 }));
 
 app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
