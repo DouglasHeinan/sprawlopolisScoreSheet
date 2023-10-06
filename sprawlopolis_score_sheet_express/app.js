@@ -60,16 +60,17 @@ app.get("/cards/:id", catchAsync(async (req, res) => {
 }));
 
 app.get("/combos", catchAsync(async(req, res) => {
-    const allCombos = await CardCombo.find({});
+    const allCombos = await CardCombo.find({}).populate("cards");
     const someCombos = allCombos.slice(700);
     res.render("tempViews/tempViewCombos", {someCombos});
 }));
 
 app.get("/combos/:id/games/new", catchAsync(async (req, res) => {
     const {id} = req.params;
-    const combo = await CardCombo.findById(id);
-    const cards = await CardCombo.findById(id).populate(cards);
-    res.render("tempViews/tempAddNewGame", {combo, cards});
+    const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
+    // const cards = await CardCombo.findById(id).populate("cards");
+    console.log(combo.cards[0].name)
+    res.render("tempViews/tempAddNewGame", {combo});
 }));
 
 app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
@@ -97,6 +98,7 @@ app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
     } else if (gameScore < combo.lowScore) {
         combo.lowScore = gameScore;
     }
+    combo.gamesPlayed.push(newResult);
     await combo.save();
     res.redirect(`/combos/${id}/games/new`)
 }));

@@ -63,10 +63,7 @@ const createCombos = async () => {
     for (let i = 0; i < length - 2; i++) {
         for (let j = i + 1; j < length - 1; j++) {
             for (let k = j + 1; k < length; k++) {
-                const combo = [allCards[0], allCards[1], allCards[2]]
-                // cardOne = allCards[i];
-                // cardTwo = allCards[j];
-                // cardThree = allCards[k];
+                const combo = [allCards[i], allCards[j], allCards[k]]
                 allCombos.push(combo);
             };
         };
@@ -81,9 +78,6 @@ const saveCombos = async () => {
         seeds = createStats();
         const comboTargetScore = combo[0].cardTargetScore + combo[1].cardTargetScore + combo[2].cardTargetScore
         const newCombo = new CardCombo({
-            // cardOne: combo[0].id,
-            // cardTwo: combo[1].id,
-            // cardThree: combo[2].id,
             cards: combo,
             wins: seeds["wins"],
             losses: seeds["losses"],
