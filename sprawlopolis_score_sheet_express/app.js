@@ -4,7 +4,7 @@ const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
-const { cardSchema, resultsSchema } = require("./schemas.js")
+const { resultsSchema } = require("./schemas.js")
 const catchAsync = require("./utils/catchAsync")
 const AppError = require("./utils/AppError")
 const ScoreCard = require("./models/scoringCards");
@@ -69,12 +69,11 @@ app.get("/combos/:id/games/new", catchAsync(async (req, res) => {
     const {id} = req.params;
     const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
     // const cards = await CardCombo.findById(id).populate("cards");
-    console.log(combo.cards[0].name)
     res.render("tempViews/tempAddNewGame", {combo});
 }));
 
 app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
-    const {id} = req.params;
+    const {id} = req.body;
     const combo = await CardCombo.findById(id);
     const gameScore = req.body.result.score;
     let gameWin = false;
@@ -103,23 +102,68 @@ app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
     res.redirect(`/combos/${id}/games/new`)
 }));
 
-app.get("/cards/:id/edit", catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const card = await ScoreCard.findById(id);
-    res.render("tempViews/tempEditCard", {card})
+app.get("/games/:id/edit", catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const game = await GameResult.findById(id);
+    res.render("tempViews/tempEditGame", {game});
 }));
 
-app.put("/cards/:id", catchAsync(async (req, res) => {
+app.put("/games/:id", catchAsync(async (req, res) => {
     const {id} = req.params;
-    const card = await ScoreCard.findByIdAndUpdate(id, req.body.card, {runValidators: true});
-    res.redirect(`/cards/${card.id}`);
+    const newScore = req.body.game.score;
+    const game = await GameResult.findByIdAndUpdate(id, {score: req.body.game.score}, {runValidators: true});
+    const combo = await CardCombo.findById(game.cardCombo)
+    if (game.win) {
+        if (combo.highScore < newScore) {
+            combo.highScore = newScore;
+        };
+        if (newScore < game.target) {
+            game.win = false;
+            combo.wins -= 1;
+            combo.losses += 1;
+            if (combo.lowScore > newScore) {
+                combo.lowScore = newScore;
+            };
+        };
+    } else if (!game.win) {
+        if (combo.lowScore > newScore) {
+            combo.lowScore = newScore;
+        };
+        if (newScore >= game.target) {
+            game.win = true;
+            combo.wins += 1;
+            combo.losses -= 1;
+            if (combo.highScore < newScore) {
+                combo.highScore = newScore;
+            };
+        };
+    };
+    await game.save();
+    await combo.save();
+    res.redirect(`/combos/${combo.id}/games/new`);
 }));
 
-app.delete("/cards/:id", catchAsync(async (req, res) => {
-    const {id} = req.params;
-    await ScoreCard.findByIdAndDelete(id);
-    res.redirect("/")
+app.delete("/combos/:id/games/:gameId", catchAsync(async (req, res) => {
+    const { id, gameId } = req.params;
+    console.log(id, gameId)
+    const combo = await CardCombo.findByIdAndUpdate(id, { $pull: { gamesPlayed: gameId } })
+    console.log("one", combo.gamesPlayed)
+    const result = await GameResult.findByIdAndDelete(gameId)
+    console.log("two", result)
+    res.redirect(`/combos/${id}/games/new`)
 }));
+
+
+// app.get("/cards/:id/edit", catchAsync(async (req, res) => {
+//     const {id} = req.params;
+//     const card = await ScoreCard.findById(id);
+//     res.render("tempViews/tempEditCard", {card})
+// }));
+
+
+
+
+
 
 
 app.all("*", (req, res, next) => {
