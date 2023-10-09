@@ -2,14 +2,20 @@ const express = require("express");
 const path = require("path");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js")
-const catchAsync = require("./utils/catchAsync")
 const AppError = require("./utils/AppError")
-const ScoreCard = require("./models/scoringCards");
-const CardCombo = require("./models/cardCombos")
-const GameResult = require("./models/gameResults")
+const cardRoutes = require("./routes/cards.js")
+const gameRoutes = require("./routes/games.js")
+const comboRoutes = require("./routes/combos.js")
+
+
+// const catchAsync = require("./utils/catchAsync");
+// const ScoreCard = require("./models/scoringCards");
+// const CardCombo = require("./models/cardCombos");
+// const GameResult = require("./models/gameResults");
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -28,6 +34,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 app.use(morgan("tiny"));
+app.use("/cards", cardRoutes);
+app.use("/games", gameRoutes);
+app.use("/combos", comboRoutes);
+app.use(cookieParser())
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
@@ -47,124 +57,6 @@ const validateResult = (req, res, next) => {
 app.get("/", async (req, res) => {
     res.render("home");
 });
-
-app.get("/cards", catchAsync(async (req, res) => {
-    const cards = await ScoreCard.find({});
-    res.render("tempviews/tempAllCards", {cards});
-}));
-
-app.get("/cards/:id", catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const card = await ScoreCard.findById(id);
-    res.render("tempViews/tempSingleCard", {card})
-}));
-
-app.get("/combos", catchAsync(async(req, res) => {
-    const allCombos = await CardCombo.find({}).populate("cards");
-    const someCombos = allCombos.slice(700);
-    res.render("tempViews/tempViewCombos", {someCombos});
-}));
-
-app.get("/combos/:id/games/new", catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
-    // const cards = await CardCombo.findById(id).populate("cards");
-    res.render("tempViews/tempAddNewGame", {combo});
-}));
-
-app.post("/combos/:id/games", catchAsync(async (req, res, next) => {
-    const {id} = req.body;
-    const combo = await CardCombo.findById(id);
-    const gameScore = req.body.result.score;
-    let gameWin = false;
-    if (gameScore >= combo.targetScore) {
-        gameWin = true;
-    }; 
-    const newResult = new GameResult({
-        cardCombo: combo.id,
-        win : gameWin,
-        score: gameScore,
-        target: combo.targetScore
-    });
-    await newResult.save();
-    if (gameWin) {
-        combo.wins += 1;
-    } else {
-        combo.losses += 1;
-    };
-    if (gameScore > combo.highScore) {
-        combo.highScore = gameScore;
-    } else if (gameScore < combo.lowScore) {
-        combo.lowScore = gameScore;
-    }
-    combo.gamesPlayed.push(newResult);
-    await combo.save();
-    res.redirect(`/combos/${id}/games/new`)
-}));
-
-app.get("/games/:id/edit", catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const game = await GameResult.findById(id);
-    res.render("tempViews/tempEditGame", {game});
-}));
-
-app.put("/games/:id", catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const newScore = req.body.game.score;
-    const game = await GameResult.findByIdAndUpdate(id, {score: req.body.game.score}, {runValidators: true});
-    const combo = await CardCombo.findById(game.cardCombo)
-    if (game.win) {
-        if (combo.highScore < newScore) {
-            combo.highScore = newScore;
-        };
-        if (newScore < game.target) {
-            game.win = false;
-            combo.wins -= 1;
-            combo.losses += 1;
-            if (combo.lowScore > newScore) {
-                combo.lowScore = newScore;
-            };
-        };
-    } else if (!game.win) {
-        if (combo.lowScore > newScore) {
-            combo.lowScore = newScore;
-        };
-        if (newScore >= game.target) {
-            game.win = true;
-            combo.wins += 1;
-            combo.losses -= 1;
-            if (combo.highScore < newScore) {
-                combo.highScore = newScore;
-            };
-        };
-    };
-    await game.save();
-    await combo.save();
-    res.redirect(`/combos/${combo.id}/games/new`);
-}));
-
-app.delete("/combos/:id/games/:gameId", catchAsync(async (req, res) => {
-    const { id, gameId } = req.params;
-    console.log(id, gameId)
-    const combo = await CardCombo.findByIdAndUpdate(id, { $pull: { gamesPlayed: gameId } })
-    console.log("one", combo.gamesPlayed)
-    const result = await GameResult.findByIdAndDelete(gameId)
-    console.log("two", result)
-    res.redirect(`/combos/${id}/games/new`)
-}));
-
-
-// app.get("/cards/:id/edit", catchAsync(async (req, res) => {
-//     const {id} = req.params;
-//     const card = await ScoreCard.findById(id);
-//     res.render("tempViews/tempEditCard", {card})
-// }));
-
-
-
-
-
-
 
 app.all("*", (req, res, next) => {
     next(new AppError("Page Not Found", 404));
