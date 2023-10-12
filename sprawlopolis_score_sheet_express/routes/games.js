@@ -10,6 +10,10 @@ const GameResult = require("../models/gameResults");
 router.get("/:id/edit", catchAsync(async (req, res) => {
     const { id } = req.params;
     const game = await GameResult.findById(id);
+    if (!game) {
+        req.flash("error", "This game no longer exists.")
+        return res.redirect("/combos")
+    }
     res.render("tempViews/tempEditGame", {game});
 }));
 
@@ -45,6 +49,7 @@ router.put("/:id", catchAsync(async (req, res) => {
     };
     await game.save();
     await combo.save();
+    req.flash("success", "You've updated this game.")
     res.redirect(`/combos/${combo.id}/games/new`);
 }));
 

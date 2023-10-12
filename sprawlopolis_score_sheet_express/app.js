@@ -8,6 +8,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js")
+const aWeekAway = require("./utils/constants")
 const AppError = require("./utils/AppError")
 const cardRoutes = require("./routes/cards.js")
 const gameRoutes = require("./routes/games.js")
@@ -36,31 +37,34 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 app.use(morgan("tiny"));
-app.use("/cards", cardRoutes);
-app.use("/games", gameRoutes);
-app.use("/combos", comboRoutes);
 app.use(cookieParser());
 
 const sessionConfig = {
     secret: "changeToBeBetterSoon",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + aWeekAway,
+        maxAge: aWeekAway
+    }
 };
 app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
+
+app.use("/cards", cardRoutes);
+app.use("/games", gameRoutes);
+app.use("/combos", comboRoutes);
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
-
-// const validateResult = (req, res, next) => {
-//     const { error } = resultsSchema.validate(req.body);
-//     if (error) {
-//         const msg = error.details.map(el => el.message).join(",");
-//         throw new AppError(msg, 400);
-//     } else {
-//         next();
-//     };
-// };
 
 
 app.get("/", async (req, res) => {
@@ -78,7 +82,15 @@ app.use((err, req, res, next) => {
 });
 
 
-
+// const validateResult = (req, res, next) => {
+//     const { error } = resultsSchema.validate(req.body);
+//     if (error) {
+//         const msg = error.details.map(el => el.message).join(",");
+//         throw new AppError(msg, 400);
+//     } else {
+//         next();
+//     };
+// };
 
 
 // const verifyPassword = (req, res, next) => {

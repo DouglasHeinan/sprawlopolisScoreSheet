@@ -7,6 +7,7 @@ const GameResult = require("../models/gameResults");
 
 
 router.get("/", catchAsync(async(req, res) => {
+    console.log("here")
     const allCombos = await CardCombo.find({}).populate("cards");
     const someCombos = allCombos.slice(700);
     res.render("tempViews/tempViewCombos", {someCombos});
@@ -15,7 +16,9 @@ router.get("/", catchAsync(async(req, res) => {
 router.get("/:id/games/new", catchAsync(async (req, res) => {
     const {id} = req.params;
     const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
-    // const cards = await CardCombo.findById(id).populate("cards");
+    if (!combo) {
+        req.flash("error", "Combination does not exist.")
+    }
     res.render("tempViews/tempAddNewGame", {combo});
 }));
 
@@ -46,6 +49,7 @@ router.post("/:id/games", catchAsync(async (req, res, next) => {
     }
     combo.gamesPlayed.push(newResult);
     await combo.save();
+    req.flash("success", "Successfully added new game.")
     res.redirect(`/combos/${id}/games/new`)
 }));
 
@@ -56,6 +60,7 @@ router.delete("/:id/games/:gameId", catchAsync(async (req, res) => {
     console.log("one", combo.gamesPlayed)
     const result = await GameResult.findByIdAndDelete(gameId)
     console.log("two", result)
+    req.flash("success", "Successfully deleted game.")
     res.redirect(`/combos/${id}/games/new`)
 }));
 
