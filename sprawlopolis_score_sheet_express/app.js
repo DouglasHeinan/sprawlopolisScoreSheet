@@ -4,6 +4,8 @@ const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const ejsMate = require("ejs-mate");
+const session = require("express-session");
+const flash = require("connect-flash");
 const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js")
 const AppError = require("./utils/AppError")
@@ -19,7 +21,7 @@ const comboRoutes = require("./routes/combos.js")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 });
 
 const db = mongoose.connection;
@@ -37,21 +39,28 @@ app.use(morgan("tiny"));
 app.use("/cards", cardRoutes);
 app.use("/games", gameRoutes);
 app.use("/combos", comboRoutes);
-app.use(cookieParser())
+app.use(cookieParser());
+
+const sessionConfig = {
+    secret: "changeToBeBetterSoon",
+    resave: false,
+    saveUninitialized: true
+};
+app.use(session(sessionConfig));
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
-const validateResult = (req, res, next) => {
-    const { error } = resultsSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(",");
-        throw new AppError(msg, 400);
-    } else {
-        next();
-    };
-};
+// const validateResult = (req, res, next) => {
+//     const { error } = resultsSchema.validate(req.body);
+//     if (error) {
+//         const msg = error.details.map(el => el.message).join(",");
+//         throw new AppError(msg, 400);
+//     } else {
+//         next();
+//     };
+// };
 
 
 app.get("/", async (req, res) => {
