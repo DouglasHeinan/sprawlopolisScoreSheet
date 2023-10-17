@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
+const bcrypt = require("bcrypt");
 const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js")
 const aWeekAway = require("./utils/constants")
@@ -68,6 +69,14 @@ app.set("views", path.join(__dirname, "/views"));
 
 
 app.get("/", async (req, res) => {
+    res.render("login")
+});
+
+app.post("/", (req, res) => {
+    //HERE
+});
+
+app.get("/home", async (req, res) => {
     res.render("home");
 });
 
