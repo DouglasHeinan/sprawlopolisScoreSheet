@@ -15,6 +15,7 @@ const cardRoutes = require("./routes/cards.js")
 const gameRoutes = require("./routes/games.js")
 const comboRoutes = require("./routes/combos.js")
 
+// Where to put this...
 
 // const catchAsync = require("./utils/catchAsync");
 // const ScoreCard = require("./models/scoringCards");
