@@ -1,6 +1,24 @@
 <%- layout("layouts/boilerplate") %>
 <h1>Sprawlopolis Score Sheet</h1>
 
+<% if (user) { %>
+    <h3>Welcome, <%= user.username %></h3>
+<% } else { %>
+    <h3>Welcome</h3>
+<% } %>
+
+<form action="/login", method="GET">
+    <button>Login</button>
+</form>
+
+<br>
+
+<form action="/register", method="GET">
+    <button>Register</button>
+</form>
+
+<br>
+
 <form action="/cards", method="GET">
     <button type="submit">Sprawlopolis</button>
 </form>

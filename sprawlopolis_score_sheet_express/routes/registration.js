@@ -1,20 +1,27 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 
 const catchAsync = require("../utils/catchAsync");
+const User = require("../models/users");
 
 
-// router.get("/:id/edit", catchAsync(async (req, res) => {
-//     const { id } = req.params;
-//     const game = await GameResult.findById(id);
-//     if (!game) {
-//         req.flash("error", "This game no longer exists.")
-//         return res.redirect("/combos")
-//     }
-//     res.render("tempViews/tempEditGame", {game});
-// }));
+router.get("/", (req, res) => {
+    res.render("register")
+})
 
-router.get("/register", catchAsync(async (req, res) => {
-    
-}))
+router.post("/", catchAsync(async (req, res) => {
+    const {password, username} = req.body;
+    const hash = await bcrypt.hash(password, 12);
+    const user = new User({
+        username,
+        password: hash
+    });
+    await user.save();
+    res.redirect(`/${user.id}`)
+}));
 
+
+
+
+module.exports = router;

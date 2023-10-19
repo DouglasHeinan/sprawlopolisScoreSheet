@@ -6,21 +6,16 @@ const cookieParser = require("cookie-parser");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
-const bcrypt = require("bcrypt");
 const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js")
 const aWeekAway = require("./utils/constants")
 const AppError = require("./utils/AppError")
+const User = require("./models/users");
 const cardRoutes = require("./routes/cards.js")
 const gameRoutes = require("./routes/games.js")
 const comboRoutes = require("./routes/combos.js")
-
-// Where to put this...
-
-// const catchAsync = require("./utils/catchAsync");
-// const ScoreCard = require("./models/scoringCards");
-// const CardCombo = require("./models/cardCombos");
-// const GameResult = require("./models/gameResults");
+const authRoutes = require("./routes/registration.js")
+const loginRoutes = require("./login.js")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -63,6 +58,8 @@ app.use((req, res, next) => {
 app.use("/cards", cardRoutes);
 app.use("/games", gameRoutes);
 app.use("/combos", comboRoutes);
+app.use("/register", authRoutes);
+app.use("/login", loginRoutes)
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
@@ -70,12 +67,15 @@ app.set("views", path.join(__dirname, "/views"));
 
 
 app.get("/", async (req, res) => {
-    res.render("login")
+    const user = null;
+    res.render("home", {user})
 });
 
-app.post("/", (req, res) => {
-    //HERE
-});
+app.get("/:id", async (req, res) => {
+    const {id} = req.params;
+    const user = await User.findById(id);
+    res.render("home", {user})
+})
 
 app.get("/home", async (req, res) => {
     res.render("home");

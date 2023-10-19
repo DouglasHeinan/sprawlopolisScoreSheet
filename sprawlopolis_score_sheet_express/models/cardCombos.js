@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const ScoreCard = require("./scoringCards");
+// const ScoreCard = require("./scoringCards");
 
 const CardComboSchema = new Schema({
     cards: [
