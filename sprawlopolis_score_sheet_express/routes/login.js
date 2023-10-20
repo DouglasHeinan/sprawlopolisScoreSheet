@@ -1,6 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const session = require("express-session");
+const aWeekAway = require("../utils/constants")
+
+const sessionConfig = {
+    secret: "changeToBeBetterSoon",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + aWeekAway,
+        maxAge: aWeekAway
+    }
+};
+
+router.use(session(sessionConfig));
 
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/users");
@@ -14,9 +29,10 @@ router.post("/", catchAsync(async (req, res) => {
     const user = await User.findOne({username});
     const validPW = await bcrypt.compare(password, user.password)
     if (validPW) {
-        res.send("Good stuff!")
+        req.session.user_id = user._id;
+        res.redirect(`/${user.id}`)
     } else {
-        res.send("NOPE!");
+        res.redirect(`/login`)
     }
     // res.send(`${username}, ${password}`)
 }));
