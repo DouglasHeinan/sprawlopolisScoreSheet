@@ -21,7 +21,4 @@ router.post("/", catchAsync(async (req, res) => {
     res.redirect(`/${user.id}`)
 }));
 
-
-
-
 module.exports = router;

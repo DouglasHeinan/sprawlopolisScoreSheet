@@ -9,15 +9,16 @@ router.get("/", (req, res) => {
     res.render("login")
 });
 
-router.post("/", catchAsync(async(req, res) => {
-    router.post("/", catchAsync(async (req, res) => {
-        const {password, username} = req.body;
-        const hash = await bcrypt.hash(password, 12);
-        const user = new User({
-            username,
-            password: hash
-        });
-        await user.save();
-        res.redirect(`/${user.id}`)
-    }));
+router.post("/", catchAsync(async (req, res) => {
+    const {username, password} = req.body;
+    const user = await User.findOne({username});
+    const validPW = await bcrypt.compare(password, user.password)
+    if (validPW) {
+        res.send("Good stuff!")
+    } else {
+        res.send("NOPE!");
+    }
+    // res.send(`${username}, ${password}`)
 }));
+
+module.exports = router;

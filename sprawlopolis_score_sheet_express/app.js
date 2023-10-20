@@ -15,7 +15,7 @@ const cardRoutes = require("./routes/cards.js")
 const gameRoutes = require("./routes/games.js")
 const comboRoutes = require("./routes/combos.js")
 const authRoutes = require("./routes/registration.js")
-const loginRoutes = require("./login.js")
+const loginRoutes = require("./routes/login.js")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -59,7 +59,7 @@ app.use("/cards", cardRoutes);
 app.use("/games", gameRoutes);
 app.use("/combos", comboRoutes);
 app.use("/register", authRoutes);
-app.use("/login", loginRoutes)
+app.use("/login", loginRoutes);
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
@@ -67,19 +67,18 @@ app.set("views", path.join(__dirname, "/views"));
 
 
 app.get("/", async (req, res) => {
-    const user = null;
-    res.render("home", {user})
+    res.render("home")
 });
+
+// app.get("/home", async (req, res) => {
+//     res.render("home");
+// });
 
 app.get("/:id", async (req, res) => {
     const {id} = req.params;
     const user = await User.findById(id);
-    res.render("home", {user})
+    res.render("userLanding", {user})
 })
-
-app.get("/home", async (req, res) => {
-    res.render("home");
-});
 
 app.all("*", (req, res, next) => {
     next(new AppError("Page Not Found", 404));
