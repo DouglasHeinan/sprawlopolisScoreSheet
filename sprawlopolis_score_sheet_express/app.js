@@ -7,15 +7,16 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
 const morgan = require("morgan");
-const { resultsSchema } = require("./schemas.js")
-const aWeekAway = require("./utils/constants")
-const AppError = require("./utils/AppError")
+const { resultsSchema } = require("./schemas.js");
+// const requireLogin = require("./utils/requireLogin");
+const aWeekAway = require("./utils/constants");
+const AppError = require("./utils/AppError");
 const User = require("./models/users");
-const cardRoutes = require("./routes/cards.js")
-const gameRoutes = require("./routes/games.js")
-const comboRoutes = require("./routes/combos.js")
-const authRoutes = require("./routes/registration.js")
-const loginRoutes = require("./routes/login.js")
+const cardRoutes = require("./routes/cards.js");
+const gameRoutes = require("./routes/games.js");
+const comboRoutes = require("./routes/combos.js");
+const authRoutes = require("./routes/registration.js");
+const loginRoutes = require("./routes/login.js");
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -46,8 +47,19 @@ const sessionConfig = {
         maxAge: aWeekAway
     }
 };
+
 app.use(session(sessionConfig));
 app.use(flash());
+// app.use(requireLogin());
+
+const requireLogin = (req, res, next) => {
+    if (!req.session.user_id) {
+        req.flash("error", "Log in to view your profile.")
+        return res.redirect("/login")
+    }
+    next();
+};
+
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
@@ -70,15 +82,11 @@ app.get("/", async (req, res) => {
     res.render("home")
 });
 
-// app.get("/home", async (req, res) => {
-//     res.render("home");
-// });
-
-app.get("/:id", async (req, res) => {
+app.get("/:id", requireLogin, (async(req, res) => {
     const {id} = req.params;
     const user = await User.findById(id);
     res.render("userLanding", {user})
-})
+}))
 
 app.all("*", (req, res, next) => {
     next(new AppError("Page Not Found", 404));

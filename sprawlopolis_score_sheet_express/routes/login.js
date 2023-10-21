@@ -34,7 +34,11 @@ router.post("/", catchAsync(async (req, res) => {
     } else {
         res.redirect(`/login`)
     }
-    // res.send(`${username}, ${password}`)
 }));
+
+router.post("/logout", (req, res) => {
+    req.session.user_id = null;
+    res.redirect("/");
+})
 
 module.exports = router;
