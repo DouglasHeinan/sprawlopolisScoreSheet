@@ -26,14 +26,21 @@ router.get("/", (req, res) => {
 
 router.post("/", catchAsync(async (req, res) => {
     const {username, password} = req.body;
-    const user = await User.findOne({username});
-    const validPW = await bcrypt.compare(password, user.password)
-    if (validPW) {
-        req.session.user_id = user._id;
-        res.redirect(`/${user.id}`)
+    const foundUser = await User.findAndValidate(username, password);
+    if (foundUser) {
+        req.session.user_id = foundUser._id;
+        res.redirect(`/${foundUser.id}`)
     } else {
         res.redirect(`/login`)
     }
+    // const user = await User.findOne({username});
+    // const validPW = await bcrypt.compare(password, user.password)
+    // if (validPW) {
+    //     req.session.user_id = user._id;
+    //     res.redirect(`/${user.id}`)
+    // } else {
+    //     res.redirect(`/login`)
+    // }
 }));
 
 router.post("/logout", (req, res) => {
