@@ -5,7 +5,6 @@ const catchAsync = require("../utils/catchAsync");
 const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
 
-
 router.get("/", catchAsync(async(req, res) => {
     console.log("here")
     const allCombos = await CardCombo.find({}).populate("cards");
@@ -27,6 +26,7 @@ router.post("/:id/games", catchAsync(async (req, res, next) => {
     const combo = await CardCombo.findById(id);
     const gameScore = req.body.result.score;
     let gameWin = false;
+    // First block
     if (gameScore >= combo.targetScore) {
         gameWin = true;
     }; 
@@ -36,7 +36,9 @@ router.post("/:id/games", catchAsync(async (req, res, next) => {
         score: gameScore,
         target: combo.targetScore
     });
+    //EndFirst
     await newResult.save();
+    //SecondBlock
     if (gameWin) {
         combo.wins += 1;
     } else {
@@ -46,7 +48,8 @@ router.post("/:id/games", catchAsync(async (req, res, next) => {
         combo.highScore = gameScore;
     } else if (gameScore < combo.lowScore) {
         combo.lowScore = gameScore;
-    }
+    };
+    //EndSecond
     combo.gamesPlayed.push(newResult);
     await combo.save();
     req.flash("success", "Successfully added new game.")

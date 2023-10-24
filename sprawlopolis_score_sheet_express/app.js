@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const localStrategy = require("passport-local");
 const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js");
 // const requireLogin = require("./utils/requireLogin");
@@ -50,7 +52,10 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session())
 // app.use(requireLogin());
+passport.use(new localStrategy(User.authenticate()))
 
 const requireLogin = (req, res, next) => {
     if (!req.session.user_id) {
