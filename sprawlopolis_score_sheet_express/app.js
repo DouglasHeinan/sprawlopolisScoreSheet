@@ -53,9 +53,12 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
 // app.use(requireLogin());
-passport.use(new localStrategy(User.authenticate()))
+passport.use(new localStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser);
+passport.deserializeUser(User.deserializeUser);
 
 const requireLogin = (req, res, next) => {
     if (!req.session.user_id) {
@@ -64,7 +67,6 @@ const requireLogin = (req, res, next) => {
     }
     next();
 };
-
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
