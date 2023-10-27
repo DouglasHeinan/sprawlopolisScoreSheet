@@ -1,21 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const session = require("express-session");
+// const bcrypt = require("bcrypt");
+// const session = require("express-session");
 const aWeekAway = require("../utils/constants")
 
-const sessionConfig = {
-    secret: "changeToBeBetterSoon",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        expires: Date.now() + aWeekAway,
-        maxAge: aWeekAway
-    }
-};
+// const sessionConfig = {
+//     secret: "changeToBeBetterSoon",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         httpOnly: true,
+//         expires: Date.now() + aWeekAway,
+//         maxAge: aWeekAway
+//     }
+// };
 
-router.use(session(sessionConfig));
+// router.use(session(sessionConfig));
 
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/users");
@@ -28,7 +28,7 @@ router.post("/", catchAsync(async (req, res) => {
     const {username, password} = req.body;
     const foundUser = await User.findAndValidate(username, password);
     if (foundUser) {
-        req.session.user_id = foundUser._id;
+        // req.session.user_id = foundUser._id;
         res.redirect(`/${foundUser.id}`)
     } else {
         res.redirect(`/login`)
