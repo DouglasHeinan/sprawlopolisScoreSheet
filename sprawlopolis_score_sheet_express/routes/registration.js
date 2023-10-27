@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
 
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/users");
@@ -25,13 +24,9 @@ router.get("/", (req, res) => {
 })
 
 router.post("/", catchAsync(async (req, res) => {
-    const {password, username} = req.body;
-    const user = new User({username, password})
-    // const hash = await bcrypt.hash(password, 12);
-    // const user = new User({
-    //     username,
-    //     password: hash
-    // });
+    const {password, username, email} = req.body;
+    const user = new User({username, email});
+    const registeredUser = await User.register(user, password)
     await user.save();
     req.session.user_id = user._id;
     res.redirect(`/${user.id}`)
