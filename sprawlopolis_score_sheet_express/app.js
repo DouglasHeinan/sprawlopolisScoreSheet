@@ -89,7 +89,6 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
-
 app.get("/", async (req, res) => {
     res.render("home")
 });
@@ -149,3 +148,4 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
     console.log("listening...");
 })
+
