@@ -40,7 +40,7 @@ app.use(morgan("tiny"));
 app.use(cookieParser());
 
 const sessionConfig = {
-    secret: "changeToBeBetterSoon",
+    secret: "productionSecret",
     resave: false,
     saveUninitialized: true,
     cookie: {

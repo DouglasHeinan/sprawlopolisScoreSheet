@@ -4,7 +4,6 @@ const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
 const ScoreCard = require("../models/scoringCards");
 
-
 router.get("/", catchAsync(async (req, res) => {
     const cards = await ScoreCard.find({});
     res.render("tempviews/tempAllCards", {cards});
