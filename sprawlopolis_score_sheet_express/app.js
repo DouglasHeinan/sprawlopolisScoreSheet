@@ -64,7 +64,7 @@ const requireLogin = (req, res, next) => {
     if (!req.session.user_id) {
         req.flash("error", "Log in to view your profile.")
         return res.redirect("/login")
-    }
+    };
     next();
 };
 
@@ -90,13 +90,13 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
 app.get("/", async (req, res) => {
-    res.render("home")
+    res.render("home");
 });
 
 app.get("/:id", requireLogin, (async(req, res) => {
     const {id} = req.params;
     const user = await User.findById(id);
-    res.render("userLanding", {user})
+    res.render("userLanding", {user});
 }))
 
 app.all("*", (req, res, next) => {
