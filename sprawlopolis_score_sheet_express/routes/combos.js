@@ -13,6 +13,10 @@ router.get("/", catchAsync(async(req, res) => {
 }));
 
 router.get("/:id/games/new", catchAsync(async (req, res) => {
+    if (!req.isAuthenticated) {
+        req.flash("error", "you must be signed in");
+        res.redirect("/login")
+    }
     const {id} = req.params;
     const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
     if (!combo) {

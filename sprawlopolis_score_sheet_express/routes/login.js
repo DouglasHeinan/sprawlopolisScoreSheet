@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+// const bcrypt = require("bcrypt");
 // const session = require("express-session");
 const aWeekAway = require("../utils/constants");
 const passport = require("passport");
@@ -26,7 +27,7 @@ router.get("/", (req, res) => {
 
 router.post("/", passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}), catchAsync(async (req, res) => {
     req.flash("success", "welcome back!")
-    res.redirect(`/`)
+    res.redirect(`/${HERE}`)
 }));
 
 router.post("/logout", (req, res) => {
