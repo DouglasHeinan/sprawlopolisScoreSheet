@@ -21,15 +21,23 @@ const aWeekAway = require("../utils/constants")
 
 router.get("/", (req, res) => {
     res.render("register")
-})
+});
 
 router.post("/", catchAsync(async (req, res) => {
-    const {password, username, email} = req.body;
-    const user = new User({username, email});
-    const registeredUser = await User.register(user, password)
-    await user.save();
+    try {
+        const {password, username, email} = req.body;
+        const user = new User({username, email});
+        const registeredUser = await User.register(user, password)
+        req.flash("success", "Welcome to Sprawlopolis Scoresheet.")
+        res.redirect(`/${user.id}`)
+    } catch (e) {
+        req.flash("error", e.message)
+        res.redirect("register")
+    }
+
+    // await user.save();
+
     // req.session.user_id = user._id;
-    res.redirect(`/${user.id}`)
 }));
 
 module.exports = router;

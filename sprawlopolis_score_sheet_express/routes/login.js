@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-// const bcrypt = require("bcrypt");
 // const session = require("express-session");
-const aWeekAway = require("../utils/constants")
+const aWeekAway = require("../utils/constants");
+const passport = require("passport");
 
 // const sessionConfig = {
 //     secret: "changeToBeBetterSoon",
@@ -24,23 +24,9 @@ router.get("/", (req, res) => {
     res.render("login")
 });
 
-router.post("/", catchAsync(async (req, res) => {
-    const {username, password} = req.body;
-    const foundUser = await User.findAndValidate(username, password);
-    if (foundUser) {
-        // req.session.user_id = foundUser._id;
-        res.redirect(`/${foundUser.id}`)
-    } else {
-        res.redirect(`/login`)
-    }
-    // const user = await User.findOne({username});
-    // const validPW = await bcrypt.compare(password, user.password)
-    // if (validPW) {
-    //     req.session.user_id = user._id;
-    //     res.redirect(`/${user.id}`)
-    // } else {
-    //     res.redirect(`/login`)
-    // }
+router.post("/", passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}), catchAsync(async (req, res) => {
+    req.flash("success", "welcome back!")
+    res.redirect(`/`)
 }));
 
 router.post("/logout", (req, res) => {
