@@ -2,13 +2,14 @@ const express = require("express");
 const path = require("path");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 const ejsMate = require("ejs-mate");
+
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const { resultsSchema } = require("./schemas.js");
 // const requireLogin = require("./utils/requireLogin");
 const aWeekAway = require("./utils/constants");
@@ -33,11 +34,15 @@ db.once("open", () => {
 
 const app = express();
 
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
-app.use(morgan("tiny"));
-app.use(cookieParser());
+// app.use(morgan("tiny"));
+// app.use(cookieParser());
 
 const sessionConfig = {
     secret: "productionSecret",
@@ -60,15 +65,17 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const requireLogin = (req, res, next) => {
-    if (!req.session.user_id) {
-        req.flash("error", "Log in to view your profile.")
-        return res.redirect("/login")
-    };
-    next();
-};
+// const requireLogin = (req, res, next) => {
+//     if (!req.session.user_id) {
+//         req.flash("error", "Log in to view your profile.")
+//         return res.redirect("/login")
+//     };
+//     next();
+// };
 
 app.use((req, res, next) => {
+    console.log(req.session);
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
@@ -85,19 +92,16 @@ app.use("/combos", comboRoutes);
 app.use("/register", authRoutes);
 app.use("/login", loginRoutes);
 
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "/views"));
-
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/:id", requireLogin, (async(req, res) => {
+app.get("/:id", async (req, res) => {
+    console.log("HEREHEREHERE")
     const {id} = req.params;
     const user = await User.findById(id);
     res.render("userLanding", {user});
-}))
+})
 
 app.all("*", (req, res, next) => {
     next(new AppError("Page Not Found", 404));

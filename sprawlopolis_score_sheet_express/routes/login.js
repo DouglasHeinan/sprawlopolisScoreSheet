@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
 
 router.post("/", passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}), catchAsync(async (req, res) => {
     req.flash("success", "welcome back!")
-    res.redirect(`/${HERE}`)
+    res.redirect(`/${req.user._id}`)
 }));
 
 router.post("/logout", (req, res) => {

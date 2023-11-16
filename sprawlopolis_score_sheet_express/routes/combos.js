@@ -22,6 +22,7 @@ router.get("/:id/games/new", catchAsync(async (req, res) => {
     if (!combo) {
         req.flash("error", "Combination does not exist.")
     }
+    console.log(res.isAuthenticated)
     res.render("tempViews/tempAddNewGame", {combo});
 }));
 
