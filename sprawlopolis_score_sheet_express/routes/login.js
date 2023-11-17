@@ -19,7 +19,7 @@ const passport = require("passport");
 // router.use(session(sessionConfig));
 
 const catchAsync = require("../utils/catchAsync");
-const User = require("../models/users");
+const User = require("../models/user");
 
 router.get("/", (req, res) => {
     res.render("login")
