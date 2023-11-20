@@ -1,22 +1,7 @@
 const express = require("express");
 const router = express.Router();
-// const bcrypt = require("bcrypt");
-// const session = require("express-session");
 const aWeekAway = require("../utils/constants");
 const passport = require("passport");
-
-// const sessionConfig = {
-//     secret: "changeToBeBetterSoon",
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         httpOnly: true,
-//         expires: Date.now() + aWeekAway,
-//         maxAge: aWeekAway
-//     }
-// };
-
-// router.use(session(sessionConfig));
 
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/user");

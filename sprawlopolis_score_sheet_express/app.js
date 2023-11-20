@@ -12,12 +12,12 @@ const User = require("./models/user.js");
 const aWeekAway = require("./utils/constants");
 // const { resultsSchema } = require("./schemas.js");
 
-const userRoutes = require("./routes/users.js")
-const cardRoutes = require("./routes/cards.js");
-const gameRoutes = require("./routes/games.js");
-const comboRoutes = require("./routes/combos.js");
-const authRoutes = require("./routes/registration.js");
-const loginRoutes = require("./routes/login.js");
+const userRoutes = require("./routes/users")
+const cardRoutes = require("./routes/cards");
+const gameRoutes = require("./routes/games");
+const comboRoutes = require("./routes/combos");
+const authRoutes = require("./routes/registration");
+const loginRoutes = require("./routes/login");
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -34,7 +34,7 @@ const app = express();
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "/views"));
+app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
@@ -69,11 +69,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// *******************************************
-
-
-// *******************************************
-
 app.use("/", userRoutes)
 app.use("/cards", cardRoutes);
 app.use("/games", gameRoutes);
@@ -87,13 +82,14 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-// app.get("/:id", async (req, res) => {
-//     console.log("userID")
-//     console.log("")
-//     const {id} = req.params;
-//     const user = await User.findById(id);
-//     res.render("userLanding", {user});
-// });
+app.get("/:id", async (req, res) => {
+    console.log("Params:")
+    console.log(req.params)
+    console.log("")
+    const {id} = req.params;
+    const user = await User.findById(id);
+    res.render("userLanding", {user});
+});
 
 app.all("*", (req, res, next) => {
     next(new AppError("Page Not Found", 404));

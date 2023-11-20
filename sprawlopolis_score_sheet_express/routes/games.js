@@ -5,8 +5,6 @@ const catchAsync = require("../utils/catchAsync");
 const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
 
-
-
 router.get("/:id/edit", catchAsync(async (req, res) => {
     const { id } = req.params;
     const game = await GameResult.findById(id);
