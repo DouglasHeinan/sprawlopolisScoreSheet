@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const CardCombo = require("./cardCombos")
+// const CardCombo = require("./cardCombos")
+// const User = require("./user")
 
 const GameResultSchema = new Schema({
     cardCombo: { type: Schema.Types.ObjectId, ref: "CardCombo" },
@@ -17,6 +18,10 @@ const GameResultSchema = new Schema({
         type: Number,
         required: true,
         min: 6
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 

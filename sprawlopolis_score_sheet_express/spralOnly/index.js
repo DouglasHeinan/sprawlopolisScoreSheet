@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const ScoreCard = require("../models/scoringCards");
 const CardCombo = require("../models/cardCombos")
-const GameResult = require("../models/gameResults")
+// const GameResult = require("../models/gameResults")
 const cards = require("./seedSprawl")
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
