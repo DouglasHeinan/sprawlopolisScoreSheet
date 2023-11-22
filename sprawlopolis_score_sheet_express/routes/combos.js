@@ -5,9 +5,9 @@ const {isLoggedIn} = require("../middleware");
 
 const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
+// const UserRecord = require("../models/userComboRecords")
 
 router.get("/", catchAsync(async(req, res) => {
-    console.log("here")
     const allCombos = await CardCombo.find({}).populate("cards");
     const someCombos = allCombos.slice(700);
     res.render("tempViews/tempViewCombos", {someCombos});
@@ -15,10 +15,13 @@ router.get("/", catchAsync(async(req, res) => {
 
 router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
     const {id} = req.params;
-    const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
+    const combo = await CardCombo.findById(id).populate("cards");
     if (!combo) {
         req.flash("error", "Combination does not exist.")
     }
+    allResults = 
+    allGames = 
+    const wins = 
     res.render("tempViews/tempAddNewGame", {combo});
 }));
 
@@ -33,6 +36,7 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     }; 
     const newResult = new GameResult({
         cardCombo: combo.id,
+        user: req.user._id,
         win : gameWin,
         score: gameScore,
         target: combo.targetScore
@@ -40,19 +44,19 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     //EndFirst
     await newResult.save();
     //SecondBlock
-    if (gameWin) {
-        combo.wins += 1;
-    } else {
-        combo.losses += 1;
-    };
-    if (gameScore > combo.highScore) {
-        combo.highScore = gameScore;
-    } else if (gameScore < combo.lowScore) {
-        combo.lowScore = gameScore;
-    };
+    // if (gameWin) {
+    //     combo.wins += 1;
+    // } else {
+    //     combo.losses += 1;
+    // };
+    // if (gameScore > combo.highScore) {
+    //     combo.highScore = gameScore;
+    // } else if (gameScore < combo.lowScore) {
+    //     combo.lowScore = gameScore;
+    // };
     //EndSecond
-    combo.gamesPlayed.push(newResult);
-    await combo.save();
+    // combo.gamesPlayed.push(newResult);
+    // await combo.save();
     req.flash("success", "Successfully added new game.")
     res.redirect(`/combos/${id}/games/new`)
 }));

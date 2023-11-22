@@ -4,7 +4,14 @@ const Schema = mongoose.Schema;
 // const User = require("./user")
 
 const GameResultSchema = new Schema({
-    cardCombo: { type: Schema.Types.ObjectId, ref: "CardCombo" },
+    cardCombo: {
+        type: Schema.Types.ObjectId,
+        ref: "CardCombo"
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
     win: {
         type: Boolean,
         required: true,
@@ -18,14 +25,10 @@ const GameResultSchema = new Schema({
         type: Number,
         required: true,
         min: 6
-    },
-    date: {
-        type: Date
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
     }
+},
+{
+    timestamps: true
 });
 
 module.exports = mongoose.model("GameResult", GameResultSchema)

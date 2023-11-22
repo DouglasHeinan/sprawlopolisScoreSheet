@@ -9,30 +9,9 @@
 
 <h3>Combo Target <%= combo.targetScore %></h3>
 
-<ul>
-    <li>Wins: <%= combo.wins %></li>
-    <li>Losses: <%= combo.losses %></li>
-    <li>Avg: <%= combo.avgScore %></li>
-    <li>High Score: <%= combo.highScore %></li>
-    <li>Low Score: <%= combo.lowScore %></li>
-</ul>
-
 <h3>Game Results</h3>
-<h4><%= combo.gamesPlayed.length %> games played with this combo.</h4>
-<ul>
-    <% for (const game of combo.gamesPlayed) { %>
-        <% if (game.win) { %>
-            <li>Win with <%= game.score %> points!</li>
-        <% } else { %>
-            <li>Loss with <%= game.score %> points.</li>
-        <% } %>
-        <a href="/games/<%= game.id %>/edit"><button>Edit These Results</button></a>
-        <form action="/combos/<%= combo.id %>/games/<%= game.id %>?_method=DELETE" method="POST">
-            <button>Delete these results</button>
-        </form>
-        <br>
-    <% } %>
-</ul>
+
+
 
 
 <form action="/combos/<%= combo.id %>/games", method="POST">
