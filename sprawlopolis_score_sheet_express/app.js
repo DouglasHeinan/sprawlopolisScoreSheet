@@ -16,8 +16,8 @@ const userRoutes = require("./routes/users")
 const cardRoutes = require("./routes/cards");
 const gameRoutes = require("./routes/games");
 const comboRoutes = require("./routes/combos");
-const authRoutes = require("./routes/registration");
-const loginRoutes = require("./routes/login");
+// const authRoutes = require("./routes/registration");
+// const loginRoutes = require("./routes/login");
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -72,8 +72,8 @@ app.use("/", userRoutes)
 app.use("/cards", cardRoutes);
 app.use("/games", gameRoutes);
 app.use("/combos", comboRoutes);
-app.use("/register", authRoutes);
-app.use("/login", loginRoutes);
+// app.use("/register", authRoutes);
+// app.use("/login", loginRoutes);
 
 app.get("/", (req, res) => {
     res.render("home");

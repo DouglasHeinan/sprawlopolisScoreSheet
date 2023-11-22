@@ -9,37 +9,42 @@ const CardComboSchema = new Schema({
             ref: "ScoreCard"
         }
     ],
-    wins: {
-        type: Number,
-        required: true,
-        min: 0,
-    },
-    losses: {
-        type: Number,
-        required: true,
-        min: 0,
-    },
+    // wins: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0,
+    // },
+    // losses: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0,
+    // },
     targetScore: {
         type: Number,
         required: true,
         min: 6
-    },
-    avgScore: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    highScore: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    lowScore: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    gamesPlayed: [{ type: Schema.Types.ObjectId, ref: "GameResult" }]
+    }
+    // avgScore: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0
+    // },
+    // highScore: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0
+    // },
+    // lowScore: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0
+    // },
+    // gamesPlayed: [
+    //     {
+    //         type: Schema.Types.ObjectId, 
+    //         ref: "GameResult"
+    //     }
+    // ]
 });
 
 module.exports = mongoose.model("CardCombo", CardComboSchema);

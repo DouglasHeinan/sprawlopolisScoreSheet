@@ -19,6 +19,9 @@ const GameResultSchema = new Schema({
         required: true,
         min: 6
     },
+    date: {
+        type: Date
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User"
