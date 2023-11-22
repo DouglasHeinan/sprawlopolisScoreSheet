@@ -7,10 +7,11 @@
 </head>
 <body>
     <h4><%- include("../partials/flash") %></h4>
-
-    <form action="/login/logout" method="POST">
-        <button>Logout</button>
-    </form>
+    <% if (currentUser) { %>
+        <form action="/logout" method="POST">
+            <button>Logout</button>
+        </form>
+    <% } %>
 
     <%- body %>
     <footer>

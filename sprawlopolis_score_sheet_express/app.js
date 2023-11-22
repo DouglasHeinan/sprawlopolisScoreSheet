@@ -8,7 +8,7 @@ const AppError = require("./utils/AppError");
 const methodOverride = require("method-override");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const User = require("./models/user.js");
+const User = require("./models/user");
 const aWeekAway = require("./utils/constants");
 // const { resultsSchema } = require("./schemas.js");
 
@@ -62,7 +62,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    console.log(req.session);
     res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
@@ -77,15 +76,10 @@ app.use("/register", authRoutes);
 app.use("/login", loginRoutes);
 
 app.get("/", (req, res) => {
-    console.log("running home")
-    console.log("")
     res.render("home");
 });
 
 app.get("/:id", async (req, res) => {
-    console.log("Params:")
-    console.log(req.params)
-    console.log("")
     const {id} = req.params;
     const user = await User.findById(id);
     res.render("userLanding", {user});

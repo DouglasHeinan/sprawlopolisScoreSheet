@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");
+const { storeReturnTo } = require('../middleware');
 const User = require("../models/user");
 
 router.get("/register", (req, res) => {
@@ -13,36 +14,35 @@ router.post("/register", catchAsync(async (req, res) => {
         const {password, username, email} = req.body;
         const user = new User({username, email});
         const registeredUser = await User.register(user, password)
-        req.flash("success", "Welcome to Sprawlopolis Scoresheet.")
-        res.redirect(`/${user.id}`)
+        req.login(registeredUser, err => {
+            if(err) return next(err);
+            req.flash("success", "Welcome to Sprawlopolis Scoresheet.")
+            res.redirect(`/${user.id}`)
+        })
     } catch (e) {
         req.flash("error", e.message)
         res.redirect("register")
     }
 }));
 
-
 router.get("/login", (req, res) => {
     res.render("login")
 });
 
-router.post("/login", passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}), catchAsync(async (req, res) => {
+router.post("/login", storeReturnTo, passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}), (req, res) => {
     req.flash("success", "welcome back!")
-    res.redirect(`/${req.user._id}`)
-}));
+    const redirectUrl = res.locals.returnTo || `/${req.user._id}`
+    res.redirect(redirectUrl)
+});
 
-router.post("/logout", (req, res) => {
-    req.session.user_id = null;
-    res.redirect("/");
-})
-
-// router.get("/:id", async (req, res) => {
-//     console.log("Params:")
-//     console.log(req.params)
-//     console.log("")
-//     const {id} = req.params;
-//     const user = await User.findById(id);
-//     res.render("userLanding", {user});
-// });
+router.post("/logout", (req, res, next) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        req.flash('success', 'Goodbye!');
+        res.redirect('/');
+    });
+}); 
 
 module.exports = router;

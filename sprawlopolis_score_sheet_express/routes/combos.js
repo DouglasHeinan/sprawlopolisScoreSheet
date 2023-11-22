@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-
 const catchAsync = require("../utils/catchAsync");
+const {isLoggedIn} = require("../middleware");
+
 const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
 
@@ -12,21 +13,16 @@ router.get("/", catchAsync(async(req, res) => {
     res.render("tempViews/tempViewCombos", {someCombos});
 }));
 
-router.get("/:id/games/new", catchAsync(async (req, res) => {
-    if (!req.isAuthenticated) {
-        req.flash("error", "you must be signed in");
-        res.redirect("/login")
-    }
+router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
     const {id} = req.params;
     const combo = await CardCombo.findById(id).populate("cards").populate("gamesPlayed");
     if (!combo) {
         req.flash("error", "Combination does not exist.")
     }
-    console.log(res.isAuthenticated)
     res.render("tempViews/tempAddNewGame", {combo});
 }));
 
-router.post("/:id/games", catchAsync(async (req, res, next) => {
+router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     const {id} = req.params;
     const combo = await CardCombo.findById(id);
     const gameScore = req.body.result.score;
