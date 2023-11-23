@@ -5,7 +5,7 @@ const {isLoggedIn} = require("../middleware");
 
 const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
-// const UserRecord = require("../models/userComboRecords")
+const UserRecord = require("../models/userComboRecords")
 
 router.get("/", catchAsync(async(req, res) => {
     const allCombos = await CardCombo.find({}).populate("cards");
@@ -19,9 +19,6 @@ router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
     if (!combo) {
         req.flash("error", "Combination does not exist.")
     }
-    allResults = 
-    allGames = 
-    const wins = 
     res.render("tempViews/tempAddNewGame", {combo});
 }));
 
@@ -43,6 +40,63 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     });
     //EndFirst
     await newResult.save();
+    let currentRecord;
+    currentRecord = await UserRecord.findOne({ user: req.user._id, cardCombo: combo.id })
+    if (!currentRecord) {
+        currentRecord = new UserRecord({
+            user: req.user._id,
+            cardCombo: combo.id,
+            wins: 0,
+            losses: 0,
+            avgScore: 0,
+            highScore: 0
+            // gamesPlayed: []
+        })
+    }
+    currentRecord.gamesPlayed.push(newResult);
+    if (gameWin) {
+        currentRecord.wins += 1;
+    } else {
+        currentRecord.losses += 1
+    };
+    numGames = currentRecord.gamesPlayed.length;
+    let totalScore = 0;
+    // const thisResult = await GameResult.findById(currentRecord.gamesPlayed[0])
+    for (let i = 0; i < numGames; i++) {
+        const thisGame = await GameResult.findById(currentRecord.gamesPlayed[i])
+        totalScore += thisGame.score
+    }
+    // for (let i = 0; i < numGames; i++) {
+    //     const thisGame = currentRecord.gamesPlayed[i];
+    //     const gameId = await GameResult.findById(thisGame.id);
+    //     console.log(gameId)
+    //     totalScore += gameId.score;
+    // };
+    currentRecord.avgScore = totalScore / numGames;
+    if (gameScore > currentRecord.highScore) {
+        currentRecord.highScore = gameScore;
+    } else if (gameScore < currentRecord.lowScore) {
+        currentRecord.lowScore = gameScore;
+    };
+    await currentRecord.save();
+    console.log(currentRecord)
+    // console.log(currentRecord)
+    
+    // } else {
+    //     const newRecord = new UserRecord({
+    //         user: req.user._id,
+    //         cardCombo: combo.id,
+    //     })
+    // }
+    // currentRecord.gamesPlayed.push(newResult);
+    // if (gameWin) {
+    //     userComboRecords.wins += 1;
+    // } else {
+    //     userComboRecords.losses -= 1;
+    // };
+    // userComboRecords.avgScore
+    
+
     //SecondBlock
     // if (gameWin) {
     //     combo.wins += 1;
