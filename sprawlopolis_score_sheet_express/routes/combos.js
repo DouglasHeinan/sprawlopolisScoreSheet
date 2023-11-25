@@ -9,7 +9,7 @@ const UserRecord = require("../models/userComboRecords")
 
 router.get("/", catchAsync(async(req, res) => {
     const allCombos = await CardCombo.find({}).populate("cards");
-    const someCombos = allCombos.slice(700);
+    const someCombos = allCombos.slice(200);
     res.render("tempViews/tempViewCombos", {someCombos});
 }));
 
@@ -19,7 +19,10 @@ router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
     if (!combo) {
         req.flash("error", "Combination does not exist.")
     }
-    res.render("tempViews/tempAddNewGame", {combo});
+    const comboRecord = await UserRecord.findOne({ user: req.user._id, cardCombo: combo.id }).populate("gamesPlayed");
+    // console.log(combo)
+    console.log(comboRecord)
+    res.render("tempViews/tempAddNewGame", {combo, comboRecord});
 }));
 
 router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
@@ -27,7 +30,6 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     const combo = await CardCombo.findById(id);
     const gameScore = req.body.result.score;
     let gameWin = false;
-    // First block
     if (gameScore >= combo.targetScore) {
         gameWin = true;
     }; 
@@ -38,7 +40,6 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
         score: gameScore,
         target: combo.targetScore
     });
-    //EndFirst
     await newResult.save();
     let currentRecord;
     currentRecord = await UserRecord.findOne({ user: req.user._id, cardCombo: combo.id })
@@ -50,7 +51,6 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
             losses: 0,
             avgScore: 0,
             highScore: 0
-            // gamesPlayed: []
         })
     }
     currentRecord.gamesPlayed.push(newResult);
@@ -61,17 +61,10 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     };
     numGames = currentRecord.gamesPlayed.length;
     let totalScore = 0;
-    // const thisResult = await GameResult.findById(currentRecord.gamesPlayed[0])
     for (let i = 0; i < numGames; i++) {
         const thisGame = await GameResult.findById(currentRecord.gamesPlayed[i])
         totalScore += thisGame.score
     }
-    // for (let i = 0; i < numGames; i++) {
-    //     const thisGame = currentRecord.gamesPlayed[i];
-    //     const gameId = await GameResult.findById(thisGame.id);
-    //     console.log(gameId)
-    //     totalScore += gameId.score;
-    // };
     currentRecord.avgScore = totalScore / numGames;
     if (gameScore > currentRecord.highScore) {
         currentRecord.highScore = gameScore;
@@ -80,37 +73,6 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     };
     await currentRecord.save();
     console.log(currentRecord)
-    // console.log(currentRecord)
-    
-    // } else {
-    //     const newRecord = new UserRecord({
-    //         user: req.user._id,
-    //         cardCombo: combo.id,
-    //     })
-    // }
-    // currentRecord.gamesPlayed.push(newResult);
-    // if (gameWin) {
-    //     userComboRecords.wins += 1;
-    // } else {
-    //     userComboRecords.losses -= 1;
-    // };
-    // userComboRecords.avgScore
-    
-
-    //SecondBlock
-    // if (gameWin) {
-    //     combo.wins += 1;
-    // } else {
-    //     combo.losses += 1;
-    // };
-    // if (gameScore > combo.highScore) {
-    //     combo.highScore = gameScore;
-    // } else if (gameScore < combo.lowScore) {
-    //     combo.lowScore = gameScore;
-    // };
-    //EndSecond
-    // combo.gamesPlayed.push(newResult);
-    // await combo.save();
     req.flash("success", "Successfully added new game.")
     res.redirect(`/combos/${id}/games/new`)
 }));

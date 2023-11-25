@@ -72,8 +72,6 @@ app.use("/", userRoutes)
 app.use("/cards", cardRoutes);
 app.use("/games", gameRoutes);
 app.use("/combos", comboRoutes);
-// app.use("/register", authRoutes);
-// app.use("/login", loginRoutes);
 
 app.get("/", (req, res) => {
     res.render("home");

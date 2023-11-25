@@ -8,18 +8,6 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     }
-    // gameResults: [
-    //     {
-    //         type: Schema.Types.ObjectId,
-    //         ref: "GameResult"
-    //     }
-    // ]
-    // userComboRecords: [
-    //     {
-    //         type: Schema.Types.ObjectId,
-    //         ref: "UserComboRecords"
-    //     }
-    // ]
 });
 UserSchema.plugin(passportLocalMongoose);
 
