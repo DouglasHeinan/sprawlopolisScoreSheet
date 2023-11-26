@@ -20,8 +20,16 @@ router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
         req.flash("error", "Combination does not exist.")
     }
     const comboRecord = await UserRecord.findOne({ user: req.user._id, cardCombo: combo.id }).populate("gamesPlayed");
-    // console.log(combo)
-    console.log(comboRecord)
+
+    numGames = comboRecord.gamesPlayed.length;
+    let totalScore = 0;
+    for (let i = 0; i < numGames; i++) {
+        const thisGame = await GameResult.findById(comboRecord.gamesPlayed[i])
+        totalScore += thisGame.score
+    }
+    comboRecord.avgScore = totalScore / numGames;
+    comboRecord.save()
+
     res.render("tempViews/tempAddNewGame", {combo, comboRecord});
 }));
 
@@ -66,26 +74,41 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
         totalScore += thisGame.score
     }
     currentRecord.avgScore = totalScore / numGames;
+    if (numGames > 1) {
+        const firstGame = await GameResult.findById(currentRecord.gamesPlayed[0])
+        let lowScore = firstGame.score;
+        for (let i = 1; i < numGames; i++) {
+            const compGame = await GameResult.findById(currentRecord.gamesPlayed[i])
+            if (compGame.score < lowScore) {
+                lowScore = compGame.score;
+            };
+        };
+        currentRecord.lowScore = lowScore;
+    }
     if (gameScore > currentRecord.highScore) {
         currentRecord.highScore = gameScore;
     } else if (gameScore < currentRecord.lowScore) {
         currentRecord.lowScore = gameScore;
     };
     await currentRecord.save();
-    console.log(currentRecord)
     req.flash("success", "Successfully added new game.")
     res.redirect(`/combos/${id}/games/new`)
 }));
 
-router.delete("/:id/games/:gameId", catchAsync(async (req, res) => {
-    const { id, gameId } = req.params;
-    console.log(id, gameId)
-    const combo = await CardCombo.findByIdAndUpdate(id, { $pull: { gamesPlayed: gameId } })
-    console.log("one", combo.gamesPlayed)
+router.delete("/:recordId/games/:gameId", catchAsync(async (req, res) => {
+    const { recordId, gameId } = req.params;
+    console.log(recordId)
+    const comboRecord = await UserRecord.findByIdAndUpdate(recordId, { $pull: { gamesPlayed: gameId } })
+    console.log(comboRecord)
+    console.log("one", comboRecord.gamesPlayed)
     const result = await GameResult.findByIdAndDelete(gameId)
     console.log("two", result)
+
+
+
+
     req.flash("success", "Successfully deleted game.")
-    res.redirect(`/combos/${id}/games/new`)
+    res.redirect(`/combos/${comboRecord.cardCombo}/games/new`)
 }));
 
 module.exports = router;

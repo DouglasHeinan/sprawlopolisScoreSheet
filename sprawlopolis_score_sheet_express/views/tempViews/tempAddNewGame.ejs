@@ -11,15 +11,15 @@
 
 <h3>Game Results</h3>
 
-<ul>
-    <li>Wins: <%= comboRecord.wins %></li>
-    <li>Losses: <%= combo.losses %></li>
-    <li>Avg: <%= combo.avgScore %></li>
-    <li>High Score: <%= combo.highScore %></li>
-    <li>Low Score: <%= combo.lowScore %></li>
-</ul>
-
 <% if (comboRecord) { %>
+    <ul>
+        <li>Wins: <%= comboRecord.wins %></li>
+        <li>Losses: <%= comboRecord.losses %></li>
+        <li>Avg: <%= comboRecord.avgScore %></li>
+        <li>High Score: <%= comboRecord.highScore %></li>
+        <li>Low Score: <%= comboRecord.lowScore %></li>
+    </ul>
+
     <h4><%= comboRecord.gamesPlayed.length %> games played with this combo.</h4>
 <% } else { %>
     <h4>0 games played with this combo.</h4>
@@ -34,9 +34,10 @@
                 <li>Loss with <%= game.score %> points.</li>
             <% } %>
             <a href="/games/<%= game.id %>/edit"><button>Edit These Results</button></a>
-            <form action="/combos/<%= combo.id %>/games/<%= game.id %>?_method=DELETE" method="POST">
+            <form action="/combos/<%= comboRecord.id %>/games/<%= game.id %>?_method=DELETE" method="POST">
                 <button>Delete these results</button>
             </form>
+            <br>
         <% } %>
     </ul>
 <% } %>
