@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const combos = require("../controllers/combos")
 const catchAsync = require("../utils/catchAsync");
 const {isLoggedIn} = require("../middleware");
 
@@ -7,11 +8,7 @@ const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
 const UserRecord = require("../models/userComboRecords")
 
-router.get("/", catchAsync(async(req, res) => {
-    const allCombos = await CardCombo.find({}).populate("cards");
-    const someCombos = allCombos.slice(200);
-    res.render("tempViews/tempViewCombos", {someCombos});
-}));
+router.get("/", catchAsync(combos.index));
 
 router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
     const {id} = req.params;
@@ -100,6 +97,7 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
 
 // Belong in games file?
 router.delete("/:recordId/games/:gameId", catchAsync(async (req, res) => {
+    // needs validation so only user can delete
     const { recordId, gameId } = req.params;
     const comboRecord = await UserRecord.findByIdAndUpdate(recordId, { $pull: { gamesPlayed: gameId } })
     const result = await GameResult.findByIdAndDelete(gameId)
@@ -108,10 +106,7 @@ router.delete("/:recordId/games/:gameId", catchAsync(async (req, res) => {
     } else {
         comboRecord.losses -= 1;
     };
-    console.log(comboRecord.wins)
-    console.log(comboRecord.losses)
     comboRecord.save()
-    console.log("result", result)
     //Run high/low score calc***************
     req.flash("success", "Successfully deleted game.")
     res.redirect(`/combos/${comboRecord.cardCombo}/games/new`)

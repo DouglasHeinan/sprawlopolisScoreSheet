@@ -9,7 +9,7 @@
 
 <h3>Combo Target <%= combo.targetScore %></h3>
 
-<h3>Game Results</h3>
+<h3> <%= currentUser.username %>'s Game Results</h3>
 
 <% if (comboRecord) { %>
     <ul>
@@ -33,10 +33,14 @@
             <% } else { %>
                 <li>Loss with <%= game.score %> points.</li>
             <% } %>
+
+            <% if (currentUser && comboRecord.user.equals(currentUser._id)) { %>
             <a href="/games/<%= game.id %>/edit"><button>Edit These Results</button></a>
             <form action="/combos/<%= comboRecord.id %>/games/<%= game.id %>?_method=DELETE" method="POST">
                 <button>Delete these results</button>
             </form>
+            <% } %>
+
             <br>
         <% } %>
     </ul>
