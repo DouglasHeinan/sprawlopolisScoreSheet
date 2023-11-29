@@ -20,15 +20,18 @@ router.get("/:id/games/new", isLoggedIn, catchAsync(async (req, res) => {
         req.flash("error", "Combination does not exist.")
     }
     const comboRecord = await UserRecord.findOne({ user: req.user._id, cardCombo: combo.id }).populate("gamesPlayed");
+    
+    if (comboRecord && comboRecord.gamesPlayed.length > 0) {
+        numGames = comboRecord.gamesPlayed.length;
+        let totalScore = 0;
+        for (let i = 0; i < numGames; i++) {
+            const thisGame = await GameResult.findById(comboRecord.gamesPlayed[i])
+            totalScore += thisGame.score
+        }
 
-    numGames = comboRecord.gamesPlayed.length;
-    let totalScore = 0;
-    for (let i = 0; i < numGames; i++) {
-        const thisGame = await GameResult.findById(comboRecord.gamesPlayed[i])
-        totalScore += thisGame.score
+        comboRecord.avgScore = totalScore / numGames;
+        comboRecord.save()
     }
-    comboRecord.avgScore = totalScore / numGames;
-    comboRecord.save()
 
     res.render("tempViews/tempAddNewGame", {combo, comboRecord});
 }));
@@ -95,18 +98,21 @@ router.post("/:id/games", isLoggedIn, catchAsync(async (req, res, next) => {
     res.redirect(`/combos/${id}/games/new`)
 }));
 
+// Belong in games file?
 router.delete("/:recordId/games/:gameId", catchAsync(async (req, res) => {
     const { recordId, gameId } = req.params;
-    console.log(recordId)
     const comboRecord = await UserRecord.findByIdAndUpdate(recordId, { $pull: { gamesPlayed: gameId } })
-    console.log(comboRecord)
-    console.log("one", comboRecord.gamesPlayed)
     const result = await GameResult.findByIdAndDelete(gameId)
-    console.log("two", result)
-
-
-
-
+    if (result.win) {
+        comboRecord.wins -= 1;
+    } else {
+        comboRecord.losses -= 1;
+    };
+    console.log(comboRecord.wins)
+    console.log(comboRecord.losses)
+    comboRecord.save()
+    console.log("result", result)
+    //Run high/low score calc***************
     req.flash("success", "Successfully deleted game.")
     res.redirect(`/combos/${comboRecord.cardCombo}/games/new`)
 }));

@@ -10,14 +10,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const aWeekAway = require("./utils/constants");
-// const { resultsSchema } = require("./schemas.js");
 
 const userRoutes = require("./routes/users")
 const cardRoutes = require("./routes/cards");
 const gameRoutes = require("./routes/games");
 const comboRoutes = require("./routes/combos");
-// const authRoutes = require("./routes/registration");
-// const loginRoutes = require("./routes/login");
 
 mongoose.connect("mongodb://127.0.0.1:27017/comboRecords", {
     useNewUrlParser: true, 
@@ -94,5 +91,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000, () => {
-    console.log("listening...");
+    console.log("*****APP RUNNING*****");
 })

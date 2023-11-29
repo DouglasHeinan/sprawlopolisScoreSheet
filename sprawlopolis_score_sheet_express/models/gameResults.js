@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// const CardCombo = require("./cardCombos")
-// const User = require("./user")
 
 const GameResultSchema = new Schema({
     cardCombo: {

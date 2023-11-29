@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const catchAsync = require("../utils/catchAsync");
+const {isGameUser} = require("../middleware");
 const CardCombo = require("../models/cardCombos");
 const GameResult = require("../models/gameResults");
-const UserRecord = require("../models/userComboRecords")
+const UserRecord = require("../models/userComboRecords");
 
-router.get("/:id/edit", catchAsync(async (req, res) => {
+router.get("/:id/edit", isGameUser, catchAsync(async (req, res) => {
     const { id } = req.params;
     const game = await GameResult.findById(id);
     if (!game) {
@@ -16,7 +17,7 @@ router.get("/:id/edit", catchAsync(async (req, res) => {
     res.render("tempViews/tempEditGame", {game});
 }));
 
-router.put("/:id", catchAsync(async (req, res) => {
+router.put("/:id", isGameUser, catchAsync(async (req, res) => {
     const {id} = req.params;
     const newScore = req.body.game.score;
     const game = await GameResult.findByIdAndUpdate(id, {score: req.body.game.score}, {runValidators: true});
