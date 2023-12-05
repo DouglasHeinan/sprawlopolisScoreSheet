@@ -1,6 +1,7 @@
 const CardCombo = require("../models/cardCombos");
-const UserRecord = require("../models/userComboRecords")
-const GameResult = require("../models/gameResults")
+const UserRecord = require("../models/userComboRecords");
+const GameResult = require("../models/gameResults");
+const ScoringCard = require("../models/scoringCards");
 
 module.exports.index = async(req, res) => {
     const allCombos = await CardCombo.find({}).populate("cards");

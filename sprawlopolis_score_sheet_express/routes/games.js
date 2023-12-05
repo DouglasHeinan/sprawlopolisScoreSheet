@@ -8,8 +8,16 @@ const {isGameUser} = require("../middleware");
 // const GameResult = require("../models/gameResults");
 // const UserRecord = require("../models/userComboRecords");
 
-router.get("/:id/edit", isGameUser, catchAsync(games.editGamePage));
+router.get(
+    "/:id/edit", 
+    isGameUser, 
+    catchAsync(games.editGamePage)
+);
 
-router.put("/:id", isGameUser, catchAsync(games.editGame));
+router.put(
+    "/:id", 
+    isGameUser, 
+    catchAsync(games.editGame)
+);
 
 module.exports = router;

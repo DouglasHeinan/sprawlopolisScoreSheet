@@ -8,13 +8,27 @@ const {isLoggedIn} = require("../middleware");
 // const GameResult = require("../models/gameResults");
 // const UserRecord = require("../models/userComboRecords")
 
-router.get("/", catchAsync(combos.index));
+router.get(
+    "/", 
+    catchAsync(combos.index)
+);
 
-router.get("/:id/games/new", isLoggedIn, catchAsync(combos.viewGames));
+router.post(
+    "/:id/games", 
+    isLoggedIn, 
+    catchAsync(combos.addGame)
+);
 
-router.post("/:id/games", isLoggedIn, catchAsync(combos.addGame));
+router.get(
+    "/:id/games/new", 
+    isLoggedIn, 
+    catchAsync(combos.viewGames)
+);
 
 // Belong in games file?
-router.delete("/:recordId/games/:gameId", catchAsync(combos.deleteGame));
+router.delete(
+    "/:recordId/games/:gameId", 
+    catchAsync(combos.deleteGame)
+);
 
 module.exports = router;
