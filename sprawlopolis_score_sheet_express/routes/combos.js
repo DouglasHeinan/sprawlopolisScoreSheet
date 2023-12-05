@@ -4,9 +4,9 @@ const combos = require("../controllers/combos")
 const catchAsync = require("../utils/catchAsync");
 const {isLoggedIn} = require("../middleware");
 
-const CardCombo = require("../models/cardCombos");
-const GameResult = require("../models/gameResults");
-const UserRecord = require("../models/userComboRecords")
+// const CardCombo = require("../models/cardCombos");
+// const GameResult = require("../models/gameResults");
+// const UserRecord = require("../models/userComboRecords")
 
 router.get("/", catchAsync(combos.index));
 
