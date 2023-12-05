@@ -19,8 +19,11 @@
         <li>High Score: <%= comboRecord.highScore %></li>
         <li>Low Score: <%= comboRecord.lowScore %></li>
     </ul>
-
-    <h4><%= comboRecord.gamesPlayed.length %> games played with this combo.</h4>
+    <% if (comboRecord.gamesPlayed.length != 1) { %>
+        <h4><%= comboRecord.gamesPlayed.length %> games played with this combo.</h4>
+    <% } else { %>
+        <h4><%= comboRecord.gamesPlayed.length %> game played with this combo.</h4>
+    <% } %>
 <% } else { %>
     <h4>0 games played with this combo.</h4>
 <% } %>
